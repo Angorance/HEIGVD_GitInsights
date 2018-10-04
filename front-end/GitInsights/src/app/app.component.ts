@@ -8,3 +8,9 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'GitInsights';
 }
+
+
+function login (){
+  console.log("ON VA SE CONNECTER POTO");
+}
+
