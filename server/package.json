@@ -1,0 +1,26 @@
+{
+  "name": "gitinsights",
+  "version": "1.0.0",
+  "description": "Github Insights, become a better GitHubber",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon --watch app.js --watch src",
+    "test": "mocha"
+  },
+  "author": "Daniel Gonzalez Lopez, Helena Reymond, Bryan Curchod",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.4"
+  },
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "node-fetch": "^2.2.0",
+    "dotenv": "^6.0.0"
+  }
+}
