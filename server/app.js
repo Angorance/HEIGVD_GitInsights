@@ -2,6 +2,7 @@
 require('dotenv/config');
 const express = require('express');
 const cors = require('cors');
+const fetch = require('node-fetch');  // Used to get data from URL
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,8 +10,17 @@ const port = process.env.PORT || 3000;
 // Enable CORS for the client app
 app.use(cors());
 
-app.get('/', (req, res, next) => {
-  res.send('Hello World!');
+app.get('/users/:username', (req, res, next) => {
+  //res.send(`Hello ${req.params.username}`);
+  fetch(`https://api.github.com/users/${req.params.username}`, 
+    headers: {
+      Accept: 'application/vnd.github.v3+json',
+      
+    }
+});
+
+app.get('/languages/:username', (req, res, next) => {
+  res.send(`Hey ${req.params.username}`);
 });
 
 // Forward 404 to error handler
