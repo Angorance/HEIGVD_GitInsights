@@ -27,13 +27,3 @@
     vertical-align: middle;
     align-content: center;
 }
-
-button{
-    height:40px; 
-    width:200px; 
-    margin: -20px -50px; 
-    position:relative;
-    top:75%; 
-    left:50%;
-    text-align: right;
-}
