@@ -11,12 +11,20 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 
 app.get('/users/:username', (req, res, next) => {
-  //res.send(`Hello ${req.params.username}`);
-  fetch(`https://api.github.com/users/${req.params.username}`, 
-    headers: {
+  fetch(`https://api.github.com/users/${req.params.username}`, {
+    headers:{
       Accept: 'application/vnd.github.v3+json',
-      
-    }
+      Authorization: `token ${process.env.OAUTH_TOKEN}`,
+    },
+  })
+  .then(result => result.json()
+    .then((data) => {
+      if(result.ok) {
+        res.send(data);
+      } else {
+        throw new Error('Woops!');
+      }
+    })).catch(next);
 });
 
 app.get('/languages/:username', (req, res, next) => {
