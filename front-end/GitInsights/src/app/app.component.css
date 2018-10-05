@@ -5,6 +5,8 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 3em;
     padding : 15px 15px 15px 50px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+
 }
 
 #description{
