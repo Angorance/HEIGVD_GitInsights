@@ -39,18 +39,38 @@ class Github {
                     return data;
                 })
             );
-    }
+    }  
+
+    /*========================================================================
+    /*  Timeline
+    /*======================================================================*/
 
     // Get all user's information
     user(username) {
         return this.request(`/users/${username}`);
     }
 
-    // Get all user's repos
-    repos(username) {
-        return this.request(`/users/${username}/repos`);
+    // Get user's location
+    userLocation(username) {
+        return this.user(username)
+            .then((user) => {
+                const location = user.location;
+                return location;
+            });
     }
 
+    userCreation(username) {
+        return this.user(username)
+            .then((user) => {
+                const creation = user.created_at;
+                return creation;
+            });
+    }
+
+    /*========================================================================
+    /*  1st graph : languages
+    /*======================================================================*/
+    
     // Get all languages of a repo
     repoLanguages(repoName) {
         return this.request(`/repos/${repoName}/languages`);
@@ -63,6 +83,29 @@ class Github {
                 const getLanguages = repo => this.repoLanguages(repo.full_name);
                 return Promise.all(repos.map(getLanguages));
             });
+    }
+    
+    /*========================================================================
+    /*  2nd graph : issues
+    /*======================================================================*/
+
+    // Get all user's issues
+    /*issues(username) {
+        return this.request(`/users/${username}/issues`);
+    }*/
+
+    /*========================================================================
+    /*  3nd graph : coded lines and commits
+    /*======================================================================*/
+
+
+    /*========================================================================
+    /*  4nd graph : repositories
+    /*======================================================================*/
+
+    // Get all user's repos
+    repos(username) {
+        return this.request(`/users/${username}/repos`);
     }
 }
 

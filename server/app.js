@@ -12,20 +12,63 @@ const client = new Github({token: process.env.OAUTH_TOKEN}); // Used to create m
 // Enable CORS for the client app
 app.use(cors());
 
-// /users/username => get all user's information
+/*========================================================================
+/*  Timeline
+/*======================================================================*/
+
+// Get all user's information
 app.get('/users/:username', (req, res, next) => {
   client.user(req.params.username)
     .then(user => res.send(user))
     .catch(next);
 });
 
-// /languages/username => get number of lines coded of each language of the user
+// Get user's location
+app.get('/location/:username', (req, res, next) => {
+  client.userLocation(req.params.username)
+    .then(location => res.send(location))
+    .catch(next);
+});
+
+// Get user's creation
+app.get('/creation/:username', (req, res, next) => {
+  client.userCreation(req.params.username)
+    .then(creation => res.send(creation))
+    .catch(next);
+});
+
+/*========================================================================
+/*  1st graph : languages
+/*======================================================================*/
+
+// Get user's number of coded lines by language
 app.get('/languages/:username', (req, res, next) => {
   client.userLanguages(req.params.username)
     .then(utils.getReposLanguagesStats)
     .then(stats => res.send(stats))
     .catch(next);
 });
+
+/*========================================================================
+/*  2nd graph : issues
+/*======================================================================*/
+
+// Get all user's issues
+app.get('/issues/:username', (req, res, next) => {
+  client.issues(req.params.username)
+    .then(issues => res.send(issues))
+    .catch(next);
+});
+
+/*========================================================================
+/*  3nd graph : coded lines and commits
+/*======================================================================*/
+
+
+/*========================================================================
+/*  4nd graph : repositories
+/*======================================================================*/
+
 
 // Forward 404 to error handler
 app.use((req, res, next) => {
