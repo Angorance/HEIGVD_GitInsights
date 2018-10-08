@@ -2,33 +2,29 @@
 require('dotenv/config');
 const express = require('express');
 const cors = require('cors');
-const fetch = require('node-fetch');  // Used to get data from URL
+const Github = require('./src/Github'); // FOr using our Github.js file
+const utils = require('./src/utils'); // For packing languages (group by)
 
 const app = express();
 const port = process.env.PORT || 3000;
+const client = new Github({token: process.env.OAUTH_TOKEN}); // Used to create my own Github connection (@LNAline)
 
 // Enable CORS for the client app
 app.use(cors());
 
+// /users/username => get all user's information
 app.get('/users/:username', (req, res, next) => {
-  fetch(`https://api.github.com/users/${req.params.username}`, {
-    headers:{
-      Accept: 'application/vnd.github.v3+json',
-      Authorization: `token ${process.env.OAUTH_TOKEN}`,
-    },
-  })
-  .then(result => result.json()
-    .then((data) => {
-      if(result.ok) {
-        res.send(data);
-      } else {
-        throw new Error('Woops!');
-      }
-    })).catch(next);
+  client.user(req.params.username)
+    .then(user => res.send(user))
+    .catch(next);
 });
 
+// /languages/username => get number of lines coded of each language of the user
 app.get('/languages/:username', (req, res, next) => {
-  res.send(`Hey ${req.params.username}`);
+  client.userLanguages(req.params.username)
+    .then(utils.getReposLanguagesStats)
+    .then(stats => res.send(stats))
+    .catch(next);
 });
 
 // Forward 404 to error handler
