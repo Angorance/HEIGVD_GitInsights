@@ -5,13 +5,14 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "lint": "eslint src/**/*.js",
     "dev": "nodemon --watch app.js --watch src",
     "test": "mocha"
   },
   "author": "Daniel Gonzalez Lopez, Helena Reymond, Bryan Curchod",
   "devDependencies": {
     "chai": "^4.2.0",
-    "eslint": "^5.5.0",
+    "eslint": "^5.6.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "mocha": "^5.2.0",
