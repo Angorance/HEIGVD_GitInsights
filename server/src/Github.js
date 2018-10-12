@@ -10,17 +10,18 @@ class ResponseError extends Error {
 }
 
 class Github {
-  constructor({baseUrl = 'https://api.github.com' } = {}) {
+  constructor({token, baseUrl = 'https://api.github.com' } = {}) {
+    this.token = token; // to remove
     this.baseUrl = baseUrl;
   }
 
-  request(path, token, opts = {}) {
+  request(path, /*token,*/ opts = {}) {
     const url = `${this.baseUrl}${path}`;
     const options = {
       ...opts,
       headers: {
         Accept: 'application/vnd.github.v3+json',
-        Authorization: `token ${token}`,
+        Authorization: `token ${this.token}`, // to change to token
       },
     };
 
@@ -41,7 +42,7 @@ class Github {
 
   // Get all user's information
   user(username/*, token*/) {
-    return this.request(`/users/${username}`/*, token*/);
+    return this.request(`/users/${username}`/*, token */);
   }
 
   // Get user's location
