@@ -7,7 +7,7 @@ const utils = require('./src/utils'); // For packing languages (group by)
 
 const app = express();
 const port = process.env.PORT || 3000;
-const client = new Github({ token: process.env.OAUTH_TOKEN }); // Used to create my own Github connection (@LNAline)
+const client = new Github({}); // Used to create my own Github connection (@LNAline)
 
 // Enable CORS for the client app
 app.use(cors());
@@ -20,7 +20,7 @@ app.use(cors());
   }); */
 
 // Get all user's information
-app.get('/users/:username', (req, res, next) => {
+app.get('/users/:username?:token', (req, res, next) => {
   /* ========================================================================
   /*  Timeline
   /*====================================================================== */
@@ -28,12 +28,12 @@ app.get('/users/:username', (req, res, next) => {
   const response = {};
 
   // Get user's location
-  const location = client.userLocation(req.params.username)
+  const location = client.userLocation(req.params.username, req.params.token)
     .then(location => response.location = location)
     .catch(next);
 
   // Get user's creation
-  const creation = client.userCreation(req.params.username)
+  const creation = client.userCreation(req.params.username, req.params.token)
     .then(creation => response.creation = creation)
     .catch(next);
 
@@ -42,7 +42,7 @@ app.get('/users/:username', (req, res, next) => {
   /*====================================================================== */
 
   // Get user's number of coded lines by language
-  const languages = client.userLanguages(req.params.username)
+  const languages = client.userLanguages(req.params.username, req.params.token)
     .then(utils.getReposLanguagesStats)
     .then(languages => response.languages = languages)
     .catch(next);
@@ -73,10 +73,8 @@ app.get('/users/:username', (req, res, next) => {
 
 // Callback handler
 app.get('/callback', (req, res, next) => {
-    /*client.issues(req.params.username)
-      .then(issues => res.send(issues))
-      .catch(next);*/
-      res.send('Not integrated right now');
+  //TODO : retrieve and send token
+  res.send('Not integrated right now');
 });
 
 // Forward 404 to error handler
