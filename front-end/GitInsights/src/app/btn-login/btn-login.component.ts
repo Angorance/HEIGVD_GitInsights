@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-btn-login',
@@ -10,10 +10,21 @@ export class BtnLoginComponent implements OnInit {
 
   constructor(private http:HttpClient) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   buttonClicked(): void {
-    this.http.get('https://github.com/login/oauth/authorize');
+
+    console.log('Button clicked!');
+
+    const params = {
+      params: new HttpParams().set('client_id', '2a9a479e2953860bbd89')
+    }
+
+    let test = this.http.get(
+      'https://github.com/login/oauth/authorize',
+      params
+    ).subscribe();
+
+    console.log(test);
   }
 }
