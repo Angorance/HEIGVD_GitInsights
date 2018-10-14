@@ -14,17 +14,11 @@ export class BtnLoginComponent implements OnInit {
 
   buttonClicked(): void {
 
-    console.log('Button clicked!');
+    console.log('Redirecting to GitHub');
 
-    const params = {
-      params: new HttpParams().set('client_id', '2a9a479e2953860bbd89')
-    }
+    // TODO - Put URL (or at least client_id) somewhere else
+    let redirect:string = 'https://github.com/login/oauth/authorize?client_id=2a9a479e2953860bbd89';
 
-    let test = this.http.get(
-      'https://github.com/login/oauth/authorize',
-      params
-    ).subscribe();
-
-    console.log(test);
+    window.location.href = redirect;
   }
 }
