@@ -32,11 +32,21 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
     .then(location => response.location = location)
     .catch(next);
 
-  // Get user's creation
+  // Get user's creation date
   const creation = client.userCreation(req.params.username)
     .then(creation => response.creation = creation)
     .catch(next);
 
+  // Get user's first pull request date
+  /*const firstPullRequest = client.userFirstPullRequestDate(req.params.username)
+    .then(firstPullRequest => response.firstPullRequest = firstPullRequest)
+    .catch(next);*/
+
+  // Get user's first repository creation date
+  /*const firstRepository = client.userFirstRepositoryDate(req.params.username)
+    .then(firstRepository => response.firstRepository = firstRepository)
+    .catch(next);*/
+  
   /* ========================================================================
   /*  1st graph : languages
   /*====================================================================== */

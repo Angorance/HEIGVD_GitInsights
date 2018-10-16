@@ -45,16 +45,27 @@ class Github {
     return this.request(`/users/${username}`/*, token */);
   }
 
+  // Get user's creation date
+  userCreation(username) {
+    return this.user(username)
+      .then(user => user.created_at);
+  }
+
   // Get user's location
   userLocation(username) {
     return this.user(username)
       .then(user => user.location);
   }
 
-  userCreation(username) {
-    return this.user(username)
-      .then(user => user.created_at);
-  }
+  // Get user's first pull request date
+  /*userFirstPullRequestDate(username) {
+    
+  }*/
+
+  // Get user's first repository creation date
+ /*userFirstRepositoryDate(username) {
+    
+  }*/
 
   /* ========================================================================
   /*  1st graph : languages
