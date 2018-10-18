@@ -1,0 +1,33 @@
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 60%;
+    background-color: #2e87bf;
+    color: rgb(26, 29, 31);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 3em;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+/*#description{
+    width: 40%;
+    vertical-align: middle;
+    font-size : 0.5em;
+    
+    margin: 50px
+}*/
+
+#logo-home{
+    width: auto;
+}
+
+.login-space{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 30%;
+    width: 100%;
+}
