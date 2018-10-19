@@ -82,10 +82,7 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
 });
 
 // Callback handler
-app.get('/callback', (req, res, next) => {
-  //TODO : retrieve and send token
-  res.send('Not integrated right now');
-});
+app.get('/callback', oauthCallback);
 
 // Forward 404 to error handler
 app.use((req, res, next) => {
