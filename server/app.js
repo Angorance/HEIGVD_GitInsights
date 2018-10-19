@@ -2,8 +2,9 @@
 require('dotenv/config');
 const express = require('express');
 const cors = require('cors');
-const Github = require('./src/Github'); // FOr using our Github.js file
+const Github = require('./src/Github'); // For using our Github.js file
 const utils = require('./src/utils'); // For packing languages (group by)
+const oauth = require('./src/OAuth'); // For callback
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -34,12 +35,12 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
 
   // Get user's creation date
   const creation = client.userCreation(req.params.username)
-    .then(creation => response.creation = creation)
+    .then(creation => response.creation_date = creation)
     .catch(next);
 
   // Get user's first repository creation date
   const firstRepository = client.userFirstRepositoryDate(req.params.username)
-    .then(firstRepository => response.firstRepository = firstRepository)
+    .then(firstRepository => response.firstRepository_date = firstRepository)
     .catch(next);
   
   /* ========================================================================
@@ -72,12 +73,36 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
   /*  4nd graph : repositories
   /*====================================================================== */
 
-  Promise.all([location, creation, languages, firstRepository])
+  // Get user's repositories
+  /*const repos = client.repos(req.params.username)
+    .then(repos => response.repos = repos)
+    .catch(next);*/
+
+  // Get all user's created repositories
+  const createdRepositories = client.userCountCreatedRepositories(req.params.username)
+    .then(total => response.nbrCreatedRepositories = total)
+    .catch(next);
+
+  // Get all user's forked repositories
+
+  // Get all user's stars
+
+  // Get all user's commits
+  // GET /repos/:owner/:repo/commits
+
+  /* ========================================================================
+  /*  Results sending
+  /*====================================================================== */
+  Promise.all([location, creation, languages, firstRepository, 
+    createdRepositories/*,
+    repos*/])
     .then(() => res.send(response));
 });
 
 // Callback handler
-app.get('/callback', oauthCallback);
+app.get('/callback', (req, res, next) => {
+  oauth.oauthCallback(req, res, next);
+});
 
 // Forward 404 to error handler
 app.use((req, res, next) => {

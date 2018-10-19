@@ -1,5 +1,9 @@
 function oauthCallback(req, res, next) {
-    let code = req.param('code');
+    let code = req.query.code;
 
-    console.log(code);
+    console.log(`Code received : ${code}`);
 }
+
+module.exports = {
+    oauthCallback,
+};

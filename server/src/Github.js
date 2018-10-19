@@ -70,7 +70,7 @@ class Github {
   /*  1st graph : languages
   /*====================================================================== */
 
-  // Get all languages of a repo
+  // Get all languages of a repository
   repoLanguages(repoName) {
     return this.request(`/repos/${repoName}/languages`);
   }
@@ -102,10 +102,23 @@ class Github {
   /*  4nd graph : repositories
   /*====================================================================== */
 
-  // Get all user's repos
+  // Get all user's repositories
   repos(username) {
     return this.request(`/users/${username}/repos`);
   }
+
+  // Get all user's created repositories
+  userCountCreatedRepositories(username) {
+    return this.repos(username)
+      .then(repos => repos.length);
+  }
+
+  // Get all user's forked repositories
+
+  // Get all user's stars
+
+  // Get all user's commits
+  // GET /repos/:owner/:repo/commits
 }
 
 module.exports = Github;
