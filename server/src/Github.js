@@ -57,15 +57,14 @@ class Github {
       .then(user => user.location);
   }
 
-  // Get user's first pull request date
-  /*userFirstPullRequestDate(username) {
-    
-  }*/
-
   // Get user's first repository creation date
- /*userFirstRepositoryDate(username) {
-    
-  }*/
+  userFirstRepositoryDate(username) {
+    return this.repos(username)
+      .then((repos) => {
+        repos.sort((a, b) => new Date(b.date) - new Date(a.date));
+        return repos[0].created_at;
+      });
+  }
 
   /* ========================================================================
   /*  1st graph : languages

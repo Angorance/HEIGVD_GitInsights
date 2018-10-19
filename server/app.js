@@ -37,15 +37,10 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
     .then(creation => response.creation = creation)
     .catch(next);
 
-  // Get user's first pull request date
-  /*const firstPullRequest = client.userFirstPullRequestDate(req.params.username)
-    .then(firstPullRequest => response.firstPullRequest = firstPullRequest)
-    .catch(next);*/
-
   // Get user's first repository creation date
-  /*const firstRepository = client.userFirstRepositoryDate(req.params.username)
+  const firstRepository = client.userFirstRepositoryDate(req.params.username)
     .then(firstRepository => response.firstRepository = firstRepository)
-    .catch(next);*/
+    .catch(next);
   
   /* ========================================================================
   /*  1st graph : languages
@@ -77,7 +72,7 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
   /*  4nd graph : repositories
   /*====================================================================== */
 
-  Promise.all([location, creation, languages])
+  Promise.all([location, creation, languages, firstRepository])
     .then(() => res.send(response));
 });
 
