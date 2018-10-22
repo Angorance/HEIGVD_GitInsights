@@ -1,16 +1,25 @@
-// const request = require('request');
-const fetch = require('node-fetch'); // Used to get data from URL
+const fetch = require('node-fetch'); // Used to post data from URL
 
 // Must be stored somewhere else, temporary
 const clientId = '2a9a479e2953860bbd89';
 const clientSecret = '7100d1e611dd28e989fd81009f4e78a09e96ecaa';
 
+/**
+ * Return a cookie with access_token to the client
+ * 
+ * @param {*} req callback request sent by Github
+ * @param {*} res cookie to send to the client
+ * @param {*} next 
+ */
 function oauthCallback(req, res, next) {
-  const codeReceived = req.query.code;
 
+  // Get code from Github
+  const codeReceived = req.query.code;
   console.log(`Code received : ${codeReceived}`);
 
+  // Create the POST request
   const url = 'https://github.com/login/oauth/access_token';
+
   const body = {
     client_id: clientId,
     client_secret: clientSecret,
@@ -26,10 +35,15 @@ function oauthCallback(req, res, next) {
     },
   };
 
+  // Send the POST request to Github, to receive the access_token
   fetch(url, options)
     .then(data => data.json())
-    .then(res => console.log(`Access-token received : ${res.access_token}`))
-    .catch(error => console.log(error));
+    .then((result) => {
+      const accessToken = result.access_token;
+      console.log(`Access-token received : ${accessToken}`);
+      res.send(accessToken);
+    })
+    .catch(next);
 }
 
 module.exports = { oauthCallback };
