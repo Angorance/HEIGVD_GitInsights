@@ -39,9 +39,19 @@ function oauthCallback(req, res, next) {
   fetch(url, options)
     .then(data => data.json())
     .then((result) => {
+
+      // Get the access_token
       const accessToken = result.access_token;
       console.log(`Access-token received : ${accessToken}`);
-      res.send(accessToken);
+
+      // Create the cookie
+      res.cookie('Github connection', accessToken, {
+        domain : 'angorance.github.io',
+        path : '/GitInsights'
+      })
+
+      // Redirect
+      res.redirect('https://angorance.github.io/GitInsights');
     })
     .catch(next);
 }
