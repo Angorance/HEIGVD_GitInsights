@@ -42,7 +42,7 @@ function oauthCallback(req, res, next) {
       console.log(`Access-token received : ${accessToken}`);
 
       // Create the cookie
-      res.cookie('Github connection', accessToken, {
+      res.cookie('Github_connection', accessToken, {
         domain: '.angorance.github.io',
         path: '/GitInsights',
         httpOnly: true,
