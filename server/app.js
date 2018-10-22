@@ -8,7 +8,9 @@ const oauth = require('./src/OAuth'); // For callback
 
 const app = express();
 const port = process.env.PORT || 3000;
-const client = new Github({ token: process.env.OAUTH_TOKEN }); // Used to create my own Github connection (@LNAline)
+
+// Used to create my own Github connection (@LNAline)
+const client = new Github({ token: process.env.OAUTH_TOKEN });
 
 // Enable CORS for the client app
 app.use(cors());
