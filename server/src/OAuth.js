@@ -6,9 +6,9 @@ const clientSecret = '7100d1e611dd28e989fd81009f4e78a09e96ecaa';
 
 function findAName(code) {
   return {
-    clientId,
-    clientSecret,
-    code,
+    "client_id": clientId,
+    "client_secret": clientSecret,
+    "code": code,
   };
 }
 
