@@ -109,14 +109,12 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
 
   // Get all user's stars
 
-  // Get all user's what ever (to decide)
-
   /* ========================================================================
   /*  Results sending
   /*====================================================================== */
   Promise.all([creationDate, firstRepositoryDate, location, avatarUrl, languages,
-    /* issues */,
     nbrCreatedRepositories, nbrForkedRepositories,
+    /* issues */
     ])
     .then(() => res.send(response));
 });
