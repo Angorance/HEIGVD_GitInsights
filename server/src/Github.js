@@ -126,7 +126,7 @@ class Github {
   userCountForkedRepositories(username) {
     return this.repos(username)
       .then((repos) => {
-        const nbrForkedRepositories = repo => (repo.fork == true ? 1 : 0);
+        const nbrForkedRepositories = repo => (repo.fork === true ? 1 : 0);
         return Promise.all(repos.map(nbrForkedRepositories))
           .then(results => results.reduce((elem, acc) => elem + acc, 0));
       });

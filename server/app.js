@@ -69,10 +69,18 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
     .then(issues => response.issues = issues)
     .catch(next);*/
 
+  // Get all user's opened issues
+
+  // Get all user's closed issues
+
   /* ========================================================================
   /*  3nd graph : coded lines and commits
   /*====================================================================== */
 
+  // Get all user's line coded
+
+  // Get all user's commits
+  // GET /repos/:owner/:repo/commits
 
   /* ========================================================================
   /*  4nd graph : repositories
@@ -95,8 +103,7 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
 
   // Get all user's stars
 
-  // Get all user's commits
-  // GET /repos/:owner/:repo/commits
+  // Get all user's what ever (to decide)
 
   /* ========================================================================
   /*  Results sending
