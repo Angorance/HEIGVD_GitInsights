@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const Github = require('./src/Github'); // For using our Github.js file
 const utils = require('./src/utils'); // For packing languages (group by)
-const oauth = require('./src/OAuth'); // For callback
+const GithubConnection = require('./src/GithubConnection'); // For connection the user to Github
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,6 +21,12 @@ app.use(cors());
     .then(user => res.send(user))
     .catch(next);
 });*/
+
+// Get a code from the client to retrieve his access_token and send it
+app.get('/authenticate', (req, res, next) => {
+  // Get the access_token of the client and send it
+  GithubConnection.getAccessToken(req, res, next);
+});
 
 // Get all user's information
 app.get('/users/:username'/*?:token'*/, (req, res, next) => {
@@ -113,11 +119,6 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
     nbrCreatedRepositories, nbrForkedRepositories,
     ])
     .then(() => res.send(response));
-});
-
-// Callback handler
-app.get('/callback', (req, res, next) => {
-  oauth.oauthCallback(req, res, next);
 });
 
 // Forward 404 to error handler

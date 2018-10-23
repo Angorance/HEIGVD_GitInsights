@@ -1,16 +1,16 @@
 const fetch = require('node-fetch'); // Used to post data from URL
 
 // Must be stored somewhere else, temporary
-const clientId = '2a9a479e2953860bbd89';
-const clientSecret = '7100d1e611dd28e989fd81009f4e78a09e96ecaa';
+const clientId = process.env.CLIENT_ID;
+const clientSecret = process.env.CLIENT_SECRET;
 
 /**
- * Return a cookie with access_token to the client
- * @param {*} req callback request sent by Github
- * @param {*} res cookie to send to the client
+ * Return the access_token of the client
+ * @param {*} req get request sent by the client with the code inside
+ * @param {*} res access_token received from Github
  * @param {*} next next function
  */
-function oauthCallback(req, res, next) {
+function getAccessToken(req, res, next) {
   // Get code from Github
   const codeReceived = req.query.code;
   console.log(`Code received : ${codeReceived}`);
@@ -42,18 +42,18 @@ function oauthCallback(req, res, next) {
       console.log(`Access-token received : ${accessToken}`);
 
       // Create the cookie
-      res.cookie('Github_connection', accessToken, {
+      /*res.cookie('Github_connection', accessToken, {
         domain: '.angorance.github.io',
         path: '/GitInsights',
         httpOnly: true,
         secure: true,
         maxAge: 600000,
-      });
+      });*/
 
       // Redirect
-      res.redirect('https://angorance.github.io/GitInsights');
+      res.send(accessToken/*'https://angorance.github.io/GitInsights'*/);
     })
     .catch(next);
 }
 
-module.exports = { oauthCallback };
+module.exports = { getAccessToken };
