@@ -16,11 +16,11 @@ const client = new Github({ token: process.env.OAUTH_TOKEN });
 app.use(cors());
 
 // Get all user's information
-/* app.get('/users/:username', (req, res, next) => {
-    client.user(req.params.username)
-      .then(user => res.send(user))
-      .catch(next);
-  }); */
+/*app.get('/users/:username', (req, res, next) => {
+  client.user(req.params.username)
+    .then(user => res.send(user))
+    .catch(next);
+});*/
 
 // Get all user's information
 app.get('/users/:username'/*?:token'*/, (req, res, next) => {
@@ -31,13 +31,13 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
   const response = {};
 
   // Get user's creation date
-  const creation = client.userCreation(req.params.username)
-    .then(creation => response.creation_date = creation)
+  const creationDate = client.userCreation(req.params.username)
+    .then(creation => response.creationDate = creation)
     .catch(next);
 
   // Get user's first repository creation date
-  const firstRepository = client.userFirstRepositoryDate(req.params.username)
-    .then(firstRepository => response.firstRepository_date = firstRepository)
+  const firstRepositoryDate = client.userFirstRepositoryDate(req.params.username)
+    .then(firstRepository => response.firstRepositoryDate = firstRepository)
     .catch(next);
   
   // Get user's location
@@ -47,7 +47,7 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
 
   // Get user's avatar url
   const avatarUrl = client.userAvatarUrl(req.params.username)
-    .then(avatar => response.avatar_url = avatar)
+    .then(avatar => response.avatarUrl = avatar)
     .catch(next);
 
   /* ========================================================================
@@ -65,11 +65,9 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
   /*====================================================================== */
 
   // Get all user's issues
-  /* app.get('/issues/:username', (req, res, next) => {
-    client.issues(req.params.username)
-      .then(issues => res.send(issues))
-      .catch(next);
-  }); */
+  /*const issues = client.issues(req.params.username)
+    .then(issues => response.issues = issues)
+    .catch(next);*/
 
   /* ========================================================================
   /*  3nd graph : coded lines and commits
@@ -86,11 +84,14 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
     .catch(next);*/
 
   // Get all user's created repositories
-  const createdRepositories = client.userCountCreatedRepositories(req.params.username)
+  const nbrCreatedRepositories = client.userCountCreatedRepositories(req.params.username)
     .then(total => response.nbrCreatedRepositories = total)
     .catch(next);
 
   // Get all user's forked repositories
+  const nbrForkedRepositories = client.userCountForkedRepositories(req.params.username)
+    .then(total => response.nbrForkedRepositories = total)
+    .catch(next);
 
   // Get all user's stars
 
@@ -100,9 +101,10 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
   /* ========================================================================
   /*  Results sending
   /*====================================================================== */
-  Promise.all([creation, firstRepository, location, avatarUrl, languages,
-    createdRepositories,/*,
-    repos*/])
+  Promise.all([creationDate, firstRepositoryDate, location, avatarUrl, languages,
+    /* issues */,
+    nbrCreatedRepositories, nbrForkedRepositories,
+    ])
     .then(() => res.send(response));
 });
 

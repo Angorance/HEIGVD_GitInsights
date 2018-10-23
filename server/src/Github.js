@@ -10,12 +10,12 @@ class ResponseError extends Error {
 }
 
 class Github {
-  constructor({token, baseUrl = 'https://api.github.com' } = {}) {
+  constructor({ token, baseUrl = 'https://api.github.com' } = {}) {
     this.token = token; // to remove
     this.baseUrl = baseUrl;
   }
 
-  request(path, /*token,*/ opts = {}) {
+  request(path, /*token, */ opts = {}) {
     const url = `${this.baseUrl}${path}`;
     const options = {
       ...opts,
@@ -41,8 +41,8 @@ class Github {
   /*====================================================================== */
 
   // Get all user's information
-  user(username/*, token*/) {
-    return this.request(`/users/${username}`/*, token */);
+  user(username/*, token */) {
+    return this.request(`/users/${username}`/* , token */);
   }
 
   // Get user's creation date
@@ -96,9 +96,9 @@ class Github {
   /*====================================================================== */
 
   // Get all user's issues
-  /* issues(username) {
-        return this.request(`/users/${username}/issues`);
-  } */
+  issues(username) {
+    return this.request(`/users/${username}/issues`);
+  }
 
   /* ========================================================================
   /*  3nd graph : coded lines and commits
@@ -121,6 +121,16 @@ class Github {
   }
 
   // Get all user's forked repositories
+  // let nbrForkedRepositories = 0;
+
+  userCountForkedRepositories(username) {
+    return this.repos(username)
+      .then((repos) => {
+        const nbrForkedRepositories = repo => (repo.fork == true ? 1 : 0);
+        return Promise.all(repos.map(nbrForkedRepositories))
+          .then(results => results.reduce((elem, acc) => elem + acc, 0));
+      });
+  }
 
   // Get all user's stars
 
