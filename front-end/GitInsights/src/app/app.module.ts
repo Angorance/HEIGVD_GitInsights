@@ -16,11 +16,11 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { CallbackPageComponent } from './callback-page/callback-page.component';
 
 const appRoutes: Routes = [
-  { path: "stats", component: StatPageComponent },
-  { path: "home", component: LoginPageComponent },
+  { path: "/stats", component: StatPageComponent },
+  { path: "/home", component: LoginPageComponent },
+  { path: "/callback", component: CallbackPageComponent },
   { path: "", redirectTo: "/home", pathMatch: "full" },
-  { path: "callback", component: CallbackPageComponent },
-  { path: "**", component: PageNotFoundComponent }
+  { path: "/**", component: PageNotFoundComponent }
 ];
 
 @NgModule({
