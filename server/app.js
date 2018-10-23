@@ -30,11 +30,6 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
 
   const response = {};
 
-  // Get user's location
-  const location = client.userLocation(req.params.username)
-    .then(location => response.location = location)
-    .catch(next);
-
   // Get user's creation date
   const creation = client.userCreation(req.params.username)
     .then(creation => response.creation_date = creation)
@@ -45,6 +40,16 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
     .then(firstRepository => response.firstRepository_date = firstRepository)
     .catch(next);
   
+  // Get user's location
+  const location = client.userLocation(req.params.username)
+    .then(location => response.location = location)
+    .catch(next);
+
+  // Get user's avatar url
+  const avatarUrl = client.userAvatarUrl(req.params.username)
+    .then(avatar => response.avatar_url = avatar)
+    .catch(next);
+
   /* ========================================================================
   /*  1st graph : languages
   /*====================================================================== */
@@ -95,8 +100,8 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
   /* ========================================================================
   /*  Results sending
   /*====================================================================== */
-  Promise.all([location, creation, languages, firstRepository, 
-    createdRepositories/*,
+  Promise.all([creation, firstRepository, location, avatarUrl, languages,
+    createdRepositories,/*,
     repos*/])
     .then(() => res.send(response));
 });

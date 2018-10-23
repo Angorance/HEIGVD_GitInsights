@@ -51,12 +51,6 @@ class Github {
       .then(user => user.created_at);
   }
 
-  // Get user's location
-  userLocation(username) {
-    return this.user(username)
-      .then(user => user.location);
-  }
-
   // Get user's first repository creation date
   userFirstRepositoryDate(username) {
     return this.repos(username)
@@ -65,6 +59,19 @@ class Github {
         return repos[0].created_at;
       });
   }
+
+  // Get user's location
+  userLocation(username) {
+    return this.user(username)
+      .then(user => user.location);
+  }
+
+  // Get user's avatar url
+  userAvatarUrl(username) {
+    return this.user(username)
+      .then(user => user.avatar_url);
+  }
+
 
   /* ========================================================================
   /*  1st graph : languages
