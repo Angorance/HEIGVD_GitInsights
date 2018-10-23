@@ -1,0 +1,52 @@
+.line{
+  background-color: #2e87bf;
+  border-radius: 15px 15px;
+  height: 3px;
+  width: 100%;
+
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center; 
+}
+
+.bigDot{
+  color : white;
+  z-index: 90;
+  background-color: #2e7aaa;
+  transition : 0.3s ease-in-out;
+  line-height: 40px;
+  font-size: 0.7em;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  position: relative;
+  top:-17px;
+}
+
+.bigDot:hover {
+  transform: scale(1.2);
+  z-index: 100;
+  background-color: #3d92c7;
+}
+
+.littleDot{
+  z-index: 99;
+  background-color: red;/*#2e7aaa;*/
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  position: absolute;
+  top: 43%;
+}
+.container{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+}

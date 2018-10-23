@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="line">
+    <div *ngFor="let year of years" class="bigDot">
+      {{year}}
+    </div>
+
+    <div *ngFor="let milestone of milestones" class="littleDot" [ngStyle]="setMilestoneStyle(milestone)">
+
+    </div>
+  </div>
+</div>

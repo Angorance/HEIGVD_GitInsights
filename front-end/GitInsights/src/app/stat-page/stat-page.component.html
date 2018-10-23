@@ -1,88 +1,134 @@
 <div class="topBar">
-  <img id="logo" src="../../assets/images/gitInsight.png" height="100 px"> GitInsights
+  <img id="logo" src="../../assets/images/gitInsight.png" height="75 px"> GitInsights
 </div>
 <div class="mainContent">
-  <mat-horizontal-stepper>
+  <mat-horizontal-stepper class="stepper-content">
     <!--------------------------------------------------------- STATS PAGE ------------------------------------------------------------->
-    <mat-step>
-      <ng-template matStepLabel>Statistiques</ng-template>
-      <mat-card>
-        TIMELINE
+    <mat-step >
+
+      <ng-template matStepLabel>Statistics</ng-template>
+      <mat-card class="timeline-card">
+        <app-timeline></app-timeline>
       </mat-card>
 
       <mat-grid-list cols="3" rowHeight="2:1">
 
         <mat-grid-tile>
-          <mat-card>
+          <mat-card class="stat-card">
             <!-- Language -->
-            Languages
+            <table>
+              <thead>
+                <tr>
+                  <th>
+                    Languages
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td id="table-container">
+                    TABLEAU
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </mat-card>
         </mat-grid-tile>
 
         <mat-grid-tile rowspan="2">
-          AVATAR MON GARS
+            <img src="" alt="User avatar">
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-card>
+          <mat-card class="stat-card">
             <!-- issues -->
             <table>
-              <tr>
-                <td> 52 </td>
-                <td> 45 </td>
-              </tr>
+              <thead>
+                <tr>
+                  <th colspan="2">
+                    Issues
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td> 52 </td>
+                  <td> 45 </td>
+                </tr>
+              </tbody>
 
-              <tr>
-                <th> Opened </th>
-                <th> Closed </th>
-              </tr>
+              <tfoot>
+                <tr>
+                  <th> Opened </th>
+                  <th> Closed </th>
+                </tr>
+              </tfoot>
 
             </table>
           </mat-card>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-card>
+          <mat-card class="stat-card">
             <!-- General -->
             <table>
-              <tr>
-                <td> 529'876 </td>
-                <td> 458 </td>
-              </tr>
+              <thead>
+                <tr>
+                  <th colspan="2">
+                    Trivia
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td> 529'876 </td>
+                  <td> 458 </td>
+                </tr>
+              </tbody>
 
-              <tr>
-                <th> Lines coded </th>
-                <th> Commits </th>
-              </tr>
-
+              <tfoot>
+                <tr>
+                  <th> Lines coded </th>
+                  <th> Commits </th>
+                </tr>
+              </tfoot>
             </table>
           </mat-card>
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-card>
+          <mat-card class="stat-card">
             <!-- Repositories -->
             <table>
-              <tr>
-                <td> 52 </td>
-                <td> 45 </td>
-                <td> 52 </td>
-                <td> 45 </td>
-              </tr>
+              <thead>
+                <tr>
+                  <th colspan="4">
+                    Repositories
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td> 52 </td>
+                  <td> 45 </td>
+                  <td> 52 </td>
+                </tr>
+              </tbody>
 
-              <tr>
-                <th> Created </th>
-                <th> Forked </th>
-                <th> Stars </th>
-                <th> Participation </th>
-              </tr>
+              <tfoot>
+                <tr>
+                  <th> Created </th>
+                  <th> Forked </th>
+                  <th> Stars </th>
+                </tr>
+              </tfoot>
             </table>
           </mat-card>
         </mat-grid-tile>
 
       </mat-grid-list>
 
-      <button mat-button matStepperNext style="right : 50px; position:fixed;"> Next </button>
+      <button mat-button matStepperNext style="right : 50px; position:fixed; margin-top: 15px;"> Next </button>
     </mat-step>
 
     <!--------------------------------------------------------- TIPS PAGE ------------------------------------------------------------->
@@ -91,7 +137,7 @@
       <mat-card>
         TIPS
       </mat-card>
-      <button mat-button matStepperPrevious style="left: 50px; position:fixed;"> Previous </button>
+      <button mat-button matStepperPrevious style="left: 50px; position:fixed; margin-top:15px;"> Previous </button>
     </mat-step>
 
   </mat-horizontal-stepper>

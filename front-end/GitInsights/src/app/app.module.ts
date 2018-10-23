@@ -13,6 +13,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { StatPageComponent } from './stat-page/stat-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LoginPageComponent } from './login-page/login-page.component';
+import { TimelineComponent } from './timeline/timeline.component';
 import { CallbackPageComponent } from './callback-page/callback-page.component';
 
 const appRoutes: Routes = [
@@ -30,6 +31,7 @@ const appRoutes: Routes = [
     StatPageComponent,
     PageNotFoundComponent,
     LoginPageComponent,
+    TimelineComponent,
     CallbackPageComponent,
   ],
   imports: [
