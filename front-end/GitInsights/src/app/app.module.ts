@@ -16,11 +16,11 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { CallbackPageComponent } from './callback-page/callback-page.component';
 
 const appRoutes: Routes = [
-  { path: "/stats", component: StatPageComponent },
-  { path: "/home", component: LoginPageComponent },
-  { path: "/callback", component: CallbackPageComponent },
+  { path: "stats", component: StatPageComponent },
+  { path: "home", component: LoginPageComponent },
+  { path: "callback", component: CallbackPageComponent },
   { path: "", redirectTo: "/home", pathMatch: "full" },
-  { path: "/**", component: PageNotFoundComponent }
+  { path: "**", component: PageNotFoundComponent }
 ];
 
 @NgModule({
@@ -39,6 +39,14 @@ const appRoutes: Routes = [
     MatCardModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, { enableTracing: true }),
+  ],
+  exports: [
+    AppComponent,
+    BtnLoginComponent,
+    StatPageComponent,
+    PageNotFoundComponent,
+    LoginPageComponent,
+    CallbackPageComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]
