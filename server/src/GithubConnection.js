@@ -5,17 +5,17 @@ const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 
 /**
- * Return the access_token of the client
+ * Send the access_token of the client
  * @param {*} req get request sent by the client with the code inside
  * @param {*} res access_token received from Github
  * @param {*} next next function
  */
-function getAccessToken(req, res, next) {
+function sendAccessToken(req, res, next) {
   // Get code from Github
   const codeReceived = req.query.code;
   console.log(`Code received : ${codeReceived}`);
 
-  // Create the POST request
+  // Create the POST request to Github with account information
   const url = 'https://github.com/login/oauth/access_token';
 
   const body = {
@@ -41,19 +41,10 @@ function getAccessToken(req, res, next) {
       const accessToken = result.access_token;
       console.log(`Access-token received : ${accessToken}`);
 
-      // Create the cookie
-      /*res.cookie('Github_connection', accessToken, {
-        domain: '.angorance.github.io',
-        path: '/GitInsights',
-        httpOnly: true,
-        secure: true,
-        maxAge: 600000,
-      });*/
-
-      // Redirect
-      res.send(accessToken/*'https://angorance.github.io/GitInsights'*/);
+      // Send the access_token to the client
+      res.send(accessToken);
     })
     .catch(next);
 }
 
-module.exports = { getAccessToken };
+module.exports = { sendAccessToken };

@@ -25,7 +25,7 @@ app.use(cors());
 // Get a code from the client to retrieve his access_token and send it
 app.get('/authenticate', (req, res, next) => {
   // Get the access_token of the client and send it
-  GithubConnection.getAccessToken(req, res, next);
+  GithubConnection.sendAccessToken(req, res, next);
 });
 
 // Get all user's information
