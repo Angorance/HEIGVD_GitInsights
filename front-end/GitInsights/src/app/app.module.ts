@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 
 import { AppComponent } from './app.component';
 
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BtnLoginComponent } from './btn-login/btn-login.component';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -13,12 +13,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { StatPageComponent } from './stat-page/stat-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LoginPageComponent } from './login-page/login-page.component';
+import { CallbackPageComponent } from './callback-page/callback-page.component';
 
-const appRoutes : Routes = [
-  {path:"stats", component:StatPageComponent},
-  {path:"home", component:LoginPageComponent},
-  {path:"", redirectTo:"/home", pathMatch:"full"},
-  {path:"**", component:PageNotFoundComponent}
+const appRoutes: Routes = [
+  { path: "stats", component: StatPageComponent },
+  { path: "home", component: LoginPageComponent },
+  { path: "", redirectTo: "/home", pathMatch: "full" },
+  { path: "callback", component: CallbackPageComponent },
+  { path: "**", component: PageNotFoundComponent }
 ];
 
 @NgModule({
@@ -28,6 +30,7 @@ const appRoutes : Routes = [
     StatPageComponent,
     PageNotFoundComponent,
     LoginPageComponent,
+    CallbackPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,7 @@ const appRoutes : Routes = [
     MatButtonModule,
     MatCardModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes, {enableTracing: true}),
+    RouterModule.forRoot(appRoutes, { enableTracing: true }),
   ],
   providers: [],
   bootstrap: [AppComponent]

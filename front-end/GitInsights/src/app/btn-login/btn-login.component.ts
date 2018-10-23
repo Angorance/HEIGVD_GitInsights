@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-btn-login',
@@ -8,7 +7,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 })
 export class BtnLoginComponent implements OnInit {
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   ngOnInit() { }
 
