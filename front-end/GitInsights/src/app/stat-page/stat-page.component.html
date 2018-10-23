@@ -1,6 +1,99 @@
-<div color="primary">
-
+<div class="topBar">
+  <img id="logo" src="../../assets/images/gitInsight.png" height="100 px"> GitInsights
 </div>
-<div>
-  j'aime les stats
+<div class="mainContent">
+  <mat-horizontal-stepper>
+    <!--------------------------------------------------------- STATS PAGE ------------------------------------------------------------->
+    <mat-step>
+      <ng-template matStepLabel>Statistiques</ng-template>
+      <mat-card>
+        TIMELINE
+      </mat-card>
+
+      <mat-grid-list cols="3" rowHeight="2:1">
+
+        <mat-grid-tile>
+          <mat-card>
+            <!-- Language -->
+            Languages
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile rowspan="2">
+          AVATAR MON GARS
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-card>
+            <!-- issues -->
+            <table>
+              <tr>
+                <td> 52 </td>
+                <td> 45 </td>
+              </tr>
+
+              <tr>
+                <th> Opened </th>
+                <th> Closed </th>
+              </tr>
+
+            </table>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-card>
+            <!-- General -->
+            <table>
+              <tr>
+                <td> 529'876 </td>
+                <td> 458 </td>
+              </tr>
+
+              <tr>
+                <th> Lines coded </th>
+                <th> Commits </th>
+              </tr>
+
+            </table>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-card>
+            <!-- Repositories -->
+            <table>
+              <tr>
+                <td> 52 </td>
+                <td> 45 </td>
+                <td> 52 </td>
+                <td> 45 </td>
+              </tr>
+
+              <tr>
+                <th> Created </th>
+                <th> Forked </th>
+                <th> Stars </th>
+                <th> Participation </th>
+              </tr>
+            </table>
+          </mat-card>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+      <button mat-button matStepperNext style="right : 50px; position:fixed;"> Next </button>
+    </mat-step>
+
+    <!--------------------------------------------------------- TIPS PAGE ------------------------------------------------------------->
+    <mat-step>
+      <ng-template matStepLabel>TIPS</ng-template>
+      <mat-card>
+        TIPS
+      </mat-card>
+      <button mat-button matStepperPrevious style="left: 50px; position:fixed;"> Previous </button>
+    </mat-step>
+
+  </mat-horizontal-stepper>
+
 </div>

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { MatButtonModule } from '@angular/material';
+import { MatButtonModule, MatGridListModule, MatStepperModule } from '@angular/material';
 import { MatCardModule } from '@angular/material/card';
 
 import { AppComponent } from './app.component';
@@ -34,6 +34,8 @@ const appRoutes : Routes = [
     BrowserAnimationsModule,
     MatButtonModule,
     MatCardModule,
+    MatGridListModule,
+    MatStepperModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, {enableTracing: true}),
   ],

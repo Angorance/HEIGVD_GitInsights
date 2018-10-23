@@ -1,0 +1,21 @@
+.topBar{
+    width : 100%;
+    background-color: #2e87bf;
+    font-size: 3em;
+    display : flex;
+    justify-items: center;
+    align-items: center;
+    padding : 15px;  
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    margin-bottom: 15px;
+}
+
+#logo{
+    margin-right: 50px;
+}
+
+.maincontent{
+    width : 100%;
+    padding: 20px;
+}
+
