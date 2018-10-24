@@ -84,9 +84,14 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
   /*====================================================================== */
 
   // Get all user's line coded
+  const nbrCodedLines = client.userCountCodedLines(req.params.username)
+    .then(total => response.nbrCodedLines = total)
+    .catch(next);
 
   // Get all user's commits
-  // GET /repos/:owner/:repo/commits
+  const nbrCommits = client.userCountCommits(req.params.username)
+    .then(total => response.nbrCommits = total)
+    .catch(next);
 
   /* ========================================================================
   /*  4nd graph : repositories
@@ -112,7 +117,9 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
   /* ========================================================================
   /*  Results sending
   /*====================================================================== */
-  Promise.all([creationDate, firstRepositoryDate, location, avatarUrl, languages,
+  Promise.all([creationDate, firstRepositoryDate, location, avatarUrl,
+    languages,
+    nbrCodedLines, nbrCommits,
     nbrCreatedRepositories, nbrForkedRepositories,
     /* issues */
     ])

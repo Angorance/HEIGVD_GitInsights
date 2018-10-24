@@ -1,4 +1,4 @@
-const fetch = require('node-fetch'); // Used to get data from URL
+const fetch = require('node-fetch');
 
 class ResponseError extends Error {
   constructor(res, body) {
@@ -15,7 +15,7 @@ class Github {
     this.baseUrl = baseUrl;
   }
 
-  request(path, /*token, */ opts = {}) {
+  request(path, /* token, */ opts = {}) {
     const url = `${this.baseUrl}${path}`;
     const options = {
       ...opts,
@@ -41,9 +41,11 @@ class Github {
   /*====================================================================== */
 
   // Get all user's information
-  user(username/*, token */) {
+  user(username/* , token */) {
     return this.request(`/users/${username}`/* , token */);
   }
+
+  /* --------------------------------------------------------------------- */
 
   // Get user's creation date
   userCreation(username) {
@@ -82,6 +84,8 @@ class Github {
     return this.request(`/repos/${repoName}/languages`);
   }
 
+  /* --------------------------------------------------------------------- */
+
   // Get all languages of the user
   userLanguages(username) {
     return this.repos(username)
@@ -104,6 +108,39 @@ class Github {
   /*  3nd graph : coded lines and commits
   /* ====================================================================== */
 
+  // Get all commits by repository
+  repoCommits(repoName) {
+    return this.request(`/repos/${repoName}/commits`);
+  }
+
+  // Get all user's personal commits
+  userPersonalCommits(username) {
+    return this.repos(username)
+      .then((repos) => {
+        // Get commits for each repo
+        const getCommits = repo => this.repoCommits(repo.full_name)
+          .then(commits => (commits).filter(commit => commit.author != null && commit.author.login === username));
+
+        // Get all commits of the user
+        return Promise.all(repos.map(getCommits))
+          .then(results => results.reduce((acc, elem) => acc.concat(elem), []));
+      });
+  }
+
+  /* --------------------------------------------------------------------- */
+
+  // Get user's number of coded lines
+  userCountCodedLines(username) {
+    return this.userPersonalCommits(username);
+  }
+
+  // Get all identifiers of user's personal commits
+
+  // Get user's number of commits
+  userCountCommits(username) {
+    return this.userPersonalCommits(username)
+      .then(results => results.length);
+  }
 
   /* ========================================================================
   /*  4nd graph : repositories

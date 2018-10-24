@@ -1,4 +1,4 @@
-const fetch = require('node-fetch'); // Used to post data from URL
+const fetch = require('node-fetch');
 
 // Must be stored somewhere else, temporary
 const clientId = process.env.CLIENT_ID;
