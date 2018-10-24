@@ -15,8 +15,8 @@ class Github {
     this.baseUrl = baseUrl;
   }
 
-  request(path, /* token, */ opts = {}) {
-    const url = `${this.baseUrl}${path}`;
+  request(path, /* token, */entireUrl = null, opts = {}) {
+    const url = entireUrl == null ? `${this.baseUrl}${path}` : entireUrl;
     const options = {
       ...opts,
       headers: {
@@ -113,8 +113,8 @@ class Github {
     return this.request(`/repos/${repoName}/commits`);
   }
 
-  // Get all user's personal commits
-  userPersonalCommits(username) {
+  // Get all personal commits of user's repositories
+  reposPersonalCommits(username) {
     return this.repos(username)
       .then((repos) => {
         // Get commits for each repo
@@ -131,14 +131,26 @@ class Github {
 
   // Get user's number of coded lines
   userCountCodedLines(username) {
-    return this.userPersonalCommits(username);
-  }
+    // Get all url of user's personal commits
+    return this.reposPersonalCommits(username)
+      .then((personalCommits) => {
+        // Get all urls of user's personal commits
+        const url = personalCommit => personalCommit.url;
+        return personalCommits.map(url);
+      })
+      .then((urls) => {
+        // Get all lines added in personal commits
+        const codedLines = url => this.request(null, url)
+          .then(personalCommit => personalCommit.stats.additions);
 
-  // Get all identifiers of user's personal commits
+        return Promise.all(urls.map(codedLines))
+          .then(results => results.reduce((elem, acc) => elem + acc, 0));
+      });
+  }
 
   // Get user's number of commits
   userCountCommits(username) {
-    return this.userPersonalCommits(username)
+    return this.reposPersonalCommits(username)
       .then(results => results.length);
   }
 
