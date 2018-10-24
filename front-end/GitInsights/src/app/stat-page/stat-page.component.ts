@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-stat-page',
@@ -7,7 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StatPageComponent implements OnInit {
 
-  constructor() { }
+  tips = ['a random tip',
+  'another tip',
+  'oh my, so much tip just for me',
+  'this one isn\'t very relevant (it was Daniel\'s idea ;) )',
+  'this is the last one, promised',
+  'ahah just kidding, this is the last :)'
+];
+
+  chart = [];
+
+  constructor() {
+  }
 
   ngOnInit() {
   }

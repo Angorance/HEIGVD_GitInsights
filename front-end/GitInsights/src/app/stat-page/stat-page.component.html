@@ -1,5 +1,5 @@
 <div class="topBar">
-  <img id="logo" src="../../assets/images/gitInsight.png" height="75 px"> GitInsights
+  <img id="logo" src="../../assets/images/gitInsight.png" height="50 px"> <h1>GitInsights</h1>
 </div>
 <div class="mainContent">
   <mat-horizontal-stepper class="stepper-content">
@@ -27,7 +27,7 @@
               <tbody>
                 <tr>
                   <td id="table-container">
-                    TABLEAU
+                    <canvas id="chart"></canvas>
                   </td>
                 </tr>
               </tbody>
@@ -134,12 +134,18 @@
     <!--------------------------------------------------------- TIPS PAGE ------------------------------------------------------------->
     <mat-step>
       <ng-template matStepLabel>TIPS</ng-template>
-      <mat-card>
-        TIPS
+      <mat-card style="text-align: center">
+        <h2> How can you get better  ? </h2>
       </mat-card>
+      <div id="tip-container">
+          <mat-card *ngFor="let tip of tips" class="tip-card">
+            {{tip}}
+          </mat-card>
+        </div>
       <button mat-button matStepperPrevious style="left: 50px; position:fixed; margin-top:15px;"> Previous </button>
     </mat-step>
 
+    
   </mat-horizontal-stepper>
 
 </div>
