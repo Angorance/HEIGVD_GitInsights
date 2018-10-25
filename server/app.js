@@ -15,13 +15,6 @@ const client = new Github();
 // Enable CORS for the client app
 app.use(cors());
 
-// Get all user's information
-/*app.get('/users/:username', (req, res, next) => {
-  client.user(req.params.username)
-    .then(user => res.send(user))
-    .catch(next);
-});*/
-
 // Get a code from the client to retrieve his access_token and send it
 app.get('/authenticate', (req, res, next) => {
   // Get the access_token of the client and send it
@@ -30,7 +23,7 @@ app.get('/authenticate', (req, res, next) => {
 
 // Get all user's information
 app.get('/user', (req, res, next) => {
-  const access_token = req.query.access_token;
+  const accessToken = req.query.access_token;
   /* ========================================================================
   /*  Timeline
   /*====================================================================== */
@@ -38,23 +31,23 @@ app.get('/user', (req, res, next) => {
   const response = {};
 
   // Get user's creation date
-  const creationDate = client.userCreation(access_token)
-    .then(creation => response.creationDate = creation)
+  const creationDate = client.userCreation(accessToken)
+    .then((creation) => { response.creationDate = creation; })
     .catch(next);
 
   // Get user's first repository creation date
-  const firstRepositoryDate = client.userFirstRepositoryDate(access_token)
-    .then(firstRepository => response.firstRepositoryDate = firstRepository)
+  const firstRepositoryDate = client.userFirstRepositoryDate(accessToken)
+    .then((firstRepository) => { response.firstRepositoryDate = firstRepository; })
     .catch(next);
   
   // Get user's location
-  const location = client.userLocation(access_token)
-    .then(location => response.location = location)
+  const location = client.userLocation(accessToken)
+    .then((userLocation) => { response.location = userLocation; })
     .catch(next);
 
   // Get user's avatar url
-  const avatarUrl = client.userAvatarUrl(access_token)
-    .then(avatar => response.avatarUrl = avatar)
+  const avatarUrl = client.userAvatarUrl(accessToken)
+    .then((avatar) => { response.avatarUrl = avatar; })
     .catch(next);
 
   /* ========================================================================
@@ -62,9 +55,9 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   // Get user's number of coded lines by language
-  const languages = client.userLanguages(access_token)
+  const languages = client.userLanguages(accessToken)
     .then(utils.getReposLanguagesStats)
-    .then(languages => response.languages = languages)
+    .then((allLanguages) => { response.languages = allLanguages; })
     .catch(next);
 
   /* ========================================================================
@@ -85,13 +78,13 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   // Get all user's line coded
-  const nbrCodedLines = client.userCountCodedLines(access_token)
-    .then(total => response.nbrCodedLines = total)
+  const nbrCodedLines = client.userCountCodedLines(accessToken)
+    .then((total) => { response.nbrCodedLines = total; })
     .catch(next);
 
   // Get all user's commits
-  const nbrCommits = client.userCountCommits(access_token)
-    .then(total => response.nbrCommits = total)
+  const nbrCommits = client.userCountCommits(accessToken)
+    .then((total) => { response.nbrCommits = total; })
     .catch(next);
 
   /* ========================================================================
@@ -104,13 +97,13 @@ app.get('/user', (req, res, next) => {
     .catch(next);*/
 
   // Get all user's created repositories
-  const nbrCreatedRepositories = client.userCountCreatedRepositories(access_token)
-    .then(total => response.nbrCreatedRepositories = total)
+  const nbrCreatedRepositories = client.userCountCreatedRepositories(accessToken)
+    .then((total) => { response.nbrCreatedRepositories = total; })
     .catch(next);
 
   // Get all user's forked repositories
-  const nbrForkedRepositories = client.userCountForkedRepositories(access_token)
-    .then(total => response.nbrForkedRepositories = total)
+  const nbrForkedRepositories = client.userCountForkedRepositories(accessToken)
+    .then((total) => { response.nbrForkedRepositories = total; })
     .catch(next);
 
   // Get all user's stars
