@@ -12,7 +12,7 @@ export class StatPageComponent implements OnInit {
   tips = ['a random tip',
     'another tip',
     'oh my, so much tip just for me',
-    'this one isn\'t very relevant (it was Daniel\'s idea ;) )',
+    'this one isn\'t very relevant (it was Nybar\'s idea ;) )',
     'this is the last one, promised',
     'ahah just kidding, this is the last :)'
   ];
