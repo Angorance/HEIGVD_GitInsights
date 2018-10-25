@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Used to create my own Github connection (@LNAline)
-const client = new Github({ token: process.env.OAUTH_TOKEN });
+const client = new Github();
 
 // Enable CORS for the client app
 app.use(cors());
@@ -29,7 +29,9 @@ app.get('/authenticate', (req, res, next) => {
 });
 
 // Get all user's information
-app.get('/users/:username'/*?:token'*/, (req, res, next) => {
+app.get('/users/:username', (req, res, next) => {
+  const username = req.params.username;
+  const access_token = req.query.access_token;
   /* ========================================================================
   /*  Timeline
   /*====================================================================== */
@@ -37,22 +39,22 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
   const response = {};
 
   // Get user's creation date
-  const creationDate = client.userCreation(req.params.username)
+  const creationDate = client.userCreation(username, access_token)
     .then(creation => response.creationDate = creation)
     .catch(next);
 
   // Get user's first repository creation date
-  const firstRepositoryDate = client.userFirstRepositoryDate(req.params.username)
+  const firstRepositoryDate = client.userFirstRepositoryDate(username, access_token)
     .then(firstRepository => response.firstRepositoryDate = firstRepository)
     .catch(next);
   
   // Get user's location
-  const location = client.userLocation(req.params.username)
+  const location = client.userLocation(username, access_token)
     .then(location => response.location = location)
     .catch(next);
 
   // Get user's avatar url
-  const avatarUrl = client.userAvatarUrl(req.params.username)
+  const avatarUrl = client.userAvatarUrl(username, access_token)
     .then(avatar => response.avatarUrl = avatar)
     .catch(next);
 
@@ -61,7 +63,7 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
   /*====================================================================== */
 
   // Get user's number of coded lines by language
-  const languages = client.userLanguages(req.params.username)
+  const languages = client.userLanguages(username, access_token)
     .then(utils.getReposLanguagesStats)
     .then(languages => response.languages = languages)
     .catch(next);
@@ -84,12 +86,12 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
   /*====================================================================== */
 
   // Get all user's line coded
-  const nbrCodedLines = client.userCountCodedLines(req.params.username)
+  const nbrCodedLines = client.userCountCodedLines(username, access_token)
     .then(total => response.nbrCodedLines = total)
     .catch(next);
 
   // Get all user's commits
-  const nbrCommits = client.userCountCommits(req.params.username)
+  const nbrCommits = client.userCountCommits(username, access_token)
     .then(total => response.nbrCommits = total)
     .catch(next);
 
@@ -103,12 +105,12 @@ app.get('/users/:username'/*?:token'*/, (req, res, next) => {
     .catch(next);*/
 
   // Get all user's created repositories
-  const nbrCreatedRepositories = client.userCountCreatedRepositories(req.params.username)
+  const nbrCreatedRepositories = client.userCountCreatedRepositories(username, access_token)
     .then(total => response.nbrCreatedRepositories = total)
     .catch(next);
 
   // Get all user's forked repositories
-  const nbrForkedRepositories = client.userCountForkedRepositories(req.params.username)
+  const nbrForkedRepositories = client.userCountForkedRepositories(username, access_token)
     .then(total => response.nbrForkedRepositories = total)
     .catch(next);
 

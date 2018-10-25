@@ -11,18 +11,17 @@ class ResponseError extends Error {
 }
 
 class Github {
-  constructor({ token, baseUrl = 'https://api.github.com' } = {}) {
-    this.token = token; // to remove
+  constructor({ baseUrl = 'https://api.github.com' } = {}) {
     this.baseUrl = baseUrl;
   }
 
-  request(path, /* token, */entireUrl = null, opts = {}) {
+  request(path, token, entireUrl = null, opts = {}) {
     const url = entireUrl == null ? `${this.baseUrl}${path}` : entireUrl;
     const options = {
       ...opts,
       headers: {
         Accept: 'application/vnd.github.v3+json',
-        Authorization: `token ${this.token}`, // to change to token
+        Authorization: `token ${token}`,
       },
     };
 
@@ -42,33 +41,33 @@ class Github {
   /*====================================================================== */
 
   // Get all user's information
-  user(username/* , token */) {
-    return this.request(`/users/${username}`/* , token */);
+  user(username, token) {
+    return this.request(`/users/${username}`, token);
   }
 
   /* --------------------------------------------------------------------- */
 
   // Get user's creation date
-  userCreation(username) {
-    return this.user(username)
+  userCreation(username, token) {
+    return this.user(username, token)
       .then(user => user.created_at);
   }
 
   // Get user's first repository creation date
-  userFirstRepositoryDate(username) {
-    return this.repos(username)
+  userFirstRepositoryDate(username, token) {
+    return this.repos(username, token)
       .then(repos => utils.getOldestCreationDate(repos));
   }
 
   // Get user's location
-  userLocation(username) {
-    return this.user(username)
+  userLocation(username, token) {
+    return this.user(username, token)
       .then(user => user.location);
   }
 
   // Get user's avatar url
-  userAvatarUrl(username) {
-    return this.user(username)
+  userAvatarUrl(username, token) {
+    return this.user(username, token)
       .then(user => user.avatar_url);
   }
 
@@ -85,8 +84,8 @@ class Github {
   /* --------------------------------------------------------------------- */
 
   // Get all languages of the user
-  userLanguages(username) {
-    return this.repos(username)
+  userLanguages(username, token) {
+    return this.repos(username, token)
       .then((repos) => {
         const getLanguages = repo => this.repoLanguages(repo.full_name);
         return Promise.all(repos.map(getLanguages));
@@ -98,9 +97,9 @@ class Github {
   /*====================================================================== */
 
   // Get all user's issues
-  issues(username) {
+  /*issues(username) {
     return this.request(`/users/${username}/issues`);
-  }
+  }*/
 
   /* ========================================================================
   /*  3nd graph : coded lines and commits
@@ -112,8 +111,8 @@ class Github {
   }
 
   // Get all personal commits of user's repositories
-  reposPersonalCommits(username) {
-    return this.repos(username)
+  reposPersonalCommits(username, token) {
+    return this.repos(username, token)
       .then((repos) => {
         // Get commits for each repo
         const getCommits = repo => this.repoCommits(repo.full_name)
@@ -128,9 +127,9 @@ class Github {
   /* --------------------------------------------------------------------- */
 
   // Get user's number of coded lines
-  userCountCodedLines(username) {
+  userCountCodedLines(username, token) {
     // Get all url of user's personal commits
-    return this.reposPersonalCommits(username)
+    return this.reposPersonalCommits(username, token)
       .then((personalCommits) => {
         // Get all urls of user's personal commits
         const url = personalCommit => personalCommit.url;
@@ -138,7 +137,7 @@ class Github {
       })
       .then((urls) => {
         // Get all lines added in personal commits
-        const codedLines = url => this.request(null, url)
+        const codedLines = url => this.request(null, token, url)
           .then(personalCommit => personalCommit.stats.additions);
 
         return Promise.all(urls.map(codedLines))
@@ -147,8 +146,8 @@ class Github {
   }
 
   // Get user's number of commits
-  userCountCommits(username) {
-    return this.reposPersonalCommits(username)
+  userCountCommits(username, token) {
+    return this.reposPersonalCommits(username, token)
       .then(results => results.length);
   }
 
@@ -157,21 +156,21 @@ class Github {
   /*====================================================================== */
 
   // Get all user's repositories
-  repos(username) {
-    return this.request(`/users/${username}/repos`);
+  repos(username, token) {
+    return this.request(`/users/${username}/repos`, token);
   }
 
   // Get all user's created repositories
-  userCountCreatedRepositories(username) {
-    return this.repos(username)
+  userCountCreatedRepositories(username, token) {
+    return this.repos(username, token)
       .then(repos => repos.length);
   }
 
   // Get all user's forked repositories
   // let nbrForkedRepositories = 0;
 
-  userCountForkedRepositories(username) {
-    return this.repos(username)
+  userCountForkedRepositories(username, token) {
+    return this.repos(username, token)
       .then((repos) => {
         const nbrForkedRepositories = repo => (repo.fork === true ? 1 : 0);
         return Promise.all(repos.map(nbrForkedRepositories))
