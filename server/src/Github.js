@@ -45,6 +45,12 @@ class Github {
     return this.request('/user', token);
   }
 
+  // Get user's login
+  getLogin(token) {
+    return this.user(token)
+      .then(profile => profile.login);
+  }
+
   /* --------------------------------------------------------------------- */
 
   // Get user's creation date
@@ -55,7 +61,7 @@ class Github {
 
   // Get user's first repository creation date
   userFirstRepositoryDate(token) {
-    return this.repos(token)
+    return this.publicRepos(token)
       .then(repos => utils.getOldestCreationDate(repos));
   }
 
@@ -85,7 +91,7 @@ class Github {
 
   // Get all languages of the user
   userLanguages(token) {
-    return this.repos(token)
+    return this.publicRepos(token)
       .then((repos) => {
         const getLanguages = repo => this.repoLanguages(repo.full_name, token);
         return Promise.all(repos.map(getLanguages));
@@ -112,12 +118,10 @@ class Github {
 
   // Get all personal commits of user's repositories
   reposPersonalCommits(token) {
-    return this.repos(token)
+    return this.publicRepos(token)
       .then((repos) => {
         // Get commits for each repo
-        const username = this.user(token)
-          .then(profile => profile.login);
-
+        const username = this.getLogin(token);
         const getCommits = repo => this.repoCommits(repo.full_name, token)
           .then(commits => (commits).filter(commit => commit.author != null && commit.author.login === username));
 
@@ -158,20 +162,41 @@ class Github {
   /*  4nd graph : repositories
   /*====================================================================== */
 
-  // Get all user's repositories
-  repos(token) {
+  // Get all user's public repositories
+  publicRepos(token) {
+    return this.getLogin(token)
+      .then(username => this.request(`/users/${username}/repos`, token));
+  }
+
+  publicPersonalRepos(token) {
+    return this.publicRepos(token)
+      .then(publicRepos => this.getLogin(token)
+        .then(username => publicRepos.filter(repo => repo.owner.login === username)));
+  }
+
+  // Get all user's private repositories
+  privateRepos(token) {
     return this.request('/user/repos', token);
   }
 
-  // Get all user's created repositories
+  privatePersonalRepos(token) {
+    return this.privateRepos(token)
+      .then(privateRepos => this.getLogin(token)
+        .then(username => privateRepos.filter(repo => repo.owner.login === username)));
+  }
+
+  /* --------------------------------------------------------------------- */
+
+  // Get user's number of created repositories
   userCountCreatedRepositories(token) {
-    return this.repos(token)
-      .then(repos => repos.length);
+    return this.publicPersonalRepos(token)
+      .then(publicRepos => this.privatePersonalRepos(token)
+        .then(privateRepos => publicRepos.length + privateRepos.length));
   }
 
   // Get all user's forked repositories
   userCountForkedRepositories(token) {
-    return this.repos(token)
+    return this.publicRepos(token)
       .then((repos) => {
         const nbrForkedRepositories = repo => (repo.fork === true ? 1 : 0);
         return Promise.all(repos.map(nbrForkedRepositories))
