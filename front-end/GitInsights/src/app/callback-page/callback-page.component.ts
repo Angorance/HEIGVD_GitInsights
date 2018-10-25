@@ -30,6 +30,10 @@ export class CallbackPageComponent implements OnInit {
           sessionStorage.setItem('token', res['access_token']);
           window.location.href = '/stats';
         }
-      );
+      )
+      .catch(err => {
+        console.log(err);
+        window.location.href = '/home';
+      });
   }
 }
