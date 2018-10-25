@@ -36,7 +36,7 @@ export class StatPageComponent implements OnInit {
     this.http.get(getUrl).toPromise()
       .then(
         res => {
-          console.log(res);
+          console.log(res); // récupérer les données suite au get et les utiliser :D
         }
       )
       .catch(err => {
