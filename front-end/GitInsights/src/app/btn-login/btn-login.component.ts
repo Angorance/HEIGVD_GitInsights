@@ -16,7 +16,7 @@ export class BtnLoginComponent implements OnInit {
     console.log('Redirecting to GitHub');
 
     // TODO - Put URL (or at least client_id) somewhere else
-    let redirect: string = 'https://github.com/login/oauth/authorize?client_id=2a9a479e2953860bbd89&scope=repo:status%20read:user';
+    let redirect: string = 'https://github.com/login/oauth/authorize?client_id=2a9a479e2953860bbd89&scope=repo%20user';
 
     window.location.href = redirect;
   }

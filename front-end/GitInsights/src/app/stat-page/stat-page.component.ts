@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js';
 
 @Component({
@@ -9,19 +10,37 @@ import { Chart } from 'chart.js';
 export class StatPageComponent implements OnInit {
 
   tips = ['a random tip',
-  'another tip',
-  'oh my, so much tip just for me',
-  'this one isn\'t very relevant (it was Daniel\'s idea ;) )',
-  'this is the last one, promised',
-  'ahah just kidding, this is the last :)'
-];
+    'another tip',
+    'oh my, so much tip just for me',
+    'this one isn\'t very relevant (it was Daniel\'s idea ;) )',
+    'this is the last one, promised',
+    'ahah just kidding, this is the last :)'
+  ];
 
   chart = [];
 
-  constructor() {
+  constructor(private http: HttpClient) {
   }
 
   ngOnInit() {
+    this.getData();
   }
 
+  getData(): void {
+    const urlServer: string = 'https://tweb-project1-serveur.herokuapp.com/user';
+
+    let getUrl = urlServer + '?access_token=' + sessionStorage.get('token');
+
+    console.log(getUrl);
+
+    this.http.get(getUrl).toPromise()
+      .then(
+        res => {
+          console.log(res);
+        }
+      )
+      .catch(err => {
+        console.log(err);
+      });
+  }
 }

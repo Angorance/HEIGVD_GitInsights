@@ -22,11 +22,10 @@ export class CallbackPageComponent implements OnInit {
 
     let getUrl = urlServer + '?code=' + url.get('code');
 
-    console.log(getUrl);
-
     this.http.get(getUrl).toPromise()
       .then(
         res => {
+          console.log('Token received and saved');
           sessionStorage.setItem('token', res['access_token']);
           window.location.href = '/stats';
         }
