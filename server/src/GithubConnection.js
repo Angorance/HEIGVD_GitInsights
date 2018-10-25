@@ -35,16 +35,16 @@ function sendAccessToken(req, res, next) {
 
   // Send the POST request to Github, to receive the access_token
   fetch(url, options)
-    .then(data => data.json())
-    .then((result) => {
-      // Get the access_token
-      const accessToken = result.access_token;
-      console.log(`Access-token received : ${accessToken}`);
+    .then(data => data.json()
+      .then((result) => {
+        // Get the access_token
+        const accessToken = result.access_token;
+        console.log(`Access-token received : ${accessToken}`);
 
-      // Send the access_token to the client
-      res.send(accessToken);
-    })
-    .catch(next);
+        // Send the access_token to the client
+        res.send(accessToken);
+      })
+      .catch(next));
 }
 
 module.exports = { sendAccessToken };
