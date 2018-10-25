@@ -105,7 +105,7 @@ class Github {
   // Get all user's issues
   /*issues(username) {
     return this.request(`/users/${username}/issues`);
-  }*/
+  } */
 
   /* ========================================================================
   /*  3nd graph : coded lines and commits
@@ -187,21 +187,28 @@ class Github {
 
   /* --------------------------------------------------------------------- */
 
-  // Get user's number of created repositories
+  // Get user's number of created repositories (private/public)
   userCountCreatedRepositories(token) {
     return this.publicPersonalRepos(token)
       .then(publicRepos => this.privatePersonalRepos(token)
         .then(privateRepos => publicRepos.length + privateRepos.length));
   }
 
-  // Get all user's forked repositories
+  // Get all user's forked repositories (private/public)
   userCountForkedRepositories(token) {
     return this.publicRepos(token)
-      .then((repos) => {
-        const nbrForkedRepositories = repo => (repo.fork === true ? 1 : 0);
-        return Promise.all(repos.map(nbrForkedRepositories))
+      .then((publicRepos) => {
+        const nbrForkedRepositories = publicRepo => (publicRepo.fork === true ? 1 : 0);
+        return Promise.all(publicRepos.map(nbrForkedRepositories))
           .then(results => results.reduce((elem, acc) => elem + acc, 0));
-      });
+      })
+      .then(nbrPublicForkedRepos => this.privateRepos(token)
+        .then((privateRepos) => {
+          const nbrForkedRepositories = privateRepo => (privateRepo.fork === true ? 1 : 0);
+          return Promise.all(privateRepos.map(nbrForkedRepositories))
+            .then(results => results.reduce((elem, acc) => elem + acc, 0));
+        })
+        .then(nbrPrivateForkedRepos => nbrPrivateForkedRepos + nbrPublicForkedRepos));
   }
 
   // Get all user's stars
