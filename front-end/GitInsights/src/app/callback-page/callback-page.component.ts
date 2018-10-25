@@ -26,11 +26,10 @@ export class CallbackPageComponent implements OnInit {
 
     this.http.get(getUrl).toPromise()
       .then(
-        res => { // Success
-          console.log(res['access_token']);
+        res => {
           sessionStorage.setItem('token', res['access_token']);
-          console.log(sessionStorage.getItem('token'));
+          window.location.href = '/stats';
         }
-      )
+      );
   }
 }
