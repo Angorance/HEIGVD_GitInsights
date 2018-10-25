@@ -16,8 +16,6 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { CallbackPageComponent } from './callback-page/callback-page.component';
 
-import { StorageServiceModule } from 'angular-webstorage-service';
-
 const appRoutes: Routes = [
   { path: "stats", component: StatPageComponent },
   { path: "home", component: LoginPageComponent },
@@ -45,7 +43,6 @@ const appRoutes: Routes = [
     MatStepperModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, { enableTracing: true }),
-    StorageServiceModule,
   ],
   exports: [
     AppComponent,

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { URLSearchParams } from '@angular/http';
-import { SESSION_STORAGE, WebStorageService } from 'angular-webstorage-service';
 
 @Component({
   selector: 'app-callback-page',
@@ -10,7 +9,7 @@ import { SESSION_STORAGE, WebStorageService } from 'angular-webstorage-service';
 })
 export class CallbackPageComponent implements OnInit {
 
-  constructor(private http: HttpClient, private storage: WebStorageService) {
+  constructor(private http: HttpClient) {
     this.getToken();
   }
 
@@ -26,12 +25,6 @@ export class CallbackPageComponent implements OnInit {
     console.log(getUrl);
 
     this.http.get(getUrl)
-      .subscribe((data: string) => {
-        console.log(data);
-
-        this.storage.set('access_token', data['access_token'])
-      });
-
-    console.log(this.storage.get('access_token'));
+      .subscribe((data: string) => console.log(data));
   }
 }
