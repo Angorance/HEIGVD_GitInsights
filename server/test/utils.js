@@ -17,7 +17,7 @@ describe('Github utils', () => {
 
     const expected = '2016-02-24T08:46:01Z';
 
-    expect(utils.getOldestDate(dates)).to.eql(expected);
+    expect(utils.getOldestCreationDate(dates)).to.eql(expected);
   });
 
   /* ========================================================================

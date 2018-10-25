@@ -57,7 +57,7 @@ class Github {
   // Get user's first repository creation date
   userFirstRepositoryDate(username) {
     return this.repos(username)
-      .then(repos => utils.getOldestDate(repos));
+      .then(repos => utils.getOldestCreationDate(repos));
   }
 
   // Get user's location
