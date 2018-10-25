@@ -42,7 +42,8 @@ function sendAccessToken(req, res, next) {
         console.log(`Access-token received : ${accessToken}`);
 
         // Send the access_token to the client
-        res.send(accessToken);
+        const response = { access_token: accessToken };
+        res.send(response);
       })
       .catch(next));
 }
