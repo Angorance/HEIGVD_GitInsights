@@ -41,33 +41,33 @@ class Github {
   /*====================================================================== */
 
   // Get all user's information
-  user(username, token) {
-    return this.request(`/users/${username}`, token);
+  user(token) {
+    return this.request('/user', token);
   }
 
   /* --------------------------------------------------------------------- */
 
   // Get user's creation date
-  userCreation(username, token) {
-    return this.user(username, token)
+  userCreation(token) {
+    return this.user(token)
       .then(user => user.created_at);
   }
 
   // Get user's first repository creation date
-  userFirstRepositoryDate(username, token) {
-    return this.repos(username, token)
+  userFirstRepositoryDate(token) {
+    return this.repos(token)
       .then(repos => utils.getOldestCreationDate(repos));
   }
 
   // Get user's location
-  userLocation(username, token) {
-    return this.user(username, token)
+  userLocation(token) {
+    return this.user(token)
       .then(user => user.location);
   }
 
   // Get user's avatar url
-  userAvatarUrl(username, token) {
-    return this.user(username, token)
+  userAvatarUrl(token) {
+    return this.user(token)
       .then(user => user.avatar_url);
   }
 
@@ -84,8 +84,8 @@ class Github {
   /* --------------------------------------------------------------------- */
 
   // Get all languages of the user
-  userLanguages(username, token) {
-    return this.repos(username, token)
+  userLanguages(token) {
+    return this.repos(token)
       .then((repos) => {
         const getLanguages = repo => this.repoLanguages(repo.full_name);
         return Promise.all(repos.map(getLanguages));
@@ -111,10 +111,13 @@ class Github {
   }
 
   // Get all personal commits of user's repositories
-  reposPersonalCommits(username, token) {
-    return this.repos(username, token)
+  reposPersonalCommits(token) {
+    return this.repos(token)
       .then((repos) => {
         // Get commits for each repo
+        const username = this.user(token)
+          .then(profile => profile.login);
+
         const getCommits = repo => this.repoCommits(repo.full_name)
           .then(commits => (commits).filter(commit => commit.author != null && commit.author.login === username));
 
@@ -127,9 +130,9 @@ class Github {
   /* --------------------------------------------------------------------- */
 
   // Get user's number of coded lines
-  userCountCodedLines(username, token) {
+  userCountCodedLines(token) {
     // Get all url of user's personal commits
-    return this.reposPersonalCommits(username, token)
+    return this.reposPersonalCommits(token)
       .then((personalCommits) => {
         // Get all urls of user's personal commits
         const url = personalCommit => personalCommit.url;
@@ -146,8 +149,8 @@ class Github {
   }
 
   // Get user's number of commits
-  userCountCommits(username, token) {
-    return this.reposPersonalCommits(username, token)
+  userCountCommits(token) {
+    return this.reposPersonalCommits(token)
       .then(results => results.length);
   }
 
@@ -156,21 +159,19 @@ class Github {
   /*====================================================================== */
 
   // Get all user's repositories
-  repos(username, token) {
-    return this.request(`/users/${username}/repos`, token);
+  repos(token) {
+    return this.request('/user/repos', token);
   }
 
   // Get all user's created repositories
-  userCountCreatedRepositories(username, token) {
-    return this.repos(username, token)
+  userCountCreatedRepositories(token) {
+    return this.repos(token)
       .then(repos => repos.length);
   }
 
   // Get all user's forked repositories
-  // let nbrForkedRepositories = 0;
-
-  userCountForkedRepositories(username, token) {
-    return this.repos(username, token)
+  userCountForkedRepositories(token) {
+    return this.repos(token)
       .then((repos) => {
         const nbrForkedRepositories = repo => (repo.fork === true ? 1 : 0);
         return Promise.all(repos.map(nbrForkedRepositories))
@@ -179,9 +180,6 @@ class Github {
   }
 
   // Get all user's stars
-
-  // Get all user's commits
-  // GET /repos/:owner/:repo/commits
 }
 
 module.exports = Github;

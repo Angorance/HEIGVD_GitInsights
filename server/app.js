@@ -29,8 +29,7 @@ app.get('/authenticate', (req, res, next) => {
 });
 
 // Get all user's information
-app.get('/users/:username', (req, res, next) => {
-  const username = req.params.username;
+app.get('/user', (req, res, next) => {
   const access_token = req.query.access_token;
   /* ========================================================================
   /*  Timeline
@@ -39,22 +38,22 @@ app.get('/users/:username', (req, res, next) => {
   const response = {};
 
   // Get user's creation date
-  const creationDate = client.userCreation(username, access_token)
+  const creationDate = client.userCreation(access_token)
     .then(creation => response.creationDate = creation)
     .catch(next);
 
   // Get user's first repository creation date
-  const firstRepositoryDate = client.userFirstRepositoryDate(username, access_token)
+  const firstRepositoryDate = client.userFirstRepositoryDate(access_token)
     .then(firstRepository => response.firstRepositoryDate = firstRepository)
     .catch(next);
   
   // Get user's location
-  const location = client.userLocation(username, access_token)
+  const location = client.userLocation(access_token)
     .then(location => response.location = location)
     .catch(next);
 
   // Get user's avatar url
-  const avatarUrl = client.userAvatarUrl(username, access_token)
+  const avatarUrl = client.userAvatarUrl(access_token)
     .then(avatar => response.avatarUrl = avatar)
     .catch(next);
 
@@ -63,7 +62,7 @@ app.get('/users/:username', (req, res, next) => {
   /*====================================================================== */
 
   // Get user's number of coded lines by language
-  const languages = client.userLanguages(username, access_token)
+  const languages = client.userLanguages(access_token)
     .then(utils.getReposLanguagesStats)
     .then(languages => response.languages = languages)
     .catch(next);
@@ -86,12 +85,12 @@ app.get('/users/:username', (req, res, next) => {
   /*====================================================================== */
 
   // Get all user's line coded
-  const nbrCodedLines = client.userCountCodedLines(username, access_token)
+  const nbrCodedLines = client.userCountCodedLines(access_token)
     .then(total => response.nbrCodedLines = total)
     .catch(next);
 
   // Get all user's commits
-  const nbrCommits = client.userCountCommits(username, access_token)
+  const nbrCommits = client.userCountCommits(access_token)
     .then(total => response.nbrCommits = total)
     .catch(next);
 
@@ -105,12 +104,12 @@ app.get('/users/:username', (req, res, next) => {
     .catch(next);*/
 
   // Get all user's created repositories
-  const nbrCreatedRepositories = client.userCountCreatedRepositories(username, access_token)
+  const nbrCreatedRepositories = client.userCountCreatedRepositories(access_token)
     .then(total => response.nbrCreatedRepositories = total)
     .catch(next);
 
   // Get all user's forked repositories
-  const nbrForkedRepositories = client.userCountForkedRepositories(username, access_token)
+  const nbrForkedRepositories = client.userCountForkedRepositories(access_token)
     .then(total => response.nbrForkedRepositories = total)
     .catch(next);
 
