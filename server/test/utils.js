@@ -6,11 +6,25 @@ describe('Github utils', () => {
   /*  Timeline
   /*====================================================================== */
 
+  // Get user's first repository creation date
+  it('should retrieve the oldest date', () => {
+    const dates = [
+      { created_at: '2018-02-19T08:46:01Z' },
+      { created_at: '2016-02-24T08:46:01Z' },
+      { created_at: '2017-05-03T08:46:01Z' },
+      { created_at: '2016-10-09T08:46:01Z' },
+    ];
+
+    const expected = '2016-02-24T08:46:01Z';
+
+    expect(utils.getOldestDate(dates)).to.eql(expected);
+  });
+
   /* ========================================================================
   /*  1st graph : languages
   /*====================================================================== */
 
-  // Get user's number of coded lines by language
+  // Get the number of coded lines by language for all repositories
   it('should calculate languages stats', () => {
     const languages = [
       { CSS: 1, Javascript: 2, MakeFile: 4 },

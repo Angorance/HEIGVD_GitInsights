@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const utils = require('./utils');
 
 class ResponseError extends Error {
   constructor(res, body) {
@@ -56,10 +57,7 @@ class Github {
   // Get user's first repository creation date
   userFirstRepositoryDate(username) {
     return this.repos(username)
-      .then((repos) => {
-        repos.sort((a, b) => new Date(b.date) - new Date(a.date));
-        return repos[0].created_at;
-      });
+      .then(repos => utils.getOldestDate(repos));
   }
 
   // Get user's location
