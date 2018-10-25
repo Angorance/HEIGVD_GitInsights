@@ -29,7 +29,7 @@ export class StatPageComponent implements OnInit {
   getData(): void {
     const urlServer: string = 'https://tweb-project1-serveur.herokuapp.com/user';
 
-    let getUrl = urlServer + '?access_token=' + sessionStorage.get('token');
+    let getUrl = urlServer + '?access_token=' + sessionStorage.getItem('token');
 
     console.log(getUrl);
 
