@@ -77,8 +77,8 @@ class Github {
   /*====================================================================== */
 
   // Get all languages of a repository
-  repoLanguages(repoName) {
-    return this.request(`/repos/${repoName}/languages`);
+  repoLanguages(repoName, token) {
+    return this.request(`/repos/${repoName}/languages`, token);
   }
 
   /* --------------------------------------------------------------------- */
@@ -87,7 +87,7 @@ class Github {
   userLanguages(token) {
     return this.repos(token)
       .then((repos) => {
-        const getLanguages = repo => this.repoLanguages(repo.full_name);
+        const getLanguages = repo => this.repoLanguages(repo.full_name, token);
         return Promise.all(repos.map(getLanguages));
       });
   }
@@ -106,8 +106,8 @@ class Github {
   /* ====================================================================== */
 
   // Get all commits by repository
-  repoCommits(repoName) {
-    return this.request(`/repos/${repoName}/commits`);
+  repoCommits(repoName, token) {
+    return this.request(`/repos/${repoName}/commits`, token);
   }
 
   // Get all personal commits of user's repositories
@@ -118,7 +118,7 @@ class Github {
         const username = this.user(token)
           .then(profile => profile.login);
 
-        const getCommits = repo => this.repoCommits(repo.full_name)
+        const getCommits = repo => this.repoCommits(repo.full_name, token)
           .then(commits => (commits).filter(commit => commit.author != null && commit.author.login === username));
 
         // Get all commits of the user
