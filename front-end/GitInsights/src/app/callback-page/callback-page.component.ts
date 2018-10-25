@@ -25,6 +25,9 @@ export class CallbackPageComponent implements OnInit {
     console.log(getUrl);
 
     this.http.get(getUrl)
-      .subscribe((data: string) => console.log(data));
+      .subscribe((data: string) => {
+        console.log("Coucou, I'm in subscribe");
+        console.log(data);
+      });
   }
 }
