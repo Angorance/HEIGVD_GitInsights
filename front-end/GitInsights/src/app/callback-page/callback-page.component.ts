@@ -26,7 +26,11 @@ export class CallbackPageComponent implements OnInit {
     console.log(getUrl);
 
     this.http.get(getUrl)
-      .subscribe((data: string) => this.storage.set('access_token', data['access_token']));
+      .subscribe((data: string) => {
+        console.log(data);
+
+        this.storage.set('access_token', data['access_token'])
+      });
 
     console.log(this.storage.get('access_token'));
   }
