@@ -9,11 +9,11 @@ import { URLSearchParams } from '@angular/http';
 })
 export class CallbackPageComponent implements OnInit {
 
-  constructor(private http: HttpClient) {
-    this.getToken();
-  }
+  constructor(private http: HttpClient) { }
 
   ngOnInit() { }
+
+  getToken();
 
   getToken(): void {
     const urlServer: string = 'https://tweb-project1-serveur.herokuapp.com/authenticate';
@@ -24,10 +24,10 @@ export class CallbackPageComponent implements OnInit {
 
     console.log(getUrl);
 
-    this.http.get(getUrl)
+    /*this.http.get(getUrl)
       .subscribe((data: string) => {
         console.log("Coucou, I'm in subscribe");
         console.log(data);
-      });
+      });*/
   }
 }
