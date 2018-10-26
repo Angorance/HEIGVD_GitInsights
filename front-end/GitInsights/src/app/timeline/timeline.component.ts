@@ -1,52 +1,63 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-timeline',
   templateUrl: './timeline.component.html',
-  styleUrls: ['./timeline.component.css']
+  styleUrls: ['./timeline.component.css'],
 })
 
 export class TimelineComponent implements OnInit {
 
-  startDate = new Date(2014,9,15);
-  endDate = new Date();
+  @Input() milestones: Array<{date: string, label: String}>;
 
-  //For the purpose of stringifying MM/DD/YYYY date format
-  monthSpan = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  today = new Date();
+
   years = [];
-  milestones = [this.startDate, new Date(2015, 5, 25), new Date(2017, 12, 12), new Date()];
 
   constructor() {
-    //console.log("start year : " + this.startDate.getFullYear());
-    //console.log("start year : " + this.endDate.getFullYear());
-
-    for( let i = this.startDate.getFullYear() ; i <= this.endDate.getFullYear()+1; ++i){
-      this.years.push(i);
-    }
-
-    //console.log(this.years);
    }
 
-   getPercentagePosition(date : Date){
-     var start = new Date(this.startDate.getFullYear(), 1,1);
-     var end = new Date(this.endDate.getFullYear()+1, 1,1);
-     var position = (date.valueOf() - start.valueOf())/(end.valueOf()- start.valueOf()) * 100;
-     console.log("position : " + position + "%");
+   getPercentagePosition(sDate: string) {
+
+     const date: Date =  new Date(sDate);
+     const start = new Date(new Date(this.milestones[0].date).getFullYear(), 1, 1);
+     const end = new Date(this.today.getFullYear() + 1, 1, 1);
+     const position = (date.valueOf() - start.valueOf()) / (end.valueOf() - start.valueOf()) * 100;
 
      return position;
    }
 
 
-   setMilestoneStyle(date : Date){
-     console.log("generating" + " position for "+ date.toDateString());
-     let style = {
-       'left' : this.getPercentagePosition(date).toString()+"%",
+   setMilestoneStyle(date: string) {
+     const style = {
+       'left' : this.getPercentagePosition(date).toString() + '%',
      };
-
-     console.log("result style : " + style);
      return style;
+   }
+
+   getTooltip(elem: {date: string, label: string} ) {
+     return new Date(elem.date).toLocaleDateString() + ' - ' + elem.label.charAt(0).toUpperCase() + elem.label.slice(1);
+   }
+
+   fillYears() {
+
+    this.years = [];
+
+    for (let i = new Date(this.milestones[0].date).getFullYear() ; i <= this.today.getFullYear() + 1; ++i) {
+      this.years.push(i);
+    }
    }
 
   ngOnInit() {
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // first step : sort the dates in order to have the oldest date first
+    this.milestones = this.milestones.sort(compareDates);
+    this.fillYears();
+  }
+}
+
+function compareDates(a, b) {
+  return -1; // new Date(b.date) - new Date(a.date);
 }

@@ -8,7 +8,7 @@
 
       <ng-template matStepLabel>Statistics</ng-template>
       <mat-card class="timeline-card">
-        <app-timeline></app-timeline>
+        <app-timeline [milestones]="milestones"></app-timeline>
       </mat-card>
 
       <mat-grid-list cols="3" rowHeight="2:1">
@@ -26,8 +26,8 @@
               </thead>
               <tbody>
                 <tr>
-                  <td id="table-container">
-                    <canvas id="chart"></canvas>
+                  <td id="canvas-container">
+                    <canvas  #canvas id="canvas" height="100%" > {{ chart }} </canvas>
                   </td>
                 </tr>
               </tbody>
@@ -36,7 +36,7 @@
         </mat-grid-tile>
 
         <mat-grid-tile rowspan="2">
-          <div id="avatar-container"> <div [ngClass]="flagClasses"></div></div>
+          <div id="avatar-container" [ngStyle]="avatarStyle"> <div [ngClass]="flagClasses"></div></div>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -52,15 +52,13 @@
               </thead>
               <tbody>
                 <tr>
-                  <td> 52 </td>
-                  <td> 45 </td>
+                  <td *ngFor="let issue of issues">{{issue.value}}</td>
                 </tr>
               </tbody>
 
               <tfoot>
                 <tr>
-                  <th> Opened </th>
-                  <th> Closed </th>
+                    <th *ngFor="let issue of issues">{{issue.label}}</th>
                 </tr>
               </tfoot>
 
@@ -75,21 +73,19 @@
               <thead>
                 <tr>
                   <th colspan="2">
-                    Trivia <!-- TODO : tooltip "only consider public repositories" -->
+                    Trivia <img alt="help" src="../../assets/images/help.png" height="20px" style="opacity: 0.3" matTooltip="Only the plublic repositories are considered" matTooltipPosition="above"> <!-- TODO : tooltip "only consider public repositories" -->
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td> 529'876 </td>
-                  <td> 458 </td> 
+                  <td *ngFor="let trivia of trivias"> {{trivia.value}}</td>
                 </tr>
               </tbody>
 
               <tfoot>
                 <tr>
-                  <th> Lines coded </th>
-                  <th> Commits </th> <!-- TODO : check data - if "too much", display "999+" -->
+                  <th *ngFor="let trivia of trivias"> {{trivia.label}}</th>
                 </tr>
               </tfoot>
             </table>
@@ -109,17 +105,13 @@
               </thead>
               <tbody>
                 <tr>
-                  <td> 52 </td>
-                  <td> 45 </td>
-                  <td> 52 </td>
+                    <td *ngFor="let repo of repositories"> {{repo.value}}</td>
                 </tr>
               </tbody>
 
               <tfoot>
                 <tr>
-                  <th> Created </th>
-                  <th> Forked </th>
-                  <th> Stars </th>
+                    <th *ngFor="let repo of repositories"> {{repo.label}}</th>
                 </tr>
               </tfoot>
             </table>

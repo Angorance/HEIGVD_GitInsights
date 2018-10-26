@@ -82,8 +82,31 @@ tfoot{
 
 }
 
+#avatar-container{
+    position: relative;
+  width: 65%;
+    border-radius: 50%;
+    background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#avatar-container:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+  }
+  
+
 .flag-icon-background{
-    width : 50px;
-    height: 50px;
+    width : 13%;
+    height: 13%;
     border-radius : 50%; 
+    position: absolute;
+    bottom: -6.5%;
+    right: 43.5%;
+}
+
+#canvas-container{
+    padding-top : 15px;
 }

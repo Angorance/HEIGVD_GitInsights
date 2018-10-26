@@ -15,7 +15,7 @@
   color : white;
   z-index: 90;
   background-color: #2e7aaa;
-  transition : 0.3s ease-in-out;
+  
   line-height: 40px;
   font-size: 0.7em;
   width: 40px;
@@ -26,20 +26,21 @@
   top:-17px;
 }
 
-.bigDot:hover {
-  transform: scale(1.2);
-  z-index: 100;
-  background-color: #3d92c7;
-}
 
 .littleDot{
   z-index: 99;
-  background-color: red;/*#2e7aaa;*/
+  background-color: #1C9BEB;/*#2e7aaa;*/
+  transition : 0.3s ease-in-out;
   width: 15px;
   height: 15px;
   border-radius: 50%;
   position: absolute;
   top: 41%;
+}
+.littleDot:hover {
+  transform: scale(1.5);
+  z-index: 100;
+  background-color: #5DB7F0;
 }
 .container{
   height: 100%;

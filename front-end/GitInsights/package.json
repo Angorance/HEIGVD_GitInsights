@@ -29,6 +29,7 @@
     "core-js": "^2.5.4",
     "country-list": "^1.1.0",
     "flag-icon-css": "^3.2.1",
+    "moment": "^2.22.2",
     "rxjs": "~6.2.0",
     "zone.js": "~0.8.26"
   },

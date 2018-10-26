@@ -4,7 +4,8 @@
       {{year}}
     </div>
 
-    <div *ngFor="let milestone of milestones" class="littleDot" [ngStyle]="setMilestoneStyle(milestone)">
+    <div *ngFor="let milestone of milestones" class="littleDot" 
+    [ngStyle]="setMilestoneStyle(milestone.date)" [matTooltip]="getTooltip(milestone)" matTooltipPosition="above">
 
     </div>
   </div>
