@@ -138,22 +138,6 @@ class Github {
         }));
   }
 
-  // Get all private personal commits of user's repositories
-  reposPrivatePersonalCommits(token) {
-    return this.privateRepos(token)
-      .then(repos => this.getLogin(token)
-        .then((username) => {
-          // Get all personal commits
-          const getCommits = repo => this.repoCommits(repo.full_name, token)
-            .then(commits => (commits).filter(commit => commit.author != null
-              && commit.author.login === username));
-
-          // Get all commits of the user
-          return Promise.all(repos.map(getCommits))
-            .then(results => results.reduce((acc, elem) => acc.concat(elem), []));
-        }));
-  }
-
   // Get number of public coded lines
   userCountPublicCodedLines(token) {
     return this.reposPublicPersonalCommits(token)
@@ -178,14 +162,13 @@ class Github {
   userCountCodedLines(token) {
     // Get all url of user's personal commits
     return this.reposPublicPersonalCommits(token)
-      .then(commits => (commits.length <= 1000 ? this.userCountPublicCodedLines(token) : 0));
+      .then(commits => (commits.length <= 1000 ? this.userCountPublicCodedLines(token) : '999+'));
   }
 
-  // Get user's number of commits (private/public)
+  // Get user's number of commits (public)
   userCountCommits(token) {
     return this.reposPublicPersonalCommits(token)
-      .then(publicCommits => this.reposPublicPersonalCommits(token)
-        .then(privateCommits => privateCommits.length + publicCommits.length));
+      .then(publicCommits => publicCommits.length);
   }
 
   /* ========================================================================

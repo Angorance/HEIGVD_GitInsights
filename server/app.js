@@ -82,7 +82,7 @@ app.get('/user', (req, res, next) => {
     .then((total) => { response.nbrCodedLines = total; })
     .catch(next);
 
-  // Get all user's commits (private/public)
+  // Get all user's commits (public)
   const nbrCommits = client.userCountCommits(accessToken)
     .then((total) => { response.nbrCommits = total; })
     .catch(next);
