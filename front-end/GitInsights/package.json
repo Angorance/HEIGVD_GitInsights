@@ -27,6 +27,8 @@
     "angular-webstorage-service": "^1.0.2",
     "chart.js": "^2.7.3",
     "core-js": "^2.5.4",
+    "country-list": "^1.1.0",
+    "flag-icon-css": "^3.2.1",
     "rxjs": "~6.2.0",
     "zone.js": "~0.8.26"
   },

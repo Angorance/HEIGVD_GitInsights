@@ -36,7 +36,7 @@
         </mat-grid-tile>
 
         <mat-grid-tile rowspan="2">
-            <img src="" alt="User avatar">
+          <div id="avatar-container"> <div [ngClass]="flagClasses"></div></div>
         </mat-grid-tile>
 
         <mat-grid-tile>
@@ -46,7 +46,7 @@
               <thead>
                 <tr>
                   <th colspan="2">
-                    Issues
+                    Issues <!-- TODO : tooltip "concern personal repositories" -->
                   </th>
                 </tr>
               </thead>
@@ -75,21 +75,21 @@
               <thead>
                 <tr>
                   <th colspan="2">
-                    Trivia
+                    Trivia <!-- TODO : tooltip "only consider public repositories" -->
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td> 529'876 </td>
-                  <td> 458 </td>
+                  <td> 458 </td> 
                 </tr>
               </tbody>
 
               <tfoot>
                 <tr>
                   <th> Lines coded </th>
-                  <th> Commits </th>
+                  <th> Commits </th> <!-- TODO : check data - if "too much", display "999+" -->
                 </tr>
               </tfoot>
             </table>
