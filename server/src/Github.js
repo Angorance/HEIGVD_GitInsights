@@ -15,8 +15,8 @@ class Github {
     this.baseUrl = baseUrl;
   }
 
-  request(path, token, entireUrl = null, opts = {}) {
-    const url = entireUrl == null ? `${this.baseUrl}${path}` : entireUrl;
+  request(path, token, entireUrl = false, opts = {}) {
+    const url = entireUrl ? `${path}` : `${this.baseUrl}${path}`;
     const options = {
       ...opts,
       headers: {
@@ -59,10 +59,16 @@ class Github {
       .then(user => user.created_at);
   }
 
-  // Get user's first repository creation date
+  // Get user's first repository creation date (private/public)
   userFirstRepositoryDate(token) {
     return this.publicRepos(token)
-      .then(repos => utils.getOldestCreationDate(repos));
+      .then(publicRepos => utils.getOldestCreationDate(publicRepos))
+      .then(oldestPublic => this.privateRepos(token)
+        .then(privateRepos => utils.getOldestCreationDate(privateRepos))
+        .then((oldestPrivate) => {
+          const array = [{ created_at: oldestPublic }, { created_at: oldestPrivate }];
+          return utils.getOldestCreationDate(array);
+        }));
   }
 
   // Get user's location
@@ -89,9 +95,9 @@ class Github {
 
   /* --------------------------------------------------------------------- */
 
-  // Get all languages of the user
+  // Get all languages of the user and contributors (private)
   userLanguages(token) {
-    return this.publicRepos(token)
+    return this.privateRepos(token)
       .then((repos) => {
         const getLanguages = repo => this.repoLanguages(repo.full_name, token);
         return Promise.all(repos.map(getLanguages));
@@ -103,7 +109,7 @@ class Github {
   /*====================================================================== */
 
   // Get all user's issues
-  /*issues(username) {
+  /* issues(username) {
     return this.request(`/users/${username}/issues`);
   } */
 
@@ -116,46 +122,70 @@ class Github {
     return this.request(`/repos/${repoName}/commits`, token);
   }
 
-  // Get all personal commits of user's repositories
-  reposPersonalCommits(token) {
+  // Get all public personal commits of user's repositories
+  reposPublicPersonalCommits(token) {
     return this.publicRepos(token)
-      .then((repos) => {
-        // Get commits for each repo
-        const username = this.getLogin(token);
-        const getCommits = repo => this.repoCommits(repo.full_name, token)
-          .then(commits => (commits).filter(commit => commit.author != null && commit.author.login === username));
+      .then(repos => this.getLogin(token)
+        .then((username) => {
+          // Get all personal commits
+          const getCommits = repo => this.repoCommits(repo.full_name, token)
+            .then(commits => (commits).filter(commit => commit.author != null
+              && commit.author.login === username));
 
-        // Get all commits of the user
-        return Promise.all(repos.map(getCommits))
-          .then(results => results.reduce((acc, elem) => acc.concat(elem), []));
+          // Get all commits of the user
+          return Promise.all(repos.map(getCommits))
+            .then(results => results.reduce((acc, elem) => acc.concat(elem), []));
+        }));
+  }
+
+  // Get all private personal commits of user's repositories
+  reposPrivatePersonalCommits(token) {
+    return this.privateRepos(token)
+      .then(repos => this.getLogin(token)
+        .then((username) => {
+          // Get all personal commits
+          const getCommits = repo => this.repoCommits(repo.full_name, token)
+            .then(commits => (commits).filter(commit => commit.author != null
+              && commit.author.login === username));
+
+          // Get all commits of the user
+          return Promise.all(repos.map(getCommits))
+            .then(results => results.reduce((acc, elem) => acc.concat(elem), []));
+        }));
+  }
+
+  // Get number of public coded lines
+  userCountPublicCodedLines(token) {
+    return this.reposPublicPersonalCommits(token)
+      .then((publicCommits) => {
+        // Get all urls of user's public personal commits
+        const publicUrl = publicCommit => publicCommit.url;
+        return publicCommits.map(publicUrl);
+      })
+      .then((publicUrls) => {
+        // Get all lines added in public personal commits
+        const publicLines = publicUrl => this.request(publicUrl, token, true)
+          .then(publicCommit => publicCommit.stats.additions);
+
+        return Promise.all(publicUrls.map(publicLines))
+          .then(results => results.reduce((elem, acc) => elem + acc, 0));
       });
   }
 
   /* --------------------------------------------------------------------- */
 
-  // Get user's number of coded lines
+  // Get user's number of coded lines (public)
   userCountCodedLines(token) {
     // Get all url of user's personal commits
-    return this.reposPersonalCommits(token)
-      .then((personalCommits) => {
-        // Get all urls of user's personal commits
-        const url = personalCommit => personalCommit.url;
-        return personalCommits.map(url);
-      })
-      .then((urls) => {
-        // Get all lines added in personal commits
-        const codedLines = url => this.request(null, token, url)
-          .then(personalCommit => personalCommit.stats.additions);
-
-        return Promise.all(urls.map(codedLines))
-          .then(results => results.reduce((elem, acc) => elem + acc, 0));
-      });
+    return this.reposPublicPersonalCommits(token)
+      .then(commits => (commits.length <= 1000 ? this.userCountPublicCodedLines(token) : 0));
   }
 
-  // Get user's number of commits
+  // Get user's number of commits (private/public)
   userCountCommits(token) {
-    return this.reposPersonalCommits(token)
-      .then(results => results.length);
+    return this.reposPublicPersonalCommits(token)
+      .then(publicCommits => this.reposPublicPersonalCommits(token)
+        .then(privateCommits => privateCommits.length + publicCommits.length));
   }
 
   /* ========================================================================
@@ -211,7 +241,7 @@ class Github {
         .then(nbrPrivateForkedRepos => nbrPrivateForkedRepos + nbrPublicForkedRepos));
   }
 
-  // Get all user's stars
+  // Get all user's stars (private/public)
 }
 
 module.exports = Github;

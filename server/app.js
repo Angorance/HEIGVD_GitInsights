@@ -35,11 +35,11 @@ app.get('/user', (req, res, next) => {
     .then((creation) => { response.creationDate = creation; })
     .catch(next);
 
-  // Get user's first repository creation date
+  // Get user's first repository creation date (private/public)
   const firstRepositoryDate = client.userFirstRepositoryDate(accessToken)
     .then((firstRepository) => { response.firstRepositoryDate = firstRepository; })
     .catch(next);
-  
+
   // Get user's location
   const location = client.userLocation(accessToken)
     .then((userLocation) => { response.location = userLocation; })
@@ -54,7 +54,7 @@ app.get('/user', (req, res, next) => {
   /*  1st graph : languages
   /*====================================================================== */
 
-  // Get user's number of coded lines by language
+  // Get all languages of the user and contributors (private)
   const languages = client.userLanguages(accessToken)
     .then(utils.getReposLanguagesStats)
     .then((allLanguages) => { response.languages = allLanguages; })
@@ -65,9 +65,9 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   // Get all user's issues
-  /*const issues = client.issues(req.params.username)
+  /* const issues = client.issues(req.params.username)
     .then(issues => response.issues = issues)
-    .catch(next);*/
+    .catch(next); */
 
   // Get all user's opened issues
 
@@ -77,12 +77,12 @@ app.get('/user', (req, res, next) => {
   /*  3nd graph : coded lines and commits
   /*====================================================================== */
 
-  // Get all user's line coded
+  // Get all user's line coded (public)
   const nbrCodedLines = client.userCountCodedLines(accessToken)
     .then((total) => { response.nbrCodedLines = total; })
     .catch(next);
 
-  // Get all user's commits
+  // Get all user's commits (private/public)
   const nbrCommits = client.userCountCommits(accessToken)
     .then((total) => { response.nbrCommits = total; })
     .catch(next);
@@ -92,21 +92,21 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   // Get user's repositories
-  /*const repos = client.repos(req.params.username)
+  /* const repos = client.repos(req.params.username)
     .then(repos => response.repos = repos)
-    .catch(next);*/
+    .catch(next); */
 
-  // Get all user's created repositories
+  // Get user's number of created repositories (private/public)
   const nbrCreatedRepositories = client.userCountCreatedRepositories(accessToken)
     .then((total) => { response.nbrCreatedRepositories = total; })
     .catch(next);
 
-  // Get all user's forked repositories
+  // Get all user's forked repositories (private/public)
   const nbrForkedRepositories = client.userCountForkedRepositories(accessToken)
     .then((total) => { response.nbrForkedRepositories = total; })
     .catch(next);
 
-  // Get all user's stars
+  // Get all user's stars (private/public)
 
   /* ========================================================================
   /*  Results sending
@@ -116,7 +116,7 @@ app.get('/user', (req, res, next) => {
     nbrCodedLines, nbrCommits,
     nbrCreatedRepositories, nbrForkedRepositories,
     /* issues */
-    ])
+  ])
     .then(() => res.send(response));
 });
 
