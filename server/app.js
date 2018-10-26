@@ -56,7 +56,7 @@ app.get('/user', (req, res, next) => {
   /*  2nd graph : issues
   /*====================================================================== */
 
-  // Get all user's issues
+  // Get all user's issues from his own repos
   const issues = client.userOpenedIssues(accessToken)
     .then(opened => client.userClosedIssues(accessToken)
       .then((closed) => { response.issues = [{ label: 'Opened', value: opened }, { label: 'Closed', value: closed }]; }))
@@ -88,10 +88,7 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   // Get all user's information about the tips
-  const tips = [];/* client.userOpenedIssues(accessToken)
-  .then(opened => client.userClosedIssues(accessToken)
-    .then((closed) => { response.issues = [{ label: 'Opened', value: opened }, { label: 'Closed', value: closed }]; }))
-  .catch(next); */
+  const tips = [];
 
   /* ========================================================================
   /*  Results sending
