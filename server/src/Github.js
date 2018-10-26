@@ -83,6 +83,7 @@ class Github {
         }));
   }
 
+  // Get user's first commit date (private/public)
   userFirstCommitDate(token) {
     return this.reposPublicPersonalCommits(token)
       .then(publicRepos => utils.getOldestCommit(publicRepos))
@@ -249,11 +250,11 @@ class Github {
         .then(username => privateRepos.filter(repo => repo.owner.login === username)));
   }
 
-  /* personalRepos(token, typeRepos) {
+  personalRepos(token, typeRepos) {
     return typeRepos(token)
       .then(repos => this.getLogin(token)
         .then(username => repos.filter(repo => repo.owner.login === username)));
-  } */
+  }
 
   /* personalRepos(token, typeRepos) {
     return typeRepos(token)
@@ -266,11 +267,11 @@ class Github {
   /* --------------------------------------------------------------------- */
 
   // Get user's number of created repositories (private/public)
-  /* userCountCreatedRepositories(token) {
+  /*userCountCreatedRepositories(token) {
     return this.personalRepos(token, this.publicRepos)
       .then(publicRepos => this.personalRepos(token, this.privateRepos)
         .then(privateRepos => publicRepos.length + privateRepos.length));
-  } */
+  }*/
 
   userCountCreatedRepositories(token) {
     return this.publicPersonalRepos(token)
