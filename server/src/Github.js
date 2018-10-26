@@ -225,8 +225,19 @@ class Github {
 
   // Get all user's stars (private/public)
   userCountStarsRepositories(token) {
-    return this.getLogin(token)
-      .then(username => 0);
+    return this.publicRepos(token)
+      .then((publicRepos) => {
+        const stars = publicRepo => publicRepo.stargazers_count;
+        return Promise.all(publicRepos.map(stars))
+          .then(results => results.reduce((elem, acc) => elem + acc, 0));
+      })
+      .then(nbrPublicStars => this.privateRepos(token)
+        .then((privateRepos) => {
+          const stars = privateRepo => privateRepo.stargazers_count;
+          return Promise.all(privateRepos.map(stars))
+            .then(results => results.reduce((elem, acc) => elem + acc, 0));
+        })
+        .then(nbrPrivateStars => nbrPrivateStars + nbrPublicStars));
   }
 }
 

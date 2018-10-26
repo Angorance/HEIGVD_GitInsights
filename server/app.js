@@ -2,14 +2,12 @@
 require('dotenv/config');
 const express = require('express');
 const cors = require('cors');
-const Github = require('./src/Github'); // For using our Github.js file
-const utils = require('./src/utils'); // For packing languages (group by)
-const GithubConnection = require('./src/GithubConnection'); // For connection the user to Github
+const Github = require('./src/Github');
+const utils = require('./src/utils');
+const GithubConnection = require('./src/GithubConnection');
 
 const app = express();
 const port = process.env.PORT || 3000;
-
-// Used to create my own Github connection (@LNAline)
 const client = new Github();
 
 // Enable CORS for the client app
@@ -17,7 +15,6 @@ app.use(cors());
 
 // Get a code from the client to retrieve his access_token and send it
 app.get('/authenticate', (req, res, next) => {
-  // Get the access_token of the client and send it
   GithubConnection.sendAccessToken(req, res, next);
 });
 
@@ -95,7 +92,7 @@ app.get('/user', (req, res, next) => {
   .then(opened => client.userClosedIssues(accessToken)
     .then((closed) => { response.issues = [{ label: 'Opened', value: opened }, { label: 'Closed', value: closed }]; }))
   .catch(next); */
-  
+
   /* ========================================================================
   /*  Results sending
   /*====================================================================== */
