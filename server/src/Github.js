@@ -13,6 +13,9 @@ class ResponseError extends Error {
 class Github {
   constructor({ baseUrl = 'https://api.github.com' } = {}) {
     this.baseUrl = baseUrl;
+    
+    this.publicRepos = this.publicRepos.bind(this);
+    this.privateRepos = this.privateRepos.bind(this);
   }
 
   request(path, token, entireUrl = false, opts = {}) {
@@ -236,46 +239,33 @@ class Github {
     return this.request('/user/repos', token);
   }
 
-  // Get all user's public personal repositories
+  // Get all user's public personal repositories  A ENLEVER
   publicPersonalRepos(token) {
     return this.publicRepos(token)
       .then(publicRepos => this.getLogin(token)
         .then(username => publicRepos.filter(repo => repo.owner.login === username)));
   }
 
-  // Get all user's private personal repositories
+  // Get all user's private personal repositories   A ENLEVER
   privatePersonalRepos(token) {
     return this.privateRepos(token)
       .then(privateRepos => this.getLogin(token)
         .then(username => privateRepos.filter(repo => repo.owner.login === username)));
   }
 
+  // Get all user's personal repositories by type of data
   personalRepos(token, typeRepos) {
     return typeRepos(token)
       .then(repos => this.getLogin(token)
         .then(username => repos.filter(repo => repo.owner.login === username)));
   }
 
-  /* personalRepos(token, typeRepos) {
-    return typeRepos(token)
-      .then(function repos(repos) {
-        return this.getLogin(token)
-          .then(username => repos.filter(repo => repo.owner.login === username));
-      });
-  } */
-
   /* --------------------------------------------------------------------- */
 
   // Get user's number of created repositories (private/public)
-  /*userCountCreatedRepositories(token) {
+  userCountCreatedRepositories(token) {
     return this.personalRepos(token, this.publicRepos)
       .then(publicRepos => this.personalRepos(token, this.privateRepos)
-        .then(privateRepos => publicRepos.length + privateRepos.length));
-  }*/
-
-  userCountCreatedRepositories(token) {
-    return this.publicPersonalRepos(token)
-      .then(publicRepos => this.privatePersonalRepos(token)
         .then(privateRepos => publicRepos.length + privateRepos.length));
   }
 
