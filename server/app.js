@@ -87,10 +87,20 @@ app.get('/user', (req, res, next) => {
     .catch(next);
 
   /* ========================================================================
+  /*  Tips
+  /*====================================================================== */
+
+  // Get all user's information about the tips
+  const tips = [];/* client.userOpenedIssues(accessToken)
+  .then(opened => client.userClosedIssues(accessToken)
+    .then((closed) => { response.issues = [{ label: 'Opened', value: opened }, { label: 'Closed', value: closed }]; }))
+  .catch(next); */
+  
+  /* ========================================================================
   /*  Results sending
   /*====================================================================== */
   Promise.all([country, profilePicture, milestones, favLanguages, issues,
-    trivia, repositories,
+    trivia, repositories, tips,
   ])
     .then(() => res.send(response));
 });
