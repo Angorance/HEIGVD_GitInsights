@@ -7,7 +7,7 @@ describe('Github utils', () => {
   /*====================================================================== */
 
   // Get user's first repository creation date
-  it('should retrieve the oldest date', () => {
+  it('should retrieve the date of the oldest repository', () => {
     const dates = [
       { created_at: '2018-02-19T08:46:01Z' },
       { created_at: '2016-02-24T08:46:01Z' },
@@ -17,7 +17,21 @@ describe('Github utils', () => {
 
     const expected = '2016-02-24T08:46:01Z';
 
-    expect(utils.getOldestCreationDate(dates)).to.eql(expected);
+    expect(utils.getOldestRepository(dates)).to.eql(expected);
+  });
+
+  // Get user's first commit date
+  it('should retrieve the date of the oldest commit', () => {
+    const dates = [
+      { commit: { author: { date: '2018-02-19T08:46:01Z' } } },
+      { commit: { author: { date: '2016-02-24T08:46:01Z' } } },
+      { commit: { author: { date: '2017-05-03T08:46:01Z' } } },
+      { commit: { author: { date: '2016-10-09T08:46:01Z' } } },
+    ];
+
+    const expected = '2016-02-24T08:46:01Z';
+
+    expect(utils.getOldestCommit(dates)).to.eql(expected);
   });
 
   /* ========================================================================

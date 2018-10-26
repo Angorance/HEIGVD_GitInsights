@@ -74,12 +74,24 @@ class Github {
   // Get user's first repository creation date (private/public)
   userFirstRepositoryDate(token) {
     return this.publicRepos(token)
-      .then(publicRepos => utils.getOldestCreationDate(publicRepos))
+      .then(publicRepos => utils.getOldestRepository(publicRepos))
       .then(oldestPublic => this.privateRepos(token)
-        .then(privateRepos => utils.getOldestCreationDate(privateRepos))
+        .then(privateRepos => utils.getOldestRepository(privateRepos))
         .then((oldestPrivate) => {
           const array = [{ created_at: oldestPublic }, { created_at: oldestPrivate }];
-          return utils.getOldestCreationDate(array);
+          return utils.getOldestRepository(array);
+        }));
+  }
+
+  userFirstCommitDate(token) {
+    return this.reposPublicPersonalCommits(token)
+      .then(publicRepos => utils.getOldestCommit(publicRepos))
+      .then(oldestPublic => this.reposPrivatePersonalCommits(token)
+        .then(privateRepos => utils.getOldestCommit(privateRepos))
+        .then((oldestPrivate) => {
+          const array = [
+            { commit: { author: { date: oldestPublic } } }, { commit: { author: { date: oldestPrivate } } }];
+          return utils.getOldestCommit(array);
         }));
   }
 
@@ -159,6 +171,22 @@ class Github {
         }));
   }
 
+  // Get all private personal commits of user's repositories
+  reposPrivatePersonalCommits(token) {
+    return this.privateRepos(token)
+      .then(repos => this.getLogin(token)
+        .then((username) => {
+          // Get all personal commits
+          const getCommits = repo => this.repoCommits(repo.full_name, token)
+            .then(commits => (commits).filter(commit => commit.author != null
+              && commit.author.login === username));
+
+          // Get all commits of the user
+          return Promise.all(repos.map(getCommits))
+            .then(results => results.reduce((acc, elem) => acc.concat(elem), []));
+        }));
+  }
+
   // Get number of public coded lines
   userCountPublicCodedLines(token) {
     return this.reposPublicPersonalCommits(token)
@@ -202,16 +230,16 @@ class Github {
       .then(username => this.request(`/users/${username}/repos`, token));
   }
 
+  // Get all user's private repositories
+  privateRepos(token) {
+    return this.request('/user/repos', token);
+  }
+
   // Get all user's public personal repositories
   publicPersonalRepos(token) {
     return this.publicRepos(token)
       .then(publicRepos => this.getLogin(token)
         .then(username => publicRepos.filter(repo => repo.owner.login === username)));
-  }
-
-  // Get all user's private repositories
-  privateRepos(token) {
-    return this.request('/user/repos', token);
   }
 
   // Get all user's private personal repositories
@@ -221,9 +249,29 @@ class Github {
         .then(username => privateRepos.filter(repo => repo.owner.login === username)));
   }
 
+  /* personalRepos(token, typeRepos) {
+    return typeRepos(token)
+      .then(repos => this.getLogin(token)
+        .then(username => repos.filter(repo => repo.owner.login === username)));
+  } */
+
+  /* personalRepos(token, typeRepos) {
+    return typeRepos(token)
+      .then(function repos(repos) {
+        return this.getLogin(token)
+          .then(username => repos.filter(repo => repo.owner.login === username));
+      });
+  } */
+
   /* --------------------------------------------------------------------- */
 
   // Get user's number of created repositories (private/public)
+  /* userCountCreatedRepositories(token) {
+    return this.personalRepos(token, this.publicRepos)
+      .then(publicRepos => this.personalRepos(token, this.privateRepos)
+        .then(privateRepos => publicRepos.length + privateRepos.length));
+  } */
+
   userCountCreatedRepositories(token) {
     return this.publicPersonalRepos(token)
       .then(publicRepos => this.privatePersonalRepos(token)

@@ -39,7 +39,8 @@ app.get('/user', (req, res, next) => {
   // Get user's milestones (account creation, first repository(public/private))
   const milestones = client.userCreation(accessToken)
     .then(creation => client.userFirstRepositoryDate(accessToken)
-      .then((firsRepo) => { response.milestones = [{ date: creation, label: 'account creation' }, { date: firsRepo, label: 'first repository' }]; }))
+      .then(firsRepo => client.userFirstCommitDate(accessToken)
+        .then((firstCommit) => { response.milestones = [{ date: creation, label: 'account creation' }, { date: firsRepo, label: 'first repository' }, { date: firstCommit, label: 'first commit' }]; })))
     .catch(next);
 
   /* ========================================================================

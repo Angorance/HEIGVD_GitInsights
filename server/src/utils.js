@@ -12,12 +12,18 @@ function getReposLanguagesStats(reposLanguages = []) {
   return stats;
 }
 
-// Sort an array by date (oldest first) and get the first one
-function getOldestCreationDate(repos = []) {
+// Sort an array of repositories by date (oldest first) and get the first one
+function getOldestRepository(repos = []) {
   repos.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
   return repos[0].created_at;
 }
 
+// Sort an array of commits by date (oldest first) and get the first one
+function getOldestCommit(repos = []) {
+  repos.sort((a, b) => new Date(a.commit.author.date) - new Date(b.commit.author.date));
+  return repos[0].commit.author.date;
+}
+
 module.exports = {
-  getReposLanguagesStats, getOldestCreationDate,
+  getReposLanguagesStats, getOldestRepository, getOldestCommit,
 };
