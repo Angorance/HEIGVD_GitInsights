@@ -53,6 +53,18 @@ class Github {
 
   /* --------------------------------------------------------------------- */
 
+  // Get user's location
+  userLocation(token) {
+    return this.user(token)
+      .then(user => user.location);
+  }
+
+  // Get user's avatar url
+  userAvatarUrl(token) {
+    return this.user(token)
+      .then(user => user.avatar_url);
+  }
+
   // Get user's creation date
   userCreation(token) {
     return this.user(token)
@@ -70,19 +82,6 @@ class Github {
           return utils.getOldestCreationDate(array);
         }));
   }
-
-  // Get user's location
-  userLocation(token) {
-    return this.user(token)
-      .then(user => user.location);
-  }
-
-  // Get user's avatar url
-  userAvatarUrl(token) {
-    return this.user(token)
-      .then(user => user.avatar_url);
-  }
-
 
   /* ========================================================================
   /*  1st graph : languages
@@ -225,6 +224,10 @@ class Github {
   }
 
   // Get all user's stars (private/public)
+  userCountStarsRepositories(token) {
+    return this.getLogin(token)
+      .then(username => 0);
+  }
 }
 
 module.exports = Github;

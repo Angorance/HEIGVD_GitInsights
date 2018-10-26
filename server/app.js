@@ -29,25 +29,20 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   const response = {};
-
-  // Get user's creation date
-  const creationDate = client.userCreation(accessToken)
-    .then((creation) => { response.creationDate = creation; })
-    .catch(next);
-
-  // Get user's first repository creation date (private/public)
-  const firstRepositoryDate = client.userFirstRepositoryDate(accessToken)
-    .then((firstRepository) => { response.firstRepositoryDate = firstRepository; })
-    .catch(next);
-
   // Get user's location
-  const location = client.userLocation(accessToken)
-    .then((userLocation) => { response.location = userLocation; })
+  const country = client.userLocation(accessToken)
+    .then((userLocation) => { response.country = userLocation; })
     .catch(next);
 
   // Get user's avatar url
-  const avatarUrl = client.userAvatarUrl(accessToken)
-    .then((avatar) => { response.avatarUrl = avatar; })
+  const profilePicture = client.userAvatarUrl(accessToken)
+    .then((avatar) => { response.profile_picture = avatar; })
+    .catch(next);
+
+  // Get user's milestones (account creation, first repository(public/private))
+  const milestones = client.userCreation(accessToken)
+    .then(creation => client.userFirstRepositoryDate(accessToken)
+      .then((firsRepo) => { response.milestones = [{ date: creation, label: 'account creation' }, { date: firsRepo, label: 'first repository' }]; }))
     .catch(next);
 
   /* ========================================================================
@@ -55,36 +50,33 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   // Get all languages of the user and contributors (private)
-  const languages = client.userLanguages(accessToken)
+  const favLanguages = client.userLanguages(accessToken)
     .then(utils.getReposLanguagesStats)
-    .then((allLanguages) => { response.languages = allLanguages; })
+    .then((allLanguages) => { response.favLanguages = allLanguages; })
     .catch(next);
 
   /* ========================================================================
   /*  2nd graph : issues
   /*====================================================================== */
 
-  // Get all user's issues
   /* const issues = client.issues(req.params.username)
-    .then(issues => response.issues = issues)
+      .then(issues => response.issues = issues)
+      .catch(next); */
+
+  // Get all user's issues
+  const issues = [];/* client.userOpenedIssues(accessToken)
+    .then(opened => client.userClosedIssues(accessToken)
+      .then((closed) => { response.issues = [{ label: 'Opened', value: opened }, { label: 'Closed', value: closed }]; }))
     .catch(next); */
-
-  // Get all user's opened issues
-
-  // Get all user's closed issues
 
   /* ========================================================================
   /*  3nd graph : coded lines and commits
   /*====================================================================== */
 
-  // Get all user's line coded (public)
-  const nbrCodedLines = client.userCountCodedLines(accessToken)
-    .then((total) => { response.nbrCodedLines = total; })
-    .catch(next);
-
-  // Get all user's commits (public)
-  const nbrCommits = client.userCountCommits(accessToken)
-    .then((total) => { response.nbrCommits = total; })
+  // Get all user's trivia information (public coded lines and public number of commits)
+  const trivia = client.userCountCodedLines(accessToken)
+    .then(codedLines => client.userCountCommits(accessToken)
+      .then((commits) => { response.trivia = [{ label: 'Lines coded', value: codedLines }, { label: 'Commits', value: commits }]; }))
     .catch(next);
 
   /* ========================================================================
@@ -96,14 +88,11 @@ app.get('/user', (req, res, next) => {
     .then(repos => response.repos = repos)
     .catch(next); */
 
-  // Get user's number of created repositories (private/public)
-  const nbrCreatedRepositories = client.userCountCreatedRepositories(accessToken)
-    .then((total) => { response.nbrCreatedRepositories = total; })
-    .catch(next);
-
-  // Get all user's forked repositories (private/public)
-  const nbrForkedRepositories = client.userCountForkedRepositories(accessToken)
-    .then((total) => { response.nbrForkedRepositories = total; })
+  // Get all user's repositories public/private information (created, forked, stars)
+  const repositories = client.userCountCreatedRepositories(accessToken)
+    .then(created => client.userCountForkedRepositories(accessToken)
+      .then(forked => client.userCountStarsRepositories(accessToken)
+        .then((stars) => { response.repositories = [{ label: 'Created', value: created }, { label: 'Forked', value: forked }, { label: 'Stars', value: stars }]; })))
     .catch(next);
 
   // Get all user's stars (private/public)
@@ -111,11 +100,8 @@ app.get('/user', (req, res, next) => {
   /* ========================================================================
   /*  Results sending
   /*====================================================================== */
-  Promise.all([creationDate, firstRepositoryDate, location, avatarUrl,
-    languages,
-    nbrCodedLines, nbrCommits,
-    nbrCreatedRepositories, nbrForkedRepositories,
-    /* issues */
+  Promise.all([country, profilePicture, milestones, favLanguages, issues,
+    trivia, repositories,
   ])
     .then(() => res.send(response));
 });
