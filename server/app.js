@@ -59,10 +59,6 @@ app.get('/user', (req, res, next) => {
   /*  2nd graph : issues
   /*====================================================================== */
 
-  /* const issues = client.issues(req.params.username)
-      .then(issues => response.issues = issues)
-      .catch(next); */
-
   // Get all user's issues
   const issues = [];/* client.userOpenedIssues(accessToken)
     .then(opened => client.userClosedIssues(accessToken)
@@ -83,19 +79,12 @@ app.get('/user', (req, res, next) => {
   /*  4nd graph : repositories
   /*====================================================================== */
 
-  // Get user's repositories
-  /* const repos = client.repos(req.params.username)
-    .then(repos => response.repos = repos)
-    .catch(next); */
-
   // Get all user's repositories public/private information (created, forked, stars)
   const repositories = client.userCountCreatedRepositories(accessToken)
     .then(created => client.userCountForkedRepositories(accessToken)
       .then(forked => client.userCountStarsRepositories(accessToken)
         .then((stars) => { response.repositories = [{ label: 'Created', value: created }, { label: 'Forked', value: forked }, { label: 'Stars', value: stars }]; })))
     .catch(next);
-
-  // Get all user's stars (private/public)
 
   /* ========================================================================
   /*  Results sending
