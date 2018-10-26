@@ -107,10 +107,32 @@ class Github {
   /*  2nd graph : issues
   /*====================================================================== */
 
-  // Get all user's issues
-  /* issues(username) {
-    return this.request(`/users/${username}/issues`);
-  } */
+  // Get all user's issues from his own repos
+  issues(token) {
+    return this.request('/user/issues', token);
+  }
+
+  /* --------------------------------------------------------------------- */
+
+  // Get all user's opened issues
+  userOpenedIssues(token) {
+    return this.issues(token)
+      .then((issues) => {
+        const openedIssues = issue => (issue.state === 'open' ? 1 : 0);
+        return Promise.all(issues.map(openedIssues))
+          .then(results => results.reduce((elem, acc) => elem + acc, 0));
+      });
+  }
+
+  // Get all user's closed issues
+  userClosedIssues(token) {
+    return this.issues(token)
+      .then((issues) => {
+        const closedIssues = issue => (issue.state === 'close' ? 1 : 0);
+        return Promise.all(issues.map(closedIssues))
+          .then(results => results.reduce((elem, acc) => elem + acc, 0));
+      });
+  }
 
   /* ========================================================================
   /*  3nd graph : coded lines and commits
@@ -180,6 +202,7 @@ class Github {
       .then(username => this.request(`/users/${username}/repos`, token));
   }
 
+  // Get all user's public personal repositories
   publicPersonalRepos(token) {
     return this.publicRepos(token)
       .then(publicRepos => this.getLogin(token)
@@ -191,6 +214,7 @@ class Github {
     return this.request('/user/repos', token);
   }
 
+  // Get all user's private personal repositories
   privatePersonalRepos(token) {
     return this.privateRepos(token)
       .then(privateRepos => this.getLogin(token)

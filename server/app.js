@@ -57,10 +57,10 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   // Get all user's issues
-  const issues = [];/* client.userOpenedIssues(accessToken)
+  const issues = client.userOpenedIssues(accessToken)
     .then(opened => client.userClosedIssues(accessToken)
       .then((closed) => { response.issues = [{ label: 'Opened', value: opened }, { label: 'Closed', value: closed }]; }))
-    .catch(next); */
+    .catch(next);
 
   /* ========================================================================
   /*  3nd graph : coded lines and commits
