@@ -52,7 +52,7 @@
               <thead>
                 <tr>
                   <th colspan="2">
-                    Assigned issues
+                    Assigned issues <img alt="help" src="../../assets/images/help.png" height="20px" style="opacity: 0.3" matTooltip="Note: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request. For this reason, &quot;Issues&quot; endpoints may return both issues and pull requests in the response." matTooltipPosition="above">
                   </th>
                 </tr>
               </thead>
@@ -136,7 +136,14 @@
       </mat-card>
       <div id="tip-container">
           <mat-card *ngFor="let tip of tips" class="tip-card">
-            {{tip}}
+            <mat-card-title>{{tip.title}}</mat-card-title>
+            <mat-card-subtitle class="card-subt" [ngStyle]="getTipStyle(tip.quality-1)">
+              Your score : {{tip.score}}
+              <img alt="help" src="../../assets/images/help.png" height="13px" style="opacity: 0.3" matTooltip="The criteria was : {{tip.criteria}}" matTooltipPosition="above">
+            </mat-card-subtitle>
+            <mat-card-content>
+              <p>{{tip.tip}}</p>
+            </mat-card-content>
           </mat-card>
       </div>
       <button mat-flat-button matStepperPrevious style="left: 50px; position:fixed; margin-top:10px;"> Previous </button>

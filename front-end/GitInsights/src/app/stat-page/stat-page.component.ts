@@ -49,13 +49,19 @@ export class StatPageComponent implements OnInit {
 
   // test purpose ==>
   // results = '{"country":"Switzerland","profile_picture":"https://avatars1.githubusercontent.com/u/30982987?v=4","issues":[{"label":"Opened","value":0},{"label":"Closed","value":0}],"favLanguages":{"Java":1203794,"Dockerfile":1050,"CSS":267635,"C++":797671,"C":33529,"CMake":1228,"JavaScript":538538,"PHP":83311,"Shell":8185,"HTML":3942,"TypeScript":31503,"PLpgSQL":1946,"QMake":7571,"Makefile":79446},"repositories":[{"label":"Created","value":23},{"label":"Forked","value":10},{"label":"Stars","value":2}],"milestones":[{"date":"2017-08-13T16:51:57Z","label":"account creation"},{"date":"2017-09-23T15:39:32Z","label":"first repository"},{"date":"2017-09-23T15:38:49Z","label":"first commit"}],"trivia":[{"label":"Lines coded","value":3648},{"label":"Commits","value":18}]}';
-  tips: Array<string> = [];
+  tips: Array<Tip> = [];
   chart = [];
   issues: Array<{label: string, value: number}> = [];
   trivias: Array<{label: string, value: number}> = [];
   milestones: Array<{ date: string; label: string }> = [];
   repositories: Array<{label: string, value: number}> = [];
   languages: Array<{ label: string; value: number }> = [];
+
+  qualityTab = [
+    '#32D157',
+    '#D69704',
+    '#C90000'
+  ];
 
   // define if the application has gathered all the data needed
   loaded = false;
@@ -127,6 +133,7 @@ export class StatPageComponent implements OnInit {
     this.issues = res.issues;
     this.trivias = res.trivia;
     this.repositories = res.repositories;
+    this.tips = res.tips;
 
     // milestones for the timeline composant
     if (res.milestones) {
@@ -212,13 +219,20 @@ export class StatPageComponent implements OnInit {
       .then((res: GitData) => {
         // TODO : loading screen
         //console.log('data retrieved');
-        
+
         this.setData(res);
         this.loaded = true;
       })
       .catch(err => {
         console.log(err);
       });
+  }
+
+  getTipStyle(i: number) {
+
+    return {
+      'color' : this.qualityTab[i % this.qualityTab.length],
+    };
   }
 }
 
@@ -242,5 +256,13 @@ class GitData {
   milestones: Array<{ date: string, label: string }>;
   repositories: Array<{ label: string, value: number }>;
   trivia: Array<{ label: string, value: number }>;
-  tips: string[];
+  tips: Array<Tip>;
+}
+
+class Tip {
+  title: string;
+  score:  number;
+  criteria: string;
+  quality: number;
+  tip: string;
 }
