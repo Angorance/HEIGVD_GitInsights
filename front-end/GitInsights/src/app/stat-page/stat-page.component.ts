@@ -1,15 +1,34 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostBinding } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js';
 import * as Country from 'country-list';
-import { log } from 'util';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+  // ...
+} from '@angular/animations';
 
 @Component({
   selector: 'app-stat-page',
   templateUrl: './stat-page.component.html',
-  styleUrls: ['./stat-page.component.css']
+  styleUrls: ['./stat-page.component.css'],
+  animations: [
+    trigger('endLoad', [
+      state('opened', style({
+        height : '100%',
+        opacity : 1
+      })),
+      state('closed', style({
+        height : '0%',
+        opacity: 0,
+      })),
+      transition('opened => closed', [animate('0.5s ease-in-out')])
+    ]),
+  ],
 })
-
 
 
 export class StatPageComponent implements OnInit {
@@ -17,7 +36,7 @@ export class StatPageComponent implements OnInit {
   context: CanvasRenderingContext2D;
 
 
-  // test purpose ==> 
+  // test purpose ==>
   //results = '{"country":"Switzerland","profile_picture":"https://avatars1.githubusercontent.com/u/30982987?v=4","issues":[{"label":"Opened","value":0},{"label":"Closed","value":0}],"favLanguages":{"Java":1203794,"Dockerfile":1050,"CSS":267635,"C++":797671,"C":33529,"CMake":1228,"JavaScript":538538,"PHP":83311,"Shell":8185,"HTML":3942,"TypeScript":31503,"PLpgSQL":1946,"QMake":7571,"Makefile":79446},"repositories":[{"label":"Created","value":23},{"label":"Forked","value":10},{"label":"Stars","value":0}],"trivia":[{"label":"Lines coded","value":3648},{"label":"Commits","value":18}]}';
   tips = [];
   chart = [];
@@ -25,6 +44,8 @@ export class StatPageComponent implements OnInit {
   trivias = [];
   milestones: Array<{date: string, label: string}> = [];
   repositories = [];
+
+  loaded = false;
 
   avatarStyle;
 
@@ -120,6 +141,7 @@ export class StatPageComponent implements OnInit {
         (res: GitData) => {
           // TODO : loading screen
           this.setData(res);
+          this.loaded = true;
         }
       )
       .catch(err => {
