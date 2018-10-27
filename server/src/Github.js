@@ -130,30 +130,46 @@ class Github {
   /*====================================================================== */
 
   // Get all user's issues from his own repos
-  issues() {
-    return this.request('/user/issues');
+  reposIssues(repo, username, state) {
+    const owner = repo.owner.login;
+    return this.request(`/repos/${owner}/${repo.name}/issues?assignee=${username}&state=${state}`, false);
   }
 
   // Get all user's issues by state
   userIssuesByState(state) {
-    return this.issues()
-      .then((issues) => {
-        const stateIssues = issue => (issue.state === state ? 1 : 0);
-        return Promise.all(issues.map(stateIssues))
-          .then(results => results.reduce((elem, acc) => elem + acc, 0));
-      });
+    return this.getLogin()
+      .then(username => this.publicRepos()
+        .then(publicRepos => this.privateRepos()
+          .then(privateRepos => privateRepos.concat(publicRepos)))
+        .then((repos) => {
+          const reposIssues = repo => this.reposIssues(repo, username, state);
+          return Promise.all(repos.map(reposIssues))
+            .then(results => results.reduce((acc, elem) => acc.concat(elem), []));
+        }));
   }
 
   /* --------------------------------------------------------------------- */
 
-  // Get all user's opened issues
-  userOpenedIssues() {
-    return this.userIssuesByState('open');
+  // Get number of user's opened issues (private/public)
+  userCountOpenedIssues() {
+    return this.userIssuesByState('open')
+      .then(issues => issues.length);
   }
 
-  // Get all user's closed issues
+  // Get number of user's closed issues (private/public)
+  userCountClosedIssues() {
+    return this.userIssuesByState('closed')
+      .then(issues => issues.length);
+  }
+
+  // Get all user's closed issues (private/public)
   userClosedIssues() {
     return this.userIssuesByState('closed');
+  }
+
+  // Get all user's closed issues (private/public)
+  userOpenedIssues() {
+    return this.userIssuesByState('open');
   }
 
   /* ========================================================================

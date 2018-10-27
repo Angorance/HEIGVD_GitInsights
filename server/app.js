@@ -70,8 +70,8 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   // Get all user's issues from his own repos
-  const issues = req.client.userOpenedIssues()
-    .then(opened => req.client.userClosedIssues()
+  const issues = req.client.userCountOpenedIssues()
+    .then(opened => req.client.userCountClosedIssues()
       .then((closed) => { response.issues = [{ label: 'Opened', value: opened }, { label: 'Closed', value: closed }]; }))
     .catch(next);
 
@@ -103,11 +103,18 @@ app.get('/user', (req, res, next) => {
   // Get all user's information about the tips
   const tips = [];
 
+  const openedIssues = req.client.userOpenedIssues()
+    .then((oIssues) => { response.opened_issues = oIssues; });
+
+  const closedIssues = req.client.userClosedIssues()
+    .then((cIssues) => { response.closed_issues = cIssues; });
+
   /* ========================================================================
   /*  Results sending
   /*====================================================================== */
   Promise.all([country, profilePicture, milestones, favLanguages, issues,
     trivia, repositories, tips,
+    openedIssues, closedIssues,
   ])
     .then(() => res.send(response));
 });
