@@ -3,7 +3,7 @@ const utils = require('./utils');
 const tips = require('./tips');
 
 // Variables for tips
-let tipsCommitsArray = [];
+let tipsCommitsMessagesArray = [];
 let tipsModifiedLinesCommitsArray = [];
 
 class ResponseError extends Error {
@@ -208,7 +208,7 @@ class Github {
 
         // Calculate tip 1
         const message = commit => commit.commit.message;
-        tipsCommitsArray = commits.map(message);
+        tipsCommitsMessagesArray = commits.map(message);
 
         // Get all urls of user's personal commits
         const url = commit => commit.url;
@@ -312,12 +312,12 @@ class Github {
   // Tip 1 : number of characters per commit (for the last hundred commits)
   // eslint-disable-next-line class-methods-use-this
   tipsNumberOfCharactersPerCommit() {
-    return tips.getTipsNumberOfCharactersPerCommit(tipsCommitsArray);
+    return tips.getTipsNumberOfCharactersPerCommit(tipsCommitsMessagesArray);
   }
 
   // Tip 2 : number of modifications per commit (for the last hundred commits)
   /*tipsNumberOfModificationsPerCommit() {
-    
+    return tips.getTipsNumberOfModificationsPerCommit(tipsModifiedLinesCommitsArray);  
   }*/
 
   // Tip 3 : percentage of used languages
