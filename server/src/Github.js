@@ -1,5 +1,10 @@
 const fetch = require('node-fetch');
 const utils = require('./utils');
+const tips = require('./tips');
+
+// Variables for tips
+let tipsCommitsArray = [];
+let tipsModifiedLinesCommitsArray = [];
 
 class ResponseError extends Error {
   constructor(res, body) {
@@ -59,8 +64,8 @@ class Github {
   }
 
   // Get user's first date of arrays public and private (private/public)
+  // eslint-disable-next-line class-methods-use-this
   userFirstDate(publicFunc, privateFunc, sortFunc) {
-    const self = this;
     return publicFunc()
       .then(publicArray => sortFunc(publicArray))
       .then(oldestPublic => privateFunc()
@@ -167,11 +172,6 @@ class Github {
     return this.userIssuesByState('closed');
   }
 
-  // Get all user's closed issues (private/public)
-  userOpenedIssues() {
-    return this.userIssuesByState('open');
-  }
-
   /* ========================================================================
   /*  3nd graph : coded lines and commits
   /* ====================================================================== */
@@ -205,6 +205,10 @@ class Github {
       .then((commitsReceived) => {
         // Get the last 100 commits
         const commits = utils.getLastCommits(commitsReceived, 100);
+
+        // Calculate tip 1
+        const message = commit => commit.commit.message;
+        tipsCommitsArray = commits.map(message);
 
         // Get all urls of user's personal commits
         const url = commit => commit.url;
@@ -257,8 +261,8 @@ class Github {
   }
 
   // Get number of forked repositories by type private or public
+  // eslint-disable-next-line class-methods-use-this
   reposCountForkedRepositories(typeRepos) {
-    const self = this;
     return typeRepos()
       .then((repos) => {
         const nbrForkedRepositories = repo => (repo.fork === true ? 1 : 0);
@@ -268,8 +272,8 @@ class Github {
   }
 
   // Get number of stars of the repositories by type private or public
+  // eslint-disable-next-line class-methods-use-this
   reposCountStarsRepositories(typeRepos) {
-    const self = this;
     return typeRepos()
       .then((repos) => {
         const stars = repo => repo.stargazers_count;
@@ -300,6 +304,31 @@ class Github {
       .then(publicStars => this.reposCountStarsRepositories(this.privateRepos)
         .then(privateStars => privateStars + publicStars));
   }
+
+  /* ========================================================================
+  /* Tips
+  /*====================================================================== */
+
+  // Tip 1 : number of characters per commit (for the last hundred commits)
+  // eslint-disable-next-line class-methods-use-this
+  tipsNumberOfCharactersPerCommit() {
+    return tips.getTipsNumberOfCharactersPerCommit(tipsCommitsArray);
+  }
+
+  // Tip 2 : number of modifications per commit (for the last hundred commits)
+  /*tipsNumberOfModificationsPerCommit() {
+    
+  }*/
+
+  // Tip 3 : percentage of used languages
+  /*tipsPercentageOfUsedLanguages() {
+    
+  }*/
+
+  // Tip 4 : time between the opening and the closure of an issue
+  /*tipsTimeBetweenOpeningAndClosureIssue() {
+    
+  }*/
 }
 
 module.exports = Github;
