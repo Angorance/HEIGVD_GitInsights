@@ -41,19 +41,21 @@ import {
     ])
   ]
 })
+
 export class StatPageComponent implements OnInit {
   @ViewChild("canvas")
   canvas: ElementRef;
   context: CanvasRenderingContext2D;
 
   // test purpose ==>
-  //results = '{"country":"Switzerland","profile_picture":"https://avatars1.githubusercontent.com/u/30982987?v=4","issues":[{"label":"Opened","value":0},{"label":"Closed","value":0}],"favLanguages":{"Java":1203794,"Dockerfile":1050,"CSS":267635,"C++":797671,"C":33529,"CMake":1228,"JavaScript":538538,"PHP":83311,"Shell":8185,"HTML":3942,"TypeScript":31503,"PLpgSQL":1946,"QMake":7571,"Makefile":79446},"repositories":[{"label":"Created","value":23},{"label":"Forked","value":10},{"label":"Stars","value":0}],"trivia":[{"label":"Lines coded","value":3648},{"label":"Commits","value":18}]}';
-  tips = [];
+  results = '{"country":"Switzerland","profile_picture":"https://avatars1.githubusercontent.com/u/30982987?v=4","issues":[{"label":"Opened","value":0},{"label":"Closed","value":0}],"favLanguages":{"Java":1203794,"Dockerfile":1050,"CSS":267635,"C++":797671,"C":33529,"CMake":1228,"JavaScript":538538,"PHP":83311,"Shell":8185,"HTML":3942,"TypeScript":31503,"PLpgSQL":1946,"QMake":7571,"Makefile":79446},"repositories":[{"label":"Created","value":23},{"label":"Forked","value":10},{"label":"Stars","value":2}],"milestones":[{"date":"2017-08-13T16:51:57Z","label":"account creation"},{"date":"2017-09-23T15:39:32Z","label":"first repository"},{"date":"2017-09-23T15:38:49Z","label":"first commit"}],"trivia":[{"label":"Lines coded","value":3648},{"label":"Commits","value":18}]}';
+  tips: Array<string> = [];
   chart = [];
-  issues = [];
-  trivias = [];
+  issues: Array<{label: string, value: number}> = [];
+  trivias: Array<{label: string, value: number}> = [];
   milestones: Array<{ date: string; label: string }> = [];
-  repositories = [];
+  repositories: Array<{label: string, value: number}> = [];
+  languages: Array<{ label: string; value: number }> = [];
 
   loaded = false;
 
@@ -65,12 +67,13 @@ export class StatPageComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    //this.setData(JSON.parse(this.results));
+    /*this.setData(JSON.parse(this.results));
+    this.loaded = true;*/
     this.getData();
   }
 
   setData(res: GitData) {
-    console.log(JSON.stringify(res)); // récupérer les données suite au get et les utiliser :D
+    // console.log(JSON.stringify(res)); // récupérer les données suite au get et les utiliser :D
 
     // set the flag and the avatar
     this.avatarStyle = {
@@ -94,21 +97,20 @@ export class StatPageComponent implements OnInit {
 
     // chart creation - creating a list containing a the language and the total line number
     if (res.favLanguages) {
-      const languages: Array<{ label: string; value: number }> = [];
 
       let labels: string[] = Object.keys(res.favLanguages); // languages
       let datas: number[] = Object.values(res.favLanguages); // total lines
 
       for (let _i = 0; _i < labels.length; _i++) {
-        languages.push({ label: labels[_i], value: datas[_i] });
+        this.languages.push({ label: labels[_i], value: datas[_i] });
       }
 
       // reset the list to store the top 5
       labels = [];
       datas = [];
-      languages
+      this.languages
         .sort(compareLanguage)
-        .slice(0, 5)
+        .slice(0, 7)
         .forEach(elem => {
           labels.push(elem.label);
           datas.push(elem.value);
@@ -130,7 +132,10 @@ export class StatPageComponent implements OnInit {
                 "rgba(54, 162, 235, 1)",
                 "rgb(36, 122, 118)",
                 "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)"
+                "rgba(153, 102, 255, 1)",
+                "rgb(72, 66, 244)",
+                "rgba(54, 162, 235, 1)",
+                "rgb(36, 122, 118)",
               ]
             }
           ]
@@ -144,7 +149,7 @@ export class StatPageComponent implements OnInit {
               {
                 scaleLabel: {
                   display: true,
-                  labelString: "Lines coded"
+                  labelString: "Coded lines"
                 }
               }
             ]

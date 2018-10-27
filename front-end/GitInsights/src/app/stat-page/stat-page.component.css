@@ -22,6 +22,7 @@ h1{
 .maincontent{
     width : 100%;
     padding: 20px;
+    height: 100%;
 }
 
 table{
@@ -53,12 +54,11 @@ tfoot{
     align-items: center;
     justify-content: center;
     color : #3f3f3f;
-
 }
 
 .timeline-card{
-    margin : 5px;
-    height: 25px;
+    margin : 10px;
+    height: 40px;
 }
 
 .stepper-content{
@@ -84,7 +84,7 @@ tfoot{
 
 #avatar-container{
     position: relative;
-  width: 65%;
+    width: 65%;
     border-radius: 50%;
     background-position: center;
   background-repeat: no-repeat;
@@ -108,7 +108,16 @@ tfoot{
 }
 
 #canvas-container{
-    padding-top : 15px;
+    width: 80%;
+    height: 100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.grid-list{
+    height: 100%;
 }
 
 .load-screen{
@@ -124,5 +133,4 @@ tfoot{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
 }

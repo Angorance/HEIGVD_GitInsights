@@ -5,16 +5,14 @@
   <img id="logo" src="../../assets/images/gitInsight.png" height="50 px"> <h1>GitInsights</h1>
 </div>
 <div class="mainContent">
-  <mat-horizontal-stepper class="stepper-content">
+  <mat-horizontal-stepper linear="false" class="stepper-content">
     <!--------------------------------------------------------- STATS PAGE ------------------------------------------------------------->
-    <mat-step >
-
-      <ng-template matStepLabel>Statistics</ng-template>
+    <mat-step label="Statistiques" completed="false">
       <mat-card class="timeline-card" >
         <app-timeline *ngIf="milestones" [milestones]="milestones"></app-timeline>
       </mat-card>
 
-      <mat-grid-list cols="3" rowHeight="2:1">
+      <mat-grid-list cols="3" rowHeight="1.8:1" class="grid-list">
 
         <mat-grid-tile>
           <mat-card class="stat-card">
@@ -23,17 +21,22 @@
               <thead>
                 <tr>
                   <th>
-                    Languages
+                    Favorites Languages <img alt="help" src="../../assets/images/help.png" height="20px" style="opacity: 0.3" matTooltip="The lines are from your private repositories as a whole" matTooltipPosition="above">
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td id="canvas-container">
-                    <canvas  #canvas id="canvas" height="100%" > {{ chart }} </canvas>
+                  <td >
+                    <div id="canvas-container">
+                      <canvas  #canvas id="canvas"> {{ chart }} </canvas>
+                    </div>
                   </td>
                 </tr>
               </tbody>
+              <tfoot>
+                <th *ngIf="languages" style="font-weight: normal; text-align: left; font-size: 0.7em">{{languages.length}} languages in total</th>
+              </tfoot>
             </table>
           </mat-card>
         </mat-grid-tile>
@@ -49,7 +52,7 @@
               <thead>
                 <tr>
                   <th colspan="2">
-                    Issues <!-- TODO : tooltip "concern personal repositories" -->
+                    Assigned issues
                   </th>
                 </tr>
               </thead>
@@ -76,13 +79,13 @@
               <thead>
                 <tr>
                   <th colspan="2">
-                    Trivia <img alt="help" src="../../assets/images/help.png" height="20px" style="opacity: 0.3" matTooltip="Only the plublic repositories are considered" matTooltipPosition="above"> <!-- TODO : tooltip "only consider public repositories" -->
+                    Trivia <img alt="help" src="../../assets/images/help.png" height="20px" style="opacity: 0.3" matTooltip="For the line coded, we only consider the 100 last commits" matTooltipPosition="above">
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td *ngFor="let trivia of trivias"> {{trivia.value}}</td>
+                  <td *ngFor="let trivia of trivias"> {{trivia.value.toLocaleString('ch-fr')}}</td>
                 </tr>
               </tbody>
 
@@ -123,12 +126,11 @@
 
       </mat-grid-list>
 
-      <button mat-button matStepperNext style="right : 50px; position:fixed; margin-top: 15px;"> Next </button>
+      <button mat-flat-button matStepperNext style="right : 50px; position:fixed; margin-top: 10px;"> Next </button>
     </mat-step>
 
     <!--------------------------------------------------------- TIPS PAGE ------------------------------------------------------------->
-    <mat-step>
-      <ng-template matStepLabel>TIPS</ng-template>
+    <mat-step label="TIPS" completed="false">
       <mat-card style="text-align: center">
         <h2> How can you get better  ? </h2>
       </mat-card>
@@ -136,11 +138,10 @@
           <mat-card *ngFor="let tip of tips" class="tip-card">
             {{tip}}
           </mat-card>
-        </div>
-      <button mat-button matStepperPrevious style="left: 50px; position:fixed; margin-top:15px;"> Previous </button>
+      </div>
+      <button mat-flat-button matStepperPrevious style="left: 50px; position:fixed; margin-top:10px;"> Previous </button>
     </mat-step>
 
-    
   </mat-horizontal-stepper>
 
 </div>

@@ -1,7 +1,7 @@
 .line{
   background-color: #2e87bf;
   border-radius: 15px 15px;
-  height: 3px;
+  height: 6px;
   width: 100%;
 
 
@@ -14,34 +14,35 @@
 .bigDot{
   color : white;
   z-index: 80;
-  background-color: #2e7aaa;
+  background-color: #2e87bf;
   
-  line-height: 40px;
+  line-height: 50px;
   font-size: 0.7em;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   text-align: center;
   position: relative;
-  top:-17px;
+  top:-24px;
 }
-
 
 .littleDot{
   z-index: 90;
-  background-color: #1C9BEB;/*#2e7aaa;*/
+  background-color: rgb(103, 58, 183);/*#2e7aaa;*/
   transition : 0.3s ease-in-out;
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   position: absolute;
-  top: 41%;
+  top: 39%;
 }
+
 .littleDot:hover {
   transform: scale(1.5);
   z-index: 91;
-  background-color: #5DB7F0;
+  background-color: rgb(153, 110, 229);
 }
+
 .container{
   height: 100%;
   width: 100%;
@@ -49,5 +50,4 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
 }
