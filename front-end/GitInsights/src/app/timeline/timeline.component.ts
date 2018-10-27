@@ -29,10 +29,9 @@ export class TimelineComponent implements OnInit {
 
 
    setMilestoneStyle(date: string) {
-     const style = {
+     return {
        'left' : this.getPercentagePosition(date).toString() + '%',
      };
-     return style;
    }
 
    getTooltip(elem: {date: string, label: string} ) {
@@ -40,12 +39,11 @@ export class TimelineComponent implements OnInit {
    }
 
    fillYears() {
-
     this.years = [];
 
-    for (let i = new Date(this.milestones[0].date).getFullYear() ; i <= this.today.getFullYear() + 1; ++i) {
-      this.years.push(i);
-    }
+      for (let i = new Date(this.milestones[0].date).getFullYear() ; i <= this.today.getFullYear() + 1; ++i) {
+        this.years.push(i);
+      }
    }
 
   ngOnInit() {
@@ -53,8 +51,10 @@ export class TimelineComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     // first step : sort the dates in order to have the oldest date first
-    this.milestones = this.milestones.sort(compareDates);
-    this.fillYears();
+    if (this.milestones.length > 0) {
+      this.milestones = this.milestones.sort(compareDates);
+      this.fillYears();
+    }
   }
 }
 

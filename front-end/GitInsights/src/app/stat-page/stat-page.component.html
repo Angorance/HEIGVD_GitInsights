@@ -7,8 +7,8 @@
     <mat-step >
 
       <ng-template matStepLabel>Statistics</ng-template>
-      <mat-card class="timeline-card">
-        <app-timeline [milestones]="milestones"></app-timeline>
+      <mat-card class="timeline-card" >
+        <app-timeline *ngIf="milestones" [milestones]="milestones"></app-timeline>
       </mat-card>
 
       <mat-grid-list cols="3" rowHeight="2:1">
