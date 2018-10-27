@@ -233,25 +233,33 @@ class Github {
     return this.request('/user/repos', token);
   }
 
-  // Get all user's public personal repositories  A ENLEVER
-  publicPersonalRepos(token) {
-    return this.publicRepos(token)
-      .then(publicRepos => this.getLogin(token)
-        .then(username => publicRepos.filter(repo => repo.owner.login === username)));
-  }
-
-  // Get all user's private personal repositories   A ENLEVER
-  privatePersonalRepos(token) {
-    return this.privateRepos(token)
-      .then(privateRepos => this.getLogin(token)
-        .then(username => privateRepos.filter(repo => repo.owner.login === username)));
-  }
-
   // Get all user's personal repositories by type of data
   personalRepos(token, typeRepos) {
     return typeRepos(token)
       .then(repos => this.getLogin(token)
         .then(username => repos.filter(repo => repo.owner.login === username)));
+  }
+
+  // Get number of forked repositories by type private or public
+  reposCountForkedRepositories(token, typeRepos) {
+    const self = this;
+    return typeRepos(token)
+      .then((repos) => {
+        const nbrForkedRepositories = repo => (repo.fork === true ? 1 : 0);
+        return Promise.all(repos.map(nbrForkedRepositories))
+          .then(results => results.reduce((elem, acc) => elem + acc, 0));
+      });
+  }
+
+  // Get number of stars of the repositories by type private or public
+  reposCountStarsRepositories(token, typeRepos) {
+    const self = this;
+    return typeRepos(token)
+      .then((repos) => {
+        const stars = repo => repo.stargazers_count;
+        return Promise.all(repos.map(stars))
+          .then(results => results.reduce((elem, acc) => elem + acc, 0));
+      });
   }
 
   /* --------------------------------------------------------------------- */
@@ -265,36 +273,16 @@ class Github {
 
   // Get all user's forked repositories (private/public)
   userCountForkedRepositories(token) {
-    return this.publicRepos(token)
-      .then((publicRepos) => {
-        const nbrForkedRepositories = publicRepo => (publicRepo.fork === true ? 1 : 0);
-        return Promise.all(publicRepos.map(nbrForkedRepositories))
-          .then(results => results.reduce((elem, acc) => elem + acc, 0));
-      })
-      .then(nbrPublicForkedRepos => this.privateRepos(token)
-        .then((privateRepos) => {
-          const nbrForkedRepositories = privateRepo => (privateRepo.fork === true ? 1 : 0);
-          return Promise.all(privateRepos.map(nbrForkedRepositories))
-            .then(results => results.reduce((elem, acc) => elem + acc, 0));
-        })
-        .then(nbrPrivateForkedRepos => nbrPrivateForkedRepos + nbrPublicForkedRepos));
+    return this.reposCountForkedRepositories(token, this.publicRepos)
+      .then(publicForked => this.reposCountForkedRepositories(token, this.privateRepos)
+        .then(privateForked => privateForked + publicForked));
   }
 
   // Get all user's stars (private/public)
   userCountStarsRepositories(token) {
-    return this.publicRepos(token)
-      .then((publicRepos) => {
-        const stars = publicRepo => publicRepo.stargazers_count;
-        return Promise.all(publicRepos.map(stars))
-          .then(results => results.reduce((elem, acc) => elem + acc, 0));
-      })
-      .then(nbrPublicStars => this.privateRepos(token)
-        .then((privateRepos) => {
-          const stars = privateRepo => privateRepo.stargazers_count;
-          return Promise.all(privateRepos.map(stars))
-            .then(results => results.reduce((elem, acc) => elem + acc, 0));
-        })
-        .then(nbrPrivateStars => nbrPrivateStars + nbrPublicStars));
+    return this.reposCountStarsRepositories(token, this.publicRepos)
+      .then(publicStars => this.reposCountStarsRepositories(token, this.privateRepos)
+        .then(privateStars => privateStars + publicStars));
   }
 }
 
