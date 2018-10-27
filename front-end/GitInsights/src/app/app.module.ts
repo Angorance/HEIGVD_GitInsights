@@ -15,12 +15,10 @@ import { StatPageComponent } from './stat-page/stat-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { TimelineComponent } from './timeline/timeline.component';
-import { CallbackPageComponent } from './callback-page/callback-page.component';
 
 const appRoutes: Routes = [
   { path: "stats", component: StatPageComponent },
   { path: "home", component: LoginPageComponent },
-  { path: "callback", component: CallbackPageComponent },
   { path: "", redirectTo: "/home", pathMatch: "full" },
   { path: "**", component: PageNotFoundComponent }
 ];
@@ -33,7 +31,6 @@ const appRoutes: Routes = [
     PageNotFoundComponent,
     LoginPageComponent,
     TimelineComponent,
-    CallbackPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,7 +51,6 @@ const appRoutes: Routes = [
     StatPageComponent,
     PageNotFoundComponent,
     LoginPageComponent,
-    CallbackPageComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

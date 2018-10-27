@@ -48,7 +48,7 @@ export class StatPageComponent implements OnInit {
   context: CanvasRenderingContext2D;
 
   // test purpose ==>
-  results = '{"country":"Switzerland","profile_picture":"https://avatars1.githubusercontent.com/u/30982987?v=4","issues":[{"label":"Opened","value":0},{"label":"Closed","value":0}],"favLanguages":{"Java":1203794,"Dockerfile":1050,"CSS":267635,"C++":797671,"C":33529,"CMake":1228,"JavaScript":538538,"PHP":83311,"Shell":8185,"HTML":3942,"TypeScript":31503,"PLpgSQL":1946,"QMake":7571,"Makefile":79446},"repositories":[{"label":"Created","value":23},{"label":"Forked","value":10},{"label":"Stars","value":2}],"milestones":[{"date":"2017-08-13T16:51:57Z","label":"account creation"},{"date":"2017-09-23T15:39:32Z","label":"first repository"},{"date":"2017-09-23T15:38:49Z","label":"first commit"}],"trivia":[{"label":"Lines coded","value":3648},{"label":"Commits","value":18}]}';
+  // results = '{"country":"Switzerland","profile_picture":"https://avatars1.githubusercontent.com/u/30982987?v=4","issues":[{"label":"Opened","value":0},{"label":"Closed","value":0}],"favLanguages":{"Java":1203794,"Dockerfile":1050,"CSS":267635,"C++":797671,"C":33529,"CMake":1228,"JavaScript":538538,"PHP":83311,"Shell":8185,"HTML":3942,"TypeScript":31503,"PLpgSQL":1946,"QMake":7571,"Makefile":79446},"repositories":[{"label":"Created","value":23},{"label":"Forked","value":10},{"label":"Stars","value":2}],"milestones":[{"date":"2017-08-13T16:51:57Z","label":"account creation"},{"date":"2017-09-23T15:39:32Z","label":"first repository"},{"date":"2017-09-23T15:38:49Z","label":"first commit"}],"trivia":[{"label":"Lines coded","value":3648},{"label":"Commits","value":18}]}';
   tips: Array<string> = [];
   chart = [];
   issues: Array<{label: string, value: number}> = [];
@@ -57,19 +57,57 @@ export class StatPageComponent implements OnInit {
   repositories: Array<{label: string, value: number}> = [];
   languages: Array<{ label: string; value: number }> = [];
 
+  // define if the application has gathered all the data needed
   loaded = false;
 
+  // style for the avatar div, to display the picture in background
   avatarStyle;
 
+  // object for the country-list package (npm)
   countries = Country();
+  // classes for the flag icon
   flagClasses = ["flag-icon-background", "flag-icon-squared"];
+
+  _srvAddress = 'https://tweb-project1-serveur.herokuapp.com'; // "http://localhost:3000";
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
     /*this.setData(JSON.parse(this.results));
     this.loaded = true;*/
-    this.getData();
+    //this.getData();
+    
+
+    if (sessionStorage.getItem('token') === null) {
+
+      // console.log('no token found');
+      // no token found, we have to get it
+      const srvTokenService = '/authenticate';
+
+      // we came from github so we have to get the code returned
+      const callbackCode: URLSearchParams = new URLSearchParams(window.location.href.split('?')[1]);
+
+      // url to send the request to
+      const getUrl = this._srvAddress + srvTokenService + '?code=' + callbackCode.get('code');
+
+      // send the request to the server
+      this.http.get(getUrl).toPromise()
+      .then(
+        res => {
+          // console.log('Token received and saved');
+          sessionStorage.setItem('token', res['access_token']);
+          this.getData();
+        }
+      )
+      .catch(err => {
+        // console.log(err);
+        window.location.href = '/home';
+      });
+    } else {
+      // console.log('we already have a token');
+      
+      this.getData();
+    }
   }
 
   setData(res: GitData) {
@@ -161,18 +199,20 @@ export class StatPageComponent implements OnInit {
   }
 
   getData(): void {
-    const urlServer = 'https://tweb-project1-serveur.herokuapp.com/user';
+    const srvService = "/user"; // 'https://tweb-project1-serveur.herokuapp.com/user';
 
-    const getUrl =
-      urlServer + "?access_token=" + sessionStorage.getItem("token");
+    const getUrl = this._srvAddress +
+    srvService + "?access_token=" + sessionStorage.getItem("token");
 
-    console.log(getUrl);
+    //console.log(getUrl);
 
     this.http
       .get(getUrl)
       .toPromise()
       .then((res: GitData) => {
         // TODO : loading screen
+        //console.log('data retrieved');
+        
         this.setData(res);
         this.loaded = true;
       })

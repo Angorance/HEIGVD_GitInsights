@@ -7,7 +7,7 @@
 <div class="mainContent">
   <mat-horizontal-stepper linear="false" class="stepper-content">
     <!--------------------------------------------------------- STATS PAGE ------------------------------------------------------------->
-    <mat-step label="Statistiques" completed="false">
+    <mat-step label="Statistics" completed="false">
       <mat-card class="timeline-card" >
         <app-timeline *ngIf="milestones" [milestones]="milestones"></app-timeline>
       </mat-card>
@@ -79,13 +79,13 @@
               <thead>
                 <tr>
                   <th colspan="2">
-                    Trivia <img alt="help" src="../../assets/images/help.png" height="20px" style="opacity: 0.3" matTooltip="For the line coded, we only consider the 100 last commits" matTooltipPosition="above">
+                    Trivia <img alt="help" src="../../assets/images/help.png" height="20px" style="opacity: 0.3" matTooltip="For the coded lines, we only consider the 100 last commits" matTooltipPosition="above">
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td *ngFor="let trivia of trivias"> {{trivia.value.toLocaleString('ch-fr')}}</td>
+                  <td *ngFor="let trivia of trivias"> {{trivia.value.toLocaleString()}}</td>
                 </tr>
               </tbody>
 
@@ -130,7 +130,7 @@
     </mat-step>
 
     <!--------------------------------------------------------- TIPS PAGE ------------------------------------------------------------->
-    <mat-step label="TIPS" completed="false">
+    <mat-step label="Tips" completed="false">
       <mat-card style="text-align: center">
         <h2> How can you get better  ? </h2>
       </mat-card>
