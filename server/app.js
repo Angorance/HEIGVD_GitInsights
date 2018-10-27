@@ -81,10 +81,10 @@ app.get('/user', (req, res, next) => {
   /*  3nd graph : coded lines and commits
   /*====================================================================== */
 
-  // Get all user's trivia information (coded lines (public) and number of commits (private/public))
+  // Get all user's trivia information (coded lines (private/public) and number of commits (private/public))
   const trivia = client.userCountCodedLines(accessToken)
     .then(codedLines => client.userCountCommits(accessToken)
-      .then((commits) => { response.trivia = [{ label: 'Lines coded', value: codedLines }, { label: 'Commits', value: commits }]; }))
+      .then((commits) => { response.trivia = [{ label: 'Coded lines', value: codedLines }, { label: 'Commits', value: commits }]; }))
     .catch(next);
 
   /* ========================================================================

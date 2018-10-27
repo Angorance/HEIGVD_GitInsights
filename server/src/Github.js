@@ -182,13 +182,14 @@ class Github {
   }
 
   // Get number of coded lines for the last 100 commits by type private or public
-  reposCountCodedLinesForLastHundredCommits(token, typeRepos) {
-    return this.reposPersonalCommits(token, typeRepos)
+  reposCountCodedLinesForLastHundredCommits(token, typeRepos1, typeRepos2) {
+    return this.reposPersonalCommits(token, typeRepos1)
+      .then(commitsType1 => this.reposPersonalCommits(token, typeRepos2)
+        .then(commitsType2 => commitsType1.concat(commitsType2)))
       .then((commitsReceived) => {
         // Get the last 100 commits
-        console.log(`before: ${commitsReceived.length}`);
         const commits = utils.getLastCommits(commitsReceived, 100);
-        console.log(`after: ${commits.length}`);
+
         // Get all urls of user's personal commits
         const url = commit => commit.url;
         return commits.map(url);
@@ -205,13 +206,12 @@ class Github {
 
   /* --------------------------------------------------------------------- */
 
-  // Get user's number of coded lines (public)
+  // Get user's number of coded lines (private/public)
   userCountCodedLines(token) {
-    return this.reposCountCodedLinesForLastHundredCommits(token, this.privateRepos);
-    // concat
+    return this.reposCountCodedLinesForLastHundredCommits(token, this.publicRepos, this.privateRepos);
   }
 
-  // Get user's number of commits (rivate/public)
+  // Get user's number of commits (private/public)
   userCountCommits(token) {
     return this.reposPersonalCommits(token, this.publicRepos)
       .then(publicCommits => this.reposPersonalCommits(token, this.privateRepos)
