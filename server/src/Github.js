@@ -153,7 +153,7 @@ class Github {
 
   // Get all user's closed issues
   userClosedIssues() {
-    return this.userIssuesByState('close');
+    return this.userIssuesByState('closed');
   }
 
   /* ========================================================================
