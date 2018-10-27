@@ -13,19 +13,13 @@ class ResponseError extends Error {
 class Github {
   constructor(/* token, */{ baseUrl = 'https://api.github.com' } = {}) {
     this.baseUrl = baseUrl;
-    //this.token = token;
+    // this.token = token;
     
     this.publicRepos = this.publicRepos.bind(this);
     this.privateRepos = this.privateRepos.bind(this);
 
-    this.publicPersonalRepos = this.publicPersonalRepos.bind(this);
-    this.privatePersonalRepos = this.privatePersonalRepos.bind(this);
-
     this.personalRepos = this.personalRepos.bind(this);
-
     this.reposPersonalCommits = this.reposPersonalCommits.bind(this);
-    //this.reposPublicPersonalCommits = this.reposPublicPersonalCommits.bind(this);
-    //this.reposPrivatePersonalCommits = this.reposPrivatePersonalCommits.bind(this);
   }
 
   request(path, token, entireUrl = false, opts = {}) {
@@ -34,7 +28,7 @@ class Github {
       ...opts,
       headers: {
         Accept: 'application/vnd.github.v3+json',
-        Authorization: `token ${token}`,//replace by this.token
+        Authorization: `token ${token}`, // replace by this.token
       },
     };
 
@@ -66,7 +60,7 @@ class Github {
 
   // Get user's first date of arrays public and private (private/public)
   userFirstDate(token, publicFunc, privateFunc, sortFunc) {
-    const self = this; // otherwise ESlint cries (don't know why..)
+    const self = this; // otherwise ESlint cries because there is no this used (don't know why..)
     return publicFunc(token)
       .then(publicArray => sortFunc(publicArray))
       .then(oldestPublic => privateFunc(token)
@@ -99,13 +93,13 @@ class Github {
 
   // Get user's first repository creation date (private/public)
   userFirstRepositoryDate(token) {
-    return this.userFirstDate(token, this.publicRepos, this.privateRepos, utils.getOldestRepository);
+    const publicFunc = () => this.personalRepos(token, this.publicRepos);
+    const privateFunc = () => this.personalRepos(token, this.privateRepos);
+    return this.userFirstDate(token, publicFunc, privateFunc, utils.getOldestRepository);
   }
 
   // Get user's first commit date (private/public)
   userFirstCommitDate(token) {
-    //return this.userFirstDate(token, this.reposPersonalCommits(token, this.publicRepos), this.reposPersonalCommits(token, this.privateRepos), utils.getOldestCommit);
-  
     const publicFunc = () => this.reposPersonalCommits(token, this.publicRepos);
     const privateFunc = () => this.reposPersonalCommits(token, this.privateRepos);
     return this.userFirstDate(token, publicFunc, privateFunc, utils.getOldestCommit);
