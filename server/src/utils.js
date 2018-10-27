@@ -12,6 +12,12 @@ function getReposLanguagesStats(reposLanguages = []) {
   return stats;
 }
 
+// Sort an array of dates (oldest first) and get the first one
+function getOldestDate(dates = []) {
+  dates.sort((a, b) => new Date(a) - new Date(b));
+  return dates[0];
+}
+
 // Sort an array of repositories by date (oldest first) and get the first one
 function getOldestRepository(repos = []) {
   repos.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
@@ -25,5 +31,5 @@ function getOldestCommit(repos = []) {
 }
 
 module.exports = {
-  getReposLanguagesStats, getOldestRepository, getOldestCommit,
+  getReposLanguagesStats, getOldestDate, getOldestRepository, getOldestCommit,
 };

@@ -18,6 +18,20 @@ app.get('/authenticate', (req, res, next) => {
   GithubConnection.sendAccessToken(req, res, next);
 });
 
+// Create Github client if token received
+/*app.use((req, res, next) => {
+  const accessToken = req.query.access_token;
+
+  if (accessToken !== undefined) {
+    req.client = new Github(accessToken);
+    next();
+  } else {
+    const error = new Error('No access token received');
+    error.status = 404;
+    next(error);
+  }
+});*/
+
 // Get all user's information
 app.get('/user', (req, res, next) => {
   const accessToken = req.query.access_token;

@@ -6,6 +6,20 @@ describe('Github utils', () => {
   /*  Timeline
   /*====================================================================== */
 
+  // Get user's first date
+  it('should retrieve the oldest date', () => {
+    const dates = [
+      '2018-02-19T08:46:01Z',
+      '2016-02-24T08:46:01Z',
+      '2017-05-03T08:46:01Z',
+      '2016-10-09T08:46:01Z',
+    ];
+
+    const expected = '2016-02-24T08:46:01Z';
+
+    expect(utils.getOldestDate(dates)).to.eql(expected);
+  });
+  
   // Get user's first repository creation date
   it('should retrieve the date of the oldest repository', () => {
     const dates = [

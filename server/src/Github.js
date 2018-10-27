@@ -11,11 +11,21 @@ class ResponseError extends Error {
 }
 
 class Github {
-  constructor({ baseUrl = 'https://api.github.com' } = {}) {
+  constructor(/* token, */{ baseUrl = 'https://api.github.com' } = {}) {
     this.baseUrl = baseUrl;
+    //this.token = token;
     
     this.publicRepos = this.publicRepos.bind(this);
     this.privateRepos = this.privateRepos.bind(this);
+
+    this.publicPersonalRepos = this.publicPersonalRepos.bind(this);
+    this.privatePersonalRepos = this.privatePersonalRepos.bind(this);
+
+    this.personalRepos = this.personalRepos.bind(this);
+
+    this.reposPersonalCommits = this.reposPersonalCommits.bind(this);
+    //this.reposPublicPersonalCommits = this.reposPublicPersonalCommits.bind(this);
+    //this.reposPrivatePersonalCommits = this.reposPrivatePersonalCommits.bind(this);
   }
 
   request(path, token, entireUrl = false, opts = {}) {
@@ -24,7 +34,7 @@ class Github {
       ...opts,
       headers: {
         Accept: 'application/vnd.github.v3+json',
-        Authorization: `token ${token}`,
+        Authorization: `token ${token}`,//replace by this.token
       },
     };
 
@@ -54,6 +64,19 @@ class Github {
       .then(profile => profile.login);
   }
 
+  // Get user's first date of arrays public and private (private/public)
+  userFirstDate(token, publicFunc, privateFunc, sortFunc) {
+    const self = this; // otherwise ESlint cries (don't know why..)
+    return publicFunc(token)
+      .then(publicArray => sortFunc(publicArray))
+      .then(oldestPublic => privateFunc(token)
+        .then(privateArray => sortFunc(privateArray))
+        .then((oldestPrivate) => {
+          const array = [oldestPublic, oldestPrivate];
+          return utils.getOldestDate(array);
+        }));
+  }
+
   /* --------------------------------------------------------------------- */
 
   // Get user's location
@@ -76,27 +99,16 @@ class Github {
 
   // Get user's first repository creation date (private/public)
   userFirstRepositoryDate(token) {
-    return this.publicRepos(token)
-      .then(publicRepos => utils.getOldestRepository(publicRepos))
-      .then(oldestPublic => this.privateRepos(token)
-        .then(privateRepos => utils.getOldestRepository(privateRepos))
-        .then((oldestPrivate) => {
-          const array = [{ created_at: oldestPublic }, { created_at: oldestPrivate }];
-          return utils.getOldestRepository(array);
-        }));
+    return this.userFirstDate(token, this.publicRepos, this.privateRepos, utils.getOldestRepository);
   }
 
   // Get user's first commit date (private/public)
   userFirstCommitDate(token) {
-    return this.reposPublicPersonalCommits(token)
-      .then(publicRepos => utils.getOldestCommit(publicRepos))
-      .then(oldestPublic => this.reposPrivatePersonalCommits(token)
-        .then(privateRepos => utils.getOldestCommit(privateRepos))
-        .then((oldestPrivate) => {
-          const array = [
-            { commit: { author: { date: oldestPublic } } }, { commit: { author: { date: oldestPrivate } } }];
-          return utils.getOldestCommit(array);
-        }));
+    //return this.userFirstDate(token, this.reposPersonalCommits(token, this.publicRepos), this.reposPersonalCommits(token, this.privateRepos), utils.getOldestCommit);
+  
+    const publicFunc = () => this.reposPersonalCommits(token, this.publicRepos);
+    const privateFunc = () => this.reposPersonalCommits(token, this.privateRepos);
+    return this.userFirstDate(token, publicFunc, privateFunc, utils.getOldestCommit);
   }
 
   /* ========================================================================
@@ -128,26 +140,26 @@ class Github {
     return this.request('/user/issues', token);
   }
 
-  /* --------------------------------------------------------------------- */
-
-  // Get all user's opened issues
-  userOpenedIssues(token) {
+  // Get all user's issues by state
+  userIssuesByState(token, state) {
     return this.issues(token)
       .then((issues) => {
-        const openedIssues = issue => (issue.state === 'open' ? 1 : 0);
-        return Promise.all(issues.map(openedIssues))
+        const stateIssues = issue => (issue.state === state ? 1 : 0);
+        return Promise.all(issues.map(stateIssues))
           .then(results => results.reduce((elem, acc) => elem + acc, 0));
       });
   }
 
+  /* --------------------------------------------------------------------- */
+
+  // Get all user's opened issues
+  userOpenedIssues(token) {
+    return this.userIssuesByState(token, 'open');
+  }
+
   // Get all user's closed issues
   userClosedIssues(token) {
-    return this.issues(token)
-      .then((issues) => {
-        const closedIssues = issue => (issue.state === 'close' ? 1 : 0);
-        return Promise.all(issues.map(closedIssues))
-          .then(results => results.reduce((elem, acc) => elem + acc, 0));
-      });
+    return this.userIssuesByState(token, 'close');
   }
 
   /* ========================================================================
@@ -159,8 +171,24 @@ class Github {
     return this.request(`/repos/${repoName}/commits`, token);
   }
 
+  // Get all personal commits of user's repositories by type private or public
+  reposPersonalCommits(token, typeRepos) {
+    return typeRepos(token)
+      .then(repos => this.getLogin(token)
+        .then((username) => {
+          // Get all personal commits
+          const getCommits = repo => this.repoCommits(repo.full_name, token)
+            .then(commits => (commits).filter(commit => commit.author != null
+              && commit.author.login === username));
+
+          // Get all commits of the user
+          return Promise.all(repos.map(getCommits))
+            .then(results => results.reduce((acc, elem) => acc.concat(elem), []));
+        }));
+  }
+
   // Get all public personal commits of user's repositories
-  reposPublicPersonalCommits(token) {
+  /* reposPublicPersonalCommits(token) {
     return this.publicRepos(token)
       .then(repos => this.getLogin(token)
         .then((username) => {
@@ -173,10 +201,10 @@ class Github {
           return Promise.all(repos.map(getCommits))
             .then(results => results.reduce((acc, elem) => acc.concat(elem), []));
         }));
-  }
+  } */
 
   // Get all private personal commits of user's repositories
-  reposPrivatePersonalCommits(token) {
+  /* reposPrivatePersonalCommits(token) {
     return this.privateRepos(token)
       .then(repos => this.getLogin(token)
         .then((username) => {
@@ -189,11 +217,28 @@ class Github {
           return Promise.all(repos.map(getCommits))
             .then(results => results.reduce((acc, elem) => acc.concat(elem), []));
         }));
-  }
+  } */
 
-  // Get number of public coded lines
+  // Get number of coded lines for the last 100 commits by type private or public
+  /* reposCountCodedLinesForLastHundredCommits(token, typeRepos) {
+    return this.reposPersonalCommits(token, typeRepos)
+      .then((commits) => {
+        // Get all urls of user's personal commits
+        const url = commit => commit.url;
+        return commits.map(url).slice(100); ==> sort by date + concat
+      })
+      .then((urls) => {
+        // Get all lines added in public personal commits
+        const lines = url => this.request(url, token, true)
+          .then(commit => commit.stats.additions);
+
+        return Promise.all(urls.map(lines))
+          .then(results => results.reduce((elem, acc) => elem + acc, 0));
+      });
+  } */
+
   userCountPublicCodedLines(token) {
-    return this.reposPublicPersonalCommits(token)
+    return this.reposPersonalCommits(token, this.publicRepos)// this.reposPublicPersonalCommits(token)
       .then((publicCommits) => {
         // Get all urls of user's public personal commits
         const publicUrl = publicCommit => publicCommit.url;
@@ -213,14 +258,13 @@ class Github {
 
   // Get user's number of coded lines (public)
   userCountCodedLines(token) {
-    // Get all url of user's personal commits
-    return this.reposPublicPersonalCommits(token)
+    return this.reposPersonalCommits(token, this.publicRepos)
       .then(commits => (commits.length <= 1000 ? this.userCountPublicCodedLines(token) : '999+'));
   }
 
   // Get user's number of commits (public)
   userCountCommits(token) {
-    return this.reposPublicPersonalCommits(token)
+    return this.reposPersonalCommits(token, this.publicRepos)//this.reposPublicPersonalCommits(token)
       .then(publicCommits => publicCommits.length);
   }
 
