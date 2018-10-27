@@ -181,45 +181,17 @@ class Github {
         }));
   }
 
-  // Get all public personal commits of user's repositories
-  /* reposPublicPersonalCommits(token) {
-    return this.publicRepos(token)
-      .then(repos => this.getLogin(token)
-        .then((username) => {
-          // Get all personal commits
-          const getCommits = repo => this.repoCommits(repo.full_name, token)
-            .then(commits => (commits).filter(commit => commit.author != null
-              && commit.author.login === username));
-
-          // Get all commits of the user
-          return Promise.all(repos.map(getCommits))
-            .then(results => results.reduce((acc, elem) => acc.concat(elem), []));
-        }));
-  } */
-
-  // Get all private personal commits of user's repositories
-  /* reposPrivatePersonalCommits(token) {
-    return this.privateRepos(token)
-      .then(repos => this.getLogin(token)
-        .then((username) => {
-          // Get all personal commits
-          const getCommits = repo => this.repoCommits(repo.full_name, token)
-            .then(commits => (commits).filter(commit => commit.author != null
-              && commit.author.login === username));
-
-          // Get all commits of the user
-          return Promise.all(repos.map(getCommits))
-            .then(results => results.reduce((acc, elem) => acc.concat(elem), []));
-        }));
-  } */
-
   // Get number of coded lines for the last 100 commits by type private or public
-  /* reposCountCodedLinesForLastHundredCommits(token, typeRepos) {
+  reposCountCodedLinesForLastHundredCommits(token, typeRepos) {
     return this.reposPersonalCommits(token, typeRepos)
-      .then((commits) => {
+      .then((commitsReceived) => {
+        // Get the last 100 commits
+        console.log(`before: ${commitsReceived.length}`);
+        const commits = utils.getLastCommits(commitsReceived, 100);
+        console.log(`after: ${commits.length}`);
         // Get all urls of user's personal commits
         const url = commit => commit.url;
-        return commits.map(url).slice(100); ==> sort by date + concat
+        return commits.map(url);
       })
       .then((urls) => {
         // Get all lines added in public personal commits
@@ -229,37 +201,21 @@ class Github {
         return Promise.all(urls.map(lines))
           .then(results => results.reduce((elem, acc) => elem + acc, 0));
       });
-  } */
-
-  userCountPublicCodedLines(token) {
-    return this.reposPersonalCommits(token, this.publicRepos)// this.reposPublicPersonalCommits(token)
-      .then((publicCommits) => {
-        // Get all urls of user's public personal commits
-        const publicUrl = publicCommit => publicCommit.url;
-        return publicCommits.map(publicUrl);
-      })
-      .then((publicUrls) => {
-        // Get all lines added in public personal commits
-        const publicLines = publicUrl => this.request(publicUrl, token, true)
-          .then(publicCommit => publicCommit.stats.additions);
-
-        return Promise.all(publicUrls.map(publicLines))
-          .then(results => results.reduce((elem, acc) => elem + acc, 0));
-      });
   }
 
   /* --------------------------------------------------------------------- */
 
   // Get user's number of coded lines (public)
   userCountCodedLines(token) {
-    return this.reposPersonalCommits(token, this.publicRepos)
-      .then(commits => (commits.length <= 1000 ? this.userCountPublicCodedLines(token) : '999+'));
+    return this.reposCountCodedLinesForLastHundredCommits(token, this.privateRepos);
+    // concat
   }
 
-  // Get user's number of commits (public)
+  // Get user's number of commits (rivate/public)
   userCountCommits(token) {
-    return this.reposPersonalCommits(token, this.publicRepos)//this.reposPublicPersonalCommits(token)
-      .then(publicCommits => publicCommits.length);
+    return this.reposPersonalCommits(token, this.publicRepos)
+      .then(publicCommits => this.reposPersonalCommits(token, this.privateRepos)
+        .then(privateCommits => privateCommits.length + publicCommits.length));
   }
 
   /* ========================================================================

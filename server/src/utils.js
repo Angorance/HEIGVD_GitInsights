@@ -12,6 +12,21 @@ function getReposLanguagesStats(reposLanguages = []) {
   return stats;
 }
 
+// Sort an array of commits by date (newest first)
+function sortCommitsByDateNewestFirst(repos = []) {
+  return repos.sort((a, b) => new Date(b.commit.author.date) - new Date(a.commit.author.date));
+}
+
+// Sort an array of commits by date (latest first)
+function sortCommitsByDateLatestFirst(repos = []) {
+  return repos.sort((a, b) => new Date(a.commit.author.date) - new Date(b.commit.author.date));
+}
+
+// Get x latest commits
+function getLastCommits(repos = [], number) {
+  return sortCommitsByDateNewestFirst(repos).slice(0, number);
+}
+
 // Sort an array of dates (oldest first) and get the first one
 function getOldestDate(dates = []) {
   dates.sort((a, b) => new Date(a) - new Date(b));
@@ -26,10 +41,15 @@ function getOldestRepository(repos = []) {
 
 // Sort an array of commits by date (oldest first) and get the first one
 function getOldestCommit(repos = []) {
-  repos.sort((a, b) => new Date(a.commit.author.date) - new Date(b.commit.author.date));
-  return repos[0].commit.author.date;
+  return sortCommitsByDateLatestFirst(repos)[0].commit.author.date;
 }
 
 module.exports = {
-  getReposLanguagesStats, getOldestDate, getOldestRepository, getOldestCommit,
+  getReposLanguagesStats,
+  getOldestDate,
+  getOldestRepository,
+  getOldestCommit,
+  sortCommitsByDateLatestFirst,
+  sortCommitsByDateNewestFirst,
+  getLastCommits,
 };

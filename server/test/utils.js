@@ -19,7 +19,7 @@ describe('Github utils', () => {
 
     expect(utils.getOldestDate(dates)).to.eql(expected);
   });
-  
+
   // Get user's first repository creation date
   it('should retrieve the date of the oldest repository', () => {
     const dates = [
@@ -77,6 +77,60 @@ describe('Github utils', () => {
   /* ========================================================================
   /*  3nd graph : coded lines and commits
   /*====================================================================== */
+
+  // Sort user's commits by date (latest first)
+  it('should retrieve the commits sorted by date (latest first)', () => {
+    const dates = [
+      { commit: { author: { date: '2018-02-19T08:46:01Z' } } },
+      { commit: { author: { date: '2016-02-24T08:46:01Z' } } },
+      { commit: { author: { date: '2017-05-03T08:46:01Z' } } },
+      { commit: { author: { date: '2016-10-09T08:46:01Z' } } },
+    ];
+
+    const expected = [
+      { commit: { author: { date: '2016-02-24T08:46:01Z' } } },
+      { commit: { author: { date: '2016-10-09T08:46:01Z' } } },
+      { commit: { author: { date: '2017-05-03T08:46:01Z' } } },
+      { commit: { author: { date: '2018-02-19T08:46:01Z' } } },
+    ];
+
+    expect(utils.sortCommitsByDateLatestFirst(dates)).to.eql(expected);
+  });
+
+  // Sort user's commits by date (newest first)
+  it('should retrieve the commits sorted by date (newest first)', () => {
+    const dates = [
+      { commit: { author: { date: '2018-02-19T08:46:01Z' } } },
+      { commit: { author: { date: '2016-02-24T08:46:01Z' } } },
+      { commit: { author: { date: '2017-05-03T08:46:01Z' } } },
+      { commit: { author: { date: '2016-10-09T08:46:01Z' } } },
+    ];
+
+    const expected = [
+      { commit: { author: { date: '2018-02-19T08:46:01Z' } } },
+      { commit: { author: { date: '2017-05-03T08:46:01Z' } } },
+      { commit: { author: { date: '2016-10-09T08:46:01Z' } } },
+      { commit: { author: { date: '2016-02-24T08:46:01Z' } } },
+    ];
+
+    expect(utils.sortCommitsByDateNewestFirst(dates)).to.eql(expected);
+  });
+
+  it('should retrieve the two last commits', () => {
+    const dates = [
+      { commit: { author: { date: '2018-02-19T08:46:01Z' } } },
+      { commit: { author: { date: '2016-02-24T08:46:01Z' } } },
+      { commit: { author: { date: '2017-05-03T08:46:01Z' } } },
+      { commit: { author: { date: '2016-10-09T08:46:01Z' } } },
+    ];
+
+    const expected = [
+      { commit: { author: { date: '2018-02-19T08:46:01Z' } } },
+      { commit: { author: { date: '2017-05-03T08:46:01Z' } } },
+    ];
+
+    expect(utils.getLastCommits(dates, 2)).to.eql(expected);
+  });
 
   /* ========================================================================
   /*  4nd graph : repositories

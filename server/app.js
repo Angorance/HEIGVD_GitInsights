@@ -50,7 +50,7 @@ app.get('/user', (req, res, next) => {
     .then((avatar) => { response.profile_picture = avatar; })
     .catch(next);
 
-  // Get user's milestones (account creation, first repository(public/private))
+  // Get user's milestones (account creation, first repository(public/private), first commit (public/private))
   const milestones = client.userCreation(accessToken)
     .then(creation => client.userFirstRepositoryDate(accessToken)
       .then(firsRepo => client.userFirstCommitDate(accessToken)
@@ -81,7 +81,7 @@ app.get('/user', (req, res, next) => {
   /*  3nd graph : coded lines and commits
   /*====================================================================== */
 
-  // Get all user's trivia information (public coded lines and public number of commits)
+  // Get all user's trivia information (coded lines (public) and number of commits (private/public))
   const trivia = client.userCountCodedLines(accessToken)
     .then(codedLines => client.userCountCommits(accessToken)
       .then((commits) => { response.trivia = [{ label: 'Lines coded', value: codedLines }, { label: 'Commits', value: commits }]; }))
