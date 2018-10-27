@@ -11,10 +11,10 @@ class ResponseError extends Error {
 }
 
 class Github {
-  constructor(/* token, */{ baseUrl = 'https://api.github.com' } = {}) {
+  constructor(token, { baseUrl = 'https://api.github.com' } = {}) {
     this.baseUrl = baseUrl;
-    // this.token = token;
-    
+    this.token = token;
+
     this.publicRepos = this.publicRepos.bind(this);
     this.privateRepos = this.privateRepos.bind(this);
 
@@ -22,13 +22,13 @@ class Github {
     this.reposPersonalCommits = this.reposPersonalCommits.bind(this);
   }
 
-  request(path, token, entireUrl = false, opts = {}) {
+  request(path, entireUrl = false, opts = {}) {
     const url = entireUrl ? `${path}` : `${this.baseUrl}${path}`;
     const options = {
       ...opts,
       headers: {
         Accept: 'application/vnd.github.v3+json',
-        Authorization: `token ${token}`, // replace by this.token
+        Authorization: `token ${this.token}`,
       },
     };
 
@@ -48,22 +48,22 @@ class Github {
   /*====================================================================== */
 
   // Get all user's information
-  user(token) {
-    return this.request('/user', token);
+  user() {
+    return this.request('/user');
   }
 
   // Get user's login
-  getLogin(token) {
-    return this.user(token)
+  getLogin() {
+    return this.user()
       .then(profile => profile.login);
   }
 
   // Get user's first date of arrays public and private (private/public)
-  userFirstDate(token, publicFunc, privateFunc, sortFunc) {
-    const self = this; // otherwise ESlint cries because there is no this used (don't know why..)
-    return publicFunc(token)
+  userFirstDate(publicFunc, privateFunc, sortFunc) {
+    const self = this;
+    return publicFunc()
       .then(publicArray => sortFunc(publicArray))
-      .then(oldestPublic => privateFunc(token)
+      .then(oldestPublic => privateFunc()
         .then(privateArray => sortFunc(privateArray))
         .then((oldestPrivate) => {
           const array = [oldestPublic, oldestPrivate];
@@ -74,35 +74,35 @@ class Github {
   /* --------------------------------------------------------------------- */
 
   // Get user's location
-  userLocation(token) {
-    return this.user(token)
+  userLocation() {
+    return this.user()
       .then(user => user.location);
   }
 
   // Get user's avatar url
-  userAvatarUrl(token) {
-    return this.user(token)
+  userAvatarUrl() {
+    return this.user()
       .then(user => user.avatar_url);
   }
 
   // Get user's creation date
-  userCreation(token) {
-    return this.user(token)
+  userCreation() {
+    return this.user()
       .then(user => user.created_at);
   }
 
   // Get user's first repository creation date (private/public)
-  userFirstRepositoryDate(token) {
-    const publicFunc = () => this.personalRepos(token, this.publicRepos);
-    const privateFunc = () => this.personalRepos(token, this.privateRepos);
-    return this.userFirstDate(token, publicFunc, privateFunc, utils.getOldestRepository);
+  userFirstRepositoryDate() {
+    const publicFunc = () => this.personalRepos(this.publicRepos);
+    const privateFunc = () => this.personalRepos(this.privateRepos);
+    return this.userFirstDate(publicFunc, privateFunc, utils.getOldestRepository);
   }
 
   // Get user's first commit date (private/public)
-  userFirstCommitDate(token) {
-    const publicFunc = () => this.reposPersonalCommits(token, this.publicRepos);
-    const privateFunc = () => this.reposPersonalCommits(token, this.privateRepos);
-    return this.userFirstDate(token, publicFunc, privateFunc, utils.getOldestCommit);
+  userFirstCommitDate() {
+    const publicFunc = () => this.reposPersonalCommits(this.publicRepos);
+    const privateFunc = () => this.reposPersonalCommits(this.privateRepos);
+    return this.userFirstDate(publicFunc, privateFunc, utils.getOldestCommit);
   }
 
   /* ========================================================================
@@ -110,17 +110,17 @@ class Github {
   /*====================================================================== */
 
   // Get all languages of a repository
-  repoLanguages(repoName, token) {
-    return this.request(`/repos/${repoName}/languages`, token);
+  repoLanguages(repoName) {
+    return this.request(`/repos/${repoName}/languages`);
   }
 
   /* --------------------------------------------------------------------- */
 
   // Get all languages of the user and contributors (private)
-  userLanguages(token) {
-    return this.privateRepos(token)
+  userLanguages() {
+    return this.privateRepos()
       .then((repos) => {
-        const getLanguages = repo => this.repoLanguages(repo.full_name, token);
+        const getLanguages = repo => this.repoLanguages(repo.full_name);
         return Promise.all(repos.map(getLanguages));
       });
   }
@@ -130,13 +130,13 @@ class Github {
   /*====================================================================== */
 
   // Get all user's issues from his own repos
-  issues(token) {
-    return this.request('/user/issues', token);
+  issues() {
+    return this.request('/user/issues');
   }
 
   // Get all user's issues by state
-  userIssuesByState(token, state) {
-    return this.issues(token)
+  userIssuesByState(state) {
+    return this.issues()
       .then((issues) => {
         const stateIssues = issue => (issue.state === state ? 1 : 0);
         return Promise.all(issues.map(stateIssues))
@@ -147,13 +147,13 @@ class Github {
   /* --------------------------------------------------------------------- */
 
   // Get all user's opened issues
-  userOpenedIssues(token) {
-    return this.userIssuesByState(token, 'open');
+  userOpenedIssues() {
+    return this.userIssuesByState('open');
   }
 
   // Get all user's closed issues
-  userClosedIssues(token) {
-    return this.userIssuesByState(token, 'close');
+  userClosedIssues() {
+    return this.userIssuesByState('close');
   }
 
   /* ========================================================================
@@ -161,17 +161,17 @@ class Github {
   /* ====================================================================== */
 
   // Get all commits by repository
-  repoCommits(repoName, token) {
-    return this.request(`/repos/${repoName}/commits`, token);
+  repoCommits(repoName) {
+    return this.request(`/repos/${repoName}/commits`);
   }
 
   // Get all personal commits of user's repositories by type private or public
-  reposPersonalCommits(token, typeRepos) {
-    return typeRepos(token)
-      .then(repos => this.getLogin(token)
+  reposPersonalCommits(typeRepos) {
+    return typeRepos()
+      .then(repos => this.getLogin()
         .then((username) => {
           // Get all personal commits
-          const getCommits = repo => this.repoCommits(repo.full_name, token)
+          const getCommits = repo => this.repoCommits(repo.full_name)
             .then(commits => (commits).filter(commit => commit.author != null
               && commit.author.login === username));
 
@@ -182,9 +182,9 @@ class Github {
   }
 
   // Get number of coded lines for the last 100 commits by type private or public
-  reposCountCodedLinesForLastHundredCommits(token, typeRepos1, typeRepos2) {
-    return this.reposPersonalCommits(token, typeRepos1)
-      .then(commitsType1 => this.reposPersonalCommits(token, typeRepos2)
+  reposCountCodedLinesForLastHundredCommits(typeRepos1, typeRepos2) {
+    return this.reposPersonalCommits(typeRepos1)
+      .then(commitsType1 => this.reposPersonalCommits(typeRepos2)
         .then(commitsType2 => commitsType1.concat(commitsType2)))
       .then((commitsReceived) => {
         // Get the last 100 commits
@@ -196,7 +196,7 @@ class Github {
       })
       .then((urls) => {
         // Get all lines added in public personal commits
-        const lines = url => this.request(url, token, true)
+        const lines = url => this.request(url, true)
           .then(commit => commit.stats.additions);
 
         return Promise.all(urls.map(lines))
@@ -207,14 +207,14 @@ class Github {
   /* --------------------------------------------------------------------- */
 
   // Get user's number of coded lines (private/public)
-  userCountCodedLines(token) {
-    return this.reposCountCodedLinesForLastHundredCommits(token, this.publicRepos, this.privateRepos);
+  userCountCodedLines() {
+    return this.reposCountCodedLinesForLastHundredCommits(this.publicRepos, this.privateRepos);
   }
 
   // Get user's number of commits (private/public)
-  userCountCommits(token) {
-    return this.reposPersonalCommits(token, this.publicRepos)
-      .then(publicCommits => this.reposPersonalCommits(token, this.privateRepos)
+  userCountCommits() {
+    return this.reposPersonalCommits(this.publicRepos)
+      .then(publicCommits => this.reposPersonalCommits(this.privateRepos)
         .then(privateCommits => privateCommits.length + publicCommits.length));
   }
 
@@ -223,27 +223,27 @@ class Github {
   /*====================================================================== */
 
   // Get all user's public repositories
-  publicRepos(token) {
-    return this.getLogin(token)
-      .then(username => this.request(`/users/${username}/repos`, token));
+  publicRepos() {
+    return this.getLogin()
+      .then(username => this.request(`/users/${username}/repos`));
   }
 
   // Get all user's private repositories
-  privateRepos(token) {
-    return this.request('/user/repos', token);
+  privateRepos() {
+    return this.request('/user/repos');
   }
 
   // Get all user's personal repositories by type of data
-  personalRepos(token, typeRepos) {
-    return typeRepos(token)
-      .then(repos => this.getLogin(token)
+  personalRepos(typeRepos) {
+    return typeRepos()
+      .then(repos => this.getLogin()
         .then(username => repos.filter(repo => repo.owner.login === username)));
   }
 
   // Get number of forked repositories by type private or public
-  reposCountForkedRepositories(token, typeRepos) {
+  reposCountForkedRepositories(typeRepos) {
     const self = this;
-    return typeRepos(token)
+    return typeRepos()
       .then((repos) => {
         const nbrForkedRepositories = repo => (repo.fork === true ? 1 : 0);
         return Promise.all(repos.map(nbrForkedRepositories))
@@ -252,9 +252,9 @@ class Github {
   }
 
   // Get number of stars of the repositories by type private or public
-  reposCountStarsRepositories(token, typeRepos) {
+  reposCountStarsRepositories(typeRepos) {
     const self = this;
-    return typeRepos(token)
+    return typeRepos()
       .then((repos) => {
         const stars = repo => repo.stargazers_count;
         return Promise.all(repos.map(stars))
@@ -265,23 +265,23 @@ class Github {
   /* --------------------------------------------------------------------- */
 
   // Get user's number of created repositories (private/public)
-  userCountCreatedRepositories(token) {
-    return this.personalRepos(token, this.publicRepos)
-      .then(publicRepos => this.personalRepos(token, this.privateRepos)
+  userCountCreatedRepositories() {
+    return this.personalRepos(this.publicRepos)
+      .then(publicRepos => this.personalRepos(this.privateRepos)
         .then(privateRepos => publicRepos.length + privateRepos.length));
   }
 
   // Get all user's forked repositories (private/public)
-  userCountForkedRepositories(token) {
-    return this.reposCountForkedRepositories(token, this.publicRepos)
-      .then(publicForked => this.reposCountForkedRepositories(token, this.privateRepos)
+  userCountForkedRepositories() {
+    return this.reposCountForkedRepositories(this.publicRepos)
+      .then(publicForked => this.reposCountForkedRepositories(this.privateRepos)
         .then(privateForked => privateForked + publicForked));
   }
 
   // Get all user's stars (private/public)
-  userCountStarsRepositories(token) {
-    return this.reposCountStarsRepositories(token, this.publicRepos)
-      .then(publicStars => this.reposCountStarsRepositories(token, this.privateRepos)
+  userCountStarsRepositories() {
+    return this.reposCountStarsRepositories(this.publicRepos)
+      .then(publicStars => this.reposCountStarsRepositories(this.privateRepos)
         .then(privateStars => privateStars + publicStars));
   }
 }

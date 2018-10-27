@@ -8,7 +8,6 @@ const GithubConnection = require('./src/GithubConnection');
 
 const app = express();
 const port = process.env.PORT || 3000;
-const client = new Github();
 
 // Enable CORS for the client app
 app.use(cors());
@@ -19,7 +18,7 @@ app.get('/authenticate', (req, res, next) => {
 });
 
 // Create Github client if token received
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
   const accessToken = req.query.access_token;
 
   if (accessToken !== undefined) {
@@ -30,30 +29,29 @@ app.get('/authenticate', (req, res, next) => {
     error.status = 404;
     next(error);
   }
-});*/
+});
 
 // Get all user's information
 app.get('/user', (req, res, next) => {
-  const accessToken = req.query.access_token;
   /* ========================================================================
   /*  Timeline
   /*====================================================================== */
 
   const response = {};
   // Get user's location
-  const country = client.userLocation(accessToken)
+  const country = req.client.userLocation()
     .then((userLocation) => { response.country = userLocation; })
     .catch(next);
 
   // Get user's avatar url
-  const profilePicture = client.userAvatarUrl(accessToken)
+  const profilePicture = req.client.userAvatarUrl()
     .then((avatar) => { response.profile_picture = avatar; })
     .catch(next);
 
   // Get user's milestones (account creation, first repository(public/private), first commit (public/private))
-  const milestones = client.userCreation(accessToken)
-    .then(creation => client.userFirstRepositoryDate(accessToken)
-      .then(firsRepo => client.userFirstCommitDate(accessToken)
+  const milestones = req.client.userCreation()
+    .then(creation => req.client.userFirstRepositoryDate()
+      .then(firsRepo => req.client.userFirstCommitDate()
         .then((firstCommit) => { response.milestones = [{ date: creation, label: 'account creation' }, { date: firsRepo, label: 'first repository' }, { date: firstCommit, label: 'first commit' }]; })))
     .catch(next);
 
@@ -62,7 +60,7 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   // Get all languages of the user and contributors (private)
-  const favLanguages = client.userLanguages(accessToken)
+  const favLanguages = req.client.userLanguages()
     .then(utils.getReposLanguagesStats)
     .then((allLanguages) => { response.favLanguages = allLanguages; })
     .catch(next);
@@ -72,8 +70,8 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   // Get all user's issues from his own repos
-  const issues = client.userOpenedIssues(accessToken)
-    .then(opened => client.userClosedIssues(accessToken)
+  const issues = req.client.userOpenedIssues()
+    .then(opened => req.client.userClosedIssues()
       .then((closed) => { response.issues = [{ label: 'Opened', value: opened }, { label: 'Closed', value: closed }]; }))
     .catch(next);
 
@@ -82,8 +80,8 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   // Get all user's trivia information (coded lines (private/public) and number of commits (private/public))
-  const trivia = client.userCountCodedLines(accessToken)
-    .then(codedLines => client.userCountCommits(accessToken)
+  const trivia = req.client.userCountCodedLines()
+    .then(codedLines => req.client.userCountCommits()
       .then((commits) => { response.trivia = [{ label: 'Coded lines', value: codedLines }, { label: 'Commits', value: commits }]; }))
     .catch(next);
 
@@ -92,9 +90,9 @@ app.get('/user', (req, res, next) => {
   /*====================================================================== */
 
   // Get all user's repositories public/private information (created, forked, stars)
-  const repositories = client.userCountCreatedRepositories(accessToken)
-    .then(created => client.userCountForkedRepositories(accessToken)
-      .then(forked => client.userCountStarsRepositories(accessToken)
+  const repositories = req.client.userCountCreatedRepositories()
+    .then(created => req.client.userCountForkedRepositories()
+      .then(forked => req.client.userCountStarsRepositories()
         .then((stars) => { response.repositories = [{ label: 'Created', value: created }, { label: 'Forked', value: forked }, { label: 'Stars', value: stars }]; })))
     .catch(next);
 
