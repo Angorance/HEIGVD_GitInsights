@@ -41,69 +41,69 @@ export class StatPageComponent implements OnInit {
   }
 
   setData(res: GitData) {
-          console.log(res); // récupérer les données suite au get et les utiliser :D
+    console.log(res); // récupérer les données suite au get et les utiliser :D
 
-          // set the flag and the avatar
-          this.avatarStyle = {
-            'background-image' : 'url("' + res.profile_picture + '")',
-          };
-          this.flagClasses.push('flag-icon-' + this.countries.getCode(res.country).toLowerCase());
+    // set the flag and the avatar
+    this.avatarStyle = {
+      'background-image': 'url("' + res.profile_picture + '")',
+    };
+    this.flagClasses.push('flag-icon-' + this.countries.getCode(res.country).toLowerCase());
 
-          // set the issues, trivia, and repositories (list of object { label, value })
-          this.issues = res.issues;
-          this.trivias = res.trivia;
-          this.repositories = res.repositories;
+    // set the issues, trivia, and repositories (list of object { label, value })
+    this.issues = res.issues;
+    this.trivias = res.trivia;
+    this.repositories = res.repositories;
 
-          // milestones for the timeline composant
-          this.milestones = res.milestones;
+    // milestones for the timeline composant
+    this.milestones = res.milestones;
 
-          // chart creation - creating a list containing a the language and the total line number
-          const languages: Array<{label: string, value: number}> = [];
+    // chart creation - creating a list containing a the language and the total line number
+    const languages: Array<{ label: string, value: number }> = [];
 
-          let labels: string[] = Object.keys(res.favLanguages); // languages
-          let datas: number[] = Object.values(res.favLanguages); // total lines
+    let labels: string[] = Object.keys(res.favLanguages); // languages
+    let datas: number[] = Object.values(res.favLanguages); // total lines
 
-          for (let _i = 0; _i < labels.length; _i++) {
-            languages.push({label: labels[_i], value: datas[_i]});
-          }
+    for (let _i = 0; _i < labels.length; _i++) {
+      languages.push({ label: labels[_i], value: datas[_i] });
+    }
 
-          // reset the list to store the top 5
-          labels = [];
-          datas = [];
-          languages.sort(compareLanguage).slice(0, 5).forEach(elem => { labels.push(elem.label); datas.push(elem.value); });
+    // reset the list to store the top 5
+    labels = [];
+    datas = [];
+    languages.sort(compareLanguage).slice(0, 5).forEach(elem => { labels.push(elem.label); datas.push(elem.value); });
 
-          // chart creation
-          this.context = (<HTMLCanvasElement>this.canvas.nativeElement).getContext('2d');
-          this.chart = new Chart(this.context, {
-            type: 'horizontalBar',
-            data : {
-              labels : labels,
-              datasets: [{
-                data : datas,
-                backgroundColor : [
-                  'rgb(72, 66, 244)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgb(36, 122, 118)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                ]
-              }]
-            },
-            options : {
-              legend: {
-                display: false
-              },
-              scales: {
-                xAxes: [{
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'Lines coded'
-                  }
-                }]
-              },
-              responsive: true
+    // chart creation
+    this.context = (<HTMLCanvasElement>this.canvas.nativeElement).getContext('2d');
+    this.chart = new Chart(this.context, {
+      type: 'horizontalBar',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: datas,
+          backgroundColor: [
+            'rgb(72, 66, 244)',
+            'rgba(54, 162, 235, 1)',
+            'rgb(36, 122, 118)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+          ]
+        }]
+      },
+      options: {
+        legend: {
+          display: false
+        },
+        scales: {
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Lines coded'
             }
-          });
+          }]
+        },
+        responsive: true
+      }
+    });
   }
 
   getData(): void {
@@ -115,7 +115,7 @@ export class StatPageComponent implements OnInit {
 
     this.http.get(getUrl).toPromise()
       .then(
-        res => {
+        (res: GitData) => {
           // TODO : loading screen
           this.setData(res);
         }
@@ -143,9 +143,9 @@ class GitData {
   country: string;
   profile_picture: string;
   favLanguages: Object;
-  issues: Array<{label: string, value: number}>;
-  milestones: Array<{date: Date, label: string}>;
-  repositories: Array<{label: string, value: number}>;
-  trivia: Array<{label: string, value: number}>;
+  issues: Array<{ label: string, value: number }>;
+  milestones: Array<{ date: Date, label: string }>;
+  repositories: Array<{ label: string, value: number }>;
+  trivia: Array<{ label: string, value: number }>;
   tips: string[];
 }
