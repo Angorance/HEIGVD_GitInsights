@@ -6,7 +6,7 @@ Our application is for giving an **insight** about GitHub accounts and their usa
 
 ### What can you find
 
-First of all, in the statistics section, you will find your favorite languages, the coded lines for the last 100 commits, the number of commits you've done so far, some stats aubout your assigned issues and about your repositories too.
+First of all, in the statistics section, you will find your favorite languages, the coded lines for the last 100 commits, the number of commits you've done so far, some stats about your assigned issues and about your repositories too.
 
 In a second time, in the tips section, you will find an analysis of your 100 last commits (mostly to analyse the length of your commit messages and the changes done), one of your languages (too much, maybe not enough?) and one about the time you take to resolve some issues.
 
