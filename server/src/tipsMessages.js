@@ -24,6 +24,32 @@ const tipMessageCommitLength0 = 'Come on, you can and have to do longer commit m
 + 'to write a book, but give as many informations as possible on what was done. Your team will be '
 + 'thankfull and they even might consider inviting you for a drink for being the "commit redactor of the year" :)';
 
+
+const tipModifiedLinesCommit40 = 'You love living dangerously... Making such big changes '
++ 'before committing can make you loose everything. Try making less changes per commit or '
++ 'making commits more often. Imagine a sunday afternoon, you, coding in front of your computer '
++ '(behind it\'s way more difficult btw) and suddenly, after changing the core of your software, '
++ 'a T-Rex enters your room breaking your door with a high kick and eats your computer... No commit, '
++ 'no work done. Next time, you should commit more often, after little changes! :D';
+
+const tipModifiedLinesCommit25 = 'C\'est un peu risqué';
+const tipModifiedLinesCommit15 = 'Parfait';
+const tipModifiedLinesCommit10 = 'La sûreté ça te connait';
+
+const tipModifiedLinesCommit0 = 'What the fuuuuuuuuuck man? Even my Grandma makes more changes per '
++ 'commit... I don\'t even know what to say! I mean, making a commit per line is not that good... '
++ 'When your colleagues pull the changes, if they want to catch up and read the commits, they will be '
++ 'lost in miserable changes and a tsunami of commits... Not so productive :/';
+
 module.exports = {
-  tipMessageCommitLength95, tipMessageCommitLength70, tipMessageCommitLength50, tipMessageCommitLength25, tipMessageCommitLength0,
+  tipMessageCommitLength95,
+  tipMessageCommitLength70,
+  tipMessageCommitLength50,
+  tipMessageCommitLength25,
+  tipMessageCommitLength0,
+  tipModifiedLinesCommit40,
+  tipModifiedLinesCommit25,
+  tipModifiedLinesCommit15,
+  tipModifiedLinesCommit10,
+  tipModifiedLinesCommit0,
 };

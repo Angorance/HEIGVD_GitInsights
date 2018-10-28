@@ -21,7 +21,7 @@ app.get('/authenticate', (req, res, next) => {
 app.use((req, res, next) => {
   const accessToken = req.query.access_token;
 
-  if (accessToken !== undefined) {
+  if (typeof accessToken !== 'undefined' && accessToken != null && accessToken !== '') {
     req.client = new Github(accessToken);
     next();
   } else {
@@ -97,21 +97,20 @@ app.get('/user', (req, res, next) => {
     .catch(next);
 
   /* ========================================================================
-  /*  Tips
-  /*====================================================================== */
-
-  // Get all user's information about the tips
-  response.tips = [
-    req.client.tipsNumberOfCharactersPerCommit(),
-  ];
-
-  /* ========================================================================
   /*  Results sending
   /*====================================================================== */
   Promise.all([country, profilePicture, milestones, favLanguages, issues,
     trivia, repositories,
   ])
-    .then(() => res.send(response));
+    .then(() => {
+      // Get all user's information about the tips
+      response.tips = [
+        req.client.tipsNumberOfCharactersPerCommit(),
+        req.client.tipsNumberOfModificationsPerCommit(),
+      ];
+
+      res.send(response);
+    });
 });
 
 // Forward 404 to error handler

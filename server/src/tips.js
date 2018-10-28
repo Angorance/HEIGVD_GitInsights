@@ -6,7 +6,7 @@ function getMedian(numbers = []) {
   const nbrNum = numbers.length;
 
   // Sort the array of numbers
-  numbers.sort((a, b) => a > b);
+  numbers.sort((a, b) => a - b);
 
   if (nbrNum % 2 === 0) {
     // average of both middle numbers
@@ -32,7 +32,7 @@ function getTipsNumberOfCharactersPerCommit(commits = []) {
 
   // Get the tip
   const tip = {};
-  tip.title = 'Commits messages length';
+  tip.title = 'Number of characters per commit message';
   tip.score = median;
   tip.criteria = 'The score is the median of the latest hundred commits messages length.';
 
@@ -62,7 +62,8 @@ function getTipsNumberOfCharactersPerCommit(commits = []) {
  */
 function getTipsNumberOfModificationsPerCommit(commits = []) {
   // Get the number of modifications (additions/deletions) of all commits
-  const modificationsPerCommit = commits.reduce((acc, elem) => acc.concat(elem.length), []);
+  console.log(`commits receive: ${commits}`);
+  const modificationsPerCommit = commits;
 
   // Get the length median
   const median = getMedian(modificationsPerCommit);
@@ -71,28 +72,28 @@ function getTipsNumberOfModificationsPerCommit(commits = []) {
   const tip = {};
   tip.title = 'Number of modifications (additions/deletions) per commit';
   tip.score = median;
-  tip.criteria = 'The score is the median of the latest hundred commits messages length.';
+  tip.criteria = 'The score is the median of the latest hundred commits modifications.';
 
-  /* if (median >= 95) {
-    tip.tip = messages.tipMessageCommitLength95;
+  if (median >= 40) {
+    tip.tip = messages.tipModifiedLinesCommit40;
     tip.quality = 3;
-  } else if (median >= 70 && median < 95) {
-    tip.tip = messages.tipMessageCommitLength70;
+  } else if (median >= 25 && median < 40) {
+    tip.tip = messages.tipModifiedLinesCommit25;
     tip.quality = 2;
-  } else if (median >= 50 && median < 70) {
-    tip.tip = messages.tipMessageCommitLength50;
+  } else if (median >= 15 && median < 25) {
+    tip.tip = messages.tipModifiedLinesCommit15;
     tip.quality = 1;
-  } else if (median >= 25 && median < 50) {
-    tip.tip = messages.tipMessageCommitLength25;
+  } else if (median >= 10 && median < 15) {
+    tip.tip = messages.tipModifiedLinesCommit10;
     tip.quality = 2;
   } else {
-    tip.tip = messages.tipMessageCommitLength0; 
+    tip.tip = messages.tipModifiedLinesCommit0;
     tip.quality = 3;
-  } */
+  }
 
   return tip;
 }
 
 module.exports = {
-  getTipsNumberOfCharactersPerCommit, getTipsNumberOfModificationsPerCommit,
+  getTipsNumberOfCharactersPerCommit, getTipsNumberOfModificationsPerCommit, getMedian,
 };

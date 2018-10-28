@@ -216,11 +216,19 @@ class Github {
       })
       .then((urls) => {
         // Get all lines added in public personal commits
-        const lines = url => this.request(url, true)
-          .then(commit => commit.stats.additions);
+        const stats = url => this.request(url, true)
+          .then(commit => commit.stats);
 
-        return Promise.all(urls.map(lines))
-          .then(results => results.reduce((elem, acc) => elem + acc, 0));
+        return Promise.all(urls.map(stats))
+          .then((results) => {
+            console.log(`results: ${JSON.stringify(results)}`);
+            const copyResults = JSON.parse(JSON.stringify(results));
+            tipsModifiedLinesCommitsArray = copyResults.reduce((acc, elem) => acc.concat(elem.total), []);
+            console.log(`tips: ${tipsModifiedLinesCommitsArray}`);
+            console.log(`results: ${JSON.stringify(results)}`);
+
+            return results.reduce((elem, acc) => elem.additions + acc, 0);
+          });
       });
   }
 
@@ -316,16 +324,19 @@ class Github {
   }
 
   // Tip 2 : number of modifications per commit (for the last hundred commits)
-  /*tipsNumberOfModificationsPerCommit() {
-    return tips.getTipsNumberOfModificationsPerCommit(tipsModifiedLinesCommitsArray);  
-  }*/
+  // eslint-disable-next-line class-methods-use-this
+  tipsNumberOfModificationsPerCommit() {
+    return tips.getTipsNumberOfModificationsPerCommit(tipsModifiedLinesCommitsArray);
+  }
 
   // Tip 3 : percentage of used languages
+  // eslint-disable-next-line class-methods-use-this
   /*tipsPercentageOfUsedLanguages() {
     
   }*/
 
   // Tip 4 : time between the opening and the closure of an issue
+  // eslint-disable-next-line class-methods-use-this
   /*tipsTimeBetweenOpeningAndClosureIssue() {
     
   }*/

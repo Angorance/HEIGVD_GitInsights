@@ -1,5 +1,6 @@
 const { expect } = require('chai');
 const utils = require('../src/utils');
+const tips = require('../src/tips');
 
 describe('Github utils', () => {
   /* ========================================================================
@@ -139,4 +140,20 @@ describe('Github utils', () => {
   /* ========================================================================
   /*  Tips
   /*====================================================================== */
+
+  // Get median of an array of even length
+  it('should retrieve the median of an array of numbers (even length)', () => {
+    const numbers = [1, 8, 1, 1, 6, 7, 5, 2, 2, 3];
+    const expected = 2.5;
+
+    expect(tips.getMedian(numbers)).to.eql(expected);
+  });
+
+  // Get median of an array of odd length
+  it('should retrieve the median of an array of numbers (odd length)', () => {
+    const numbers = [1, 8, 1, 1, 6, 9, 7, 5, 2, 2, 3];
+    const expected = 3;
+
+    expect(tips.getMedian(numbers)).to.eql(expected);
+  });
 });
