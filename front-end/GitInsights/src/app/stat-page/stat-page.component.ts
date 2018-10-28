@@ -217,7 +217,6 @@ export class StatPageComponent implements OnInit {
       .get(getUrl)
       .toPromise()
       .then((res: GitData) => {
-        // TODO : loading screen
         //console.log('data retrieved');
 
         this.setData(res);
@@ -225,6 +224,8 @@ export class StatPageComponent implements OnInit {
       })
       .catch(err => {
         console.log(err);
+        // todo afficher une popup
+        // redirect to /home
       });
   }
 
