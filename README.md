@@ -40,3 +40,15 @@ npm run dev
 ```
 
 ### Configure the frontend
+In the folder `front-end\GitInsights` run the command
+```cmd
+npm install
+```
+N.B. : you might get an `unexpected string` error, if that's the case, delete the package-lock.json file and retry
+
+When it's done you'll have to install the Angular CLI in order to run the live server : 
+```cmd
+npm install -g @angular/cli
+ng serve --open
+```
+This will run the front-end on localhost:4200 and automatically open a new tab in your browser.
