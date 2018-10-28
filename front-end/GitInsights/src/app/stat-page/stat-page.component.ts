@@ -1,21 +1,14 @@
+import { ErrorDialogComponent } from './../error-dialog/error-dialog.component';
 import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  HostBinding
-} from "@angular/core";
+  Component, OnInit, ViewChild, ElementRef,
+  Inject, HostBinding } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Chart } from "chart.js";
 import * as Country from "country-list";
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition
-  // ...
-} from "@angular/animations";
+import { trigger, state, style,
+  animate, transition } from "@angular/animations";
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { log } from 'util';
 
 @Component({
   selector: "app-stat-page",
@@ -48,7 +41,7 @@ export class StatPageComponent implements OnInit {
   context: CanvasRenderingContext2D;
 
   // test purpose ==>
-  // results = '{"country":"Switzerland","profile_picture":"https://avatars1.githubusercontent.com/u/30982987?v=4","issues":[{"label":"Opened","value":0},{"label":"Closed","value":0}],"favLanguages":{"Java":1203794,"Dockerfile":1050,"CSS":267635,"C++":797671,"C":33529,"CMake":1228,"JavaScript":538538,"PHP":83311,"Shell":8185,"HTML":3942,"TypeScript":31503,"PLpgSQL":1946,"QMake":7571,"Makefile":79446},"repositories":[{"label":"Created","value":23},{"label":"Forked","value":10},{"label":"Stars","value":2}],"milestones":[{"date":"2017-08-13T16:51:57Z","label":"account creation"},{"date":"2017-09-23T15:39:32Z","label":"first repository"},{"date":"2017-09-23T15:38:49Z","label":"first commit"}],"trivia":[{"label":"Lines coded","value":3648},{"label":"Commits","value":18}]}';
+  results = '{"country":"Switzerland","profile_picture":"https://avatars1.githubusercontent.com/u/30982987?v=4","favLanguages":{"Java":1203794,"Dockerfile":1050,"CSS":267635,"C++":797671,"C":33529,"CMake":1228,"JavaScript":538538,"PHP":83311,"Shell":8185,"HTML":3942,"TypeScript":31503,"PLpgSQL":1946,"QMake":7571,"Makefile":79446},"repositories":[{"label":"Created","value":23},{"label":"Forked","value":10},{"label":"Stars","value":3}],"issues":[{"label":"Opened","value":0},{"label":"Closed","value":31}],"milestones":[{"date":"2017-08-13T16:51:57Z","label":"account creation"},{"date":"2017-09-23T15:39:32Z","label":"first repository"},{"date":"2017-09-23T15:38:49Z","label":"first commit"}],"trivia":[{"label":"Coded lines","value":905019},{"label":"Commits","value":200}],"tips":[]}';
   tips: Array<Tip> = [];
   chart = [];
   issues: Array<{label: string, value: number}> = [];
@@ -76,8 +69,9 @@ export class StatPageComponent implements OnInit {
 
   _srvAddress = 'https://tweb-project1-serveur.herokuapp.com'; // "http://localhost:3000";
 
-  constructor(private http: HttpClient) {}
+  errorDialogRef: MatDialogRef<ErrorDialogComponent>;
 
+  constructor(private http: HttpClient, public dialog: MatDialog) {}
   ngOnInit() {
     /*this.setData(JSON.parse(this.results));
     this.loaded = true;*/
@@ -234,6 +228,18 @@ export class StatPageComponent implements OnInit {
     return {
       'color' : this.qualityTab[i % this.qualityTab.length],
     };
+  }
+
+  openDialogue(ressource: string): void {
+    this.errorDialogRef = this.dialog.open(ErrorDialogComponent, {
+      data : {
+        text : ressource
+      }
+    });
+
+    this.errorDialogRef.afterClosed().subscribe(() => {
+      window.location.href = '/home';
+    });
   }
 }
 

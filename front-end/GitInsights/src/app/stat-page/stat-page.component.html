@@ -2,7 +2,7 @@
   <mat-spinner id="spinner" color="primary" diameter="200" strokeWidth="10" ></mat-spinner>
 </div>
 <div class="topBar">
-  <img id="logo" src="../../assets/images/gitInsight.png" height="50 px"> <h1>GitInsights</h1>
+  <img id="logo" src="../../assets/images/gitInsight.png" height="50 px"> <h1>GitInsights</h1> <button mat-button (click)="openDialogue()">open dialogue</button>
 </div>
 <div class="mainContent">
   <mat-horizontal-stepper linear="false" class="stepper-content">
@@ -132,7 +132,10 @@
     <!--------------------------------------------------------- TIPS PAGE ------------------------------------------------------------->
     <mat-step label="Tips" completed="false">
       <mat-card style="text-align: center">
-        <h2> How can you get better  ? </h2>
+        <h2> 
+          How can you get better  ? 
+          <img alt="help" src="../../assets/images/help.png" height="15px" style="opacity: 0.3" matTooltip="The marking scheme were established by our standards, we are open to any feedback/suggestion to improve it" matTooltipPosition="above">
+        </h2>
       </mat-card>
       <div id="tip-container">
           <mat-card *ngFor="let tip of tips" class="tip-card">
