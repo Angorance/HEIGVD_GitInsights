@@ -229,7 +229,7 @@ class Github {
         return Promise.all(urls.map(stats))
           .then((results) => {
             // Tip 2
-            const copyResults = JSON.parse(JSON.stringify(results));
+            const copyResults = results;
             // eslint-disable-next-line
             tipsModifiedLinesCommitsArray = copyResults.reduce((acc, elem) => acc.concat(elem.total), []);
 
