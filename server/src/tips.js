@@ -30,8 +30,8 @@ function getNumberOfLanguagesToReach75Percent(languages = {}) {
   // Get an array from the JSON object
   const array = [];
 
-  for (let i in languages)
-    array.push(languages[i]);
+  // eslint-disable-next-line
+  for (let i in languages) {array.push(languages[i])};
 
   // Sort the array decreasing
   array.sort((a, b) => b - a);
@@ -46,6 +46,7 @@ function getNumberOfLanguagesToReach75Percent(languages = {}) {
 
   do {
     countLines += array[numberOfLanguages];
+    // eslint-disable-next-line
     ++numberOfLanguages;
   } while (countLines < nbrLinesFor75Percent);
 
@@ -59,70 +60,80 @@ function getNumberOfLanguagesToReach75Percent(languages = {}) {
  * @param {*} commits hundred commits to analyse.
  */
 function getTipsNumberOfCharactersPerCommit(commits = []) {
-  // Get the length of all commits
-  const charactersPerCommit = commits.reduce((acc, elem) => acc.concat(elem.length), []);
-
-  // Get the length median
-  const median = getMedian(charactersPerCommit);
-
-  // Get the tip
   const tip = {};
   tip.title = 'Number of characters per commit message';
-  tip.score = median;
   tip.criteria = 'The score is the median of the latest hundred commits messages length.';
 
-  if (median >= 95) {
-    tip.tip = messages.tipMessageCommitLength95;
-    tip.quality = 3;
-  } else if (median >= 70 && median < 95) {
-    tip.tip = messages.tipMessageCommitLength70;
-    tip.quality = 2;
-  } else if (median >= 50 && median < 70) {
-    tip.tip = messages.tipMessageCommitLength50;
-    tip.quality = 1;
-  } else if (median >= 25 && median < 50) {
-    tip.tip = messages.tipMessageCommitLength25;
-    tip.quality = 2;
+  if (commits.length > 0) {
+    // Get the length of all commits
+    const charactersPerCommit = commits.reduce((acc, elem) => acc.concat(elem.length), []);
+
+    // Get the length median
+    const median = getMedian(charactersPerCommit);
+
+    // Get the tip
+    tip.score = median;
+
+    if (median >= 95) {
+      tip.tip = messages.tipMessageCommitLength95;
+      tip.quality = 3;
+    } else if (median >= 70 && median < 95) {
+      tip.tip = messages.tipMessageCommitLength70;
+      tip.quality = 2;
+    } else if (median >= 50 && median < 70) {
+      tip.tip = messages.tipMessageCommitLength50;
+      tip.quality = 1;
+    } else if (median >= 25 && median < 50) {
+      tip.tip = messages.tipMessageCommitLength25;
+      tip.quality = 2;
+    } else {
+      tip.tip = messages.tipMessageCommitLength0;
+      tip.quality = 3;
+    }
   } else {
-    tip.tip = messages.tipMessageCommitLength0;
-    tip.quality = 3;
+    tip.score = 0;
+    tip.tip = 'No data to analyze';
   }
 
   return tip;
 }
 
 /**
- * Get tip for the number of modifications (additions/deletions) of the latest hundred commits messages.
+ * Get tip for the number of modifications (additions/deletions) of the latest hundred commits
+ * messages.
  * @param {*} commits hundred commits to analyse.
  */
 function getTipsNumberOfModificationsPerCommit(commits = []) {
-  // Get the number of modifications (additions/deletions) of all commits
-  const modificationsPerCommit = commits;
-
-  // Get the length median
-  const median = getMedian(modificationsPerCommit);
-
-  // Get the tip
   const tip = {};
   tip.title = 'Number of modifications (additions/deletions) per commit';
-  tip.score = median;
   tip.criteria = 'The score is the median of the latest hundred commits modifications.';
 
-  if (median >= 40) {
-    tip.tip = messages.tipModifiedLinesCommit40;
-    tip.quality = 3;
-  } else if (median >= 25 && median < 40) {
-    tip.tip = messages.tipModifiedLinesCommit25;
-    tip.quality = 2;
-  } else if (median >= 15 && median < 25) {
-    tip.tip = messages.tipModifiedLinesCommit15;
-    tip.quality = 1;
-  } else if (median >= 10 && median < 15) {
-    tip.tip = messages.tipModifiedLinesCommit10;
-    tip.quality = 2;
+  if (commits.length > 0) {
+    // Get the length median
+    const median = getMedian(commits);
+
+    // Get the tip
+    tip.score = median;
+
+    if (median >= 40) {
+      tip.tip = messages.tipModifiedLinesCommit40;
+      tip.quality = 3;
+    } else if (median >= 25 && median < 40) {
+      tip.tip = messages.tipModifiedLinesCommit25;
+      tip.quality = 2;
+    } else if (median >= 15 && median < 25) {
+      tip.tip = messages.tipModifiedLinesCommit15;
+      tip.quality = 1;
+    } else if (median >= 10 && median < 15) {
+      tip.tip = messages.tipModifiedLinesCommit10;
+      tip.quality = 2;
+    } else {
+      tip.tip = messages.tipModifiedLinesCommit0;
+      tip.quality = 3;
+    }
   } else {
-    tip.tip = messages.tipModifiedLinesCommit0;
-    tip.quality = 3;
+    tip.score = 0;
+    tip.tip = 'No data to analyze';
   }
 
   return tip;
@@ -133,30 +144,78 @@ function getTipsNumberOfModificationsPerCommit(commits = []) {
  * @param {*} languages languages to analyse.
  */
 function getTipsNumberOfLanguagesToReach75PercentsOfCodedLines(languages = {}) {
-  // Get the number of modifications (additions/deletions) of all commits
-  const numberOfLanguages = getNumberOfLanguagesToReach75Percent(languages);
-
-  // Get the tip
   const tip = {};
   tip.title = 'Number of languages to reach 75% of the coded lines';
-  tip.score = numberOfLanguages;
-  tip.criteria = 'To find that value, the array of languages is sorted descending';
+  tip.criteria = 'To find that value, the array of languages is sorted descending. '
+  + 'The languages used to calculate come from the array languages in the statistics.';
 
-  if (numberOfLanguages >= 8) {
-    tip.tip = messages.tipLanguage8;
-    tip.quality = 3;
-  } else if (numberOfLanguages >= 5 && numberOfLanguages < 8) {
-    tip.tip = messages.tipLanguage5;
-    tip.quality = 2;
-  } else if (numberOfLanguages >= 3 && numberOfLanguages < 5) {
-    tip.tip = messages.tipLanguage3;
-    tip.quality = 1;
-  } else if (numberOfLanguages === 2) {
-    tip.tip = messages.tipLanguage2;
-    tip.quality = 2;
+  if (languages.length > 0) {
+    // Get the number of languages of the user to reach 75% of the coded lines
+    const numberOfLanguages = getNumberOfLanguagesToReach75Percent(languages);
+
+    // Get the tip
+    tip.score = numberOfLanguages;
+
+    if (numberOfLanguages >= 8) {
+      tip.tip = messages.tipLanguage8;
+      tip.quality = 3;
+    } else if (numberOfLanguages >= 5 && numberOfLanguages < 8) {
+      tip.tip = messages.tipLanguage5;
+      tip.quality = 2;
+    } else if (numberOfLanguages >= 3 && numberOfLanguages < 5) {
+      tip.tip = messages.tipLanguage3;
+      tip.quality = 1;
+    } else if (numberOfLanguages === 2) {
+      tip.tip = messages.tipLanguage2;
+      tip.quality = 2;
+    } else {
+      tip.tip = messages.tipLanguage0;
+      tip.quality = 3;
+    }
   } else {
-    tip.tip = messages.tipLanguage0;
-    tip.quality = 3;
+    tip.score = 0;
+    tip.tip = 'No data to analyze';
+  }
+
+  return tip;
+}
+
+/**
+ * Get the time in days between the opening and closure of issues.
+ * @param {*} issues issues to analyze
+ */
+function getTipsTimeBetweenOpeningAndClosureIssue(issues = []) {
+  const tip = {};
+  tip.title = 'Days between the opening and closure of issues';
+  tip.criteria = 'The score is the median of the time of each issue.';
+
+  if (issues.length > 0) {
+    // Get the time in days between the opening and closure of each issue
+    const times = issues.map(issue => Math.round(((new Date(issue.closed_at)
+    - new Date(issue.created_at)) / (24 * 1000 * 3600))));
+
+    // Get the median of this time
+    const median = getMedian(times);
+
+    // Get the tip
+    tip.score = median;
+
+    if (median >= 25) {
+      tip.tip = messages.tipIssue25;
+      tip.quality = 3;
+    } else if (median >= 10 && median < 25) {
+      tip.tip = messages.tipIssue10;
+      tip.quality = 2;
+    } else if (median >= 3 && median < 10) {
+      tip.tip = messages.tipIssue3;
+      tip.quality = 1;
+    } else {
+      tip.tip = messages.tipIssue0;
+      tip.quality = 2;
+    }
+  } else {
+    tip.score = 0;
+    tip.tip = 'No data to analyze';
   }
 
   return tip;
@@ -166,6 +225,7 @@ module.exports = {
   getTipsNumberOfCharactersPerCommit,
   getTipsNumberOfModificationsPerCommit,
   getTipsNumberOfLanguagesToReach75PercentsOfCodedLines,
+  getTipsTimeBetweenOpeningAndClosureIssue,
   getMedian,
   getNumberOfLanguagesToReach75Percent,
 };

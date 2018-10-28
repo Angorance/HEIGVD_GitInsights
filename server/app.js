@@ -75,6 +75,10 @@ app.get('/user', (req, res, next) => {
       .then((closed) => { response.issues = [{ label: 'Opened', value: opened }, { label: 'Closed', value: closed }]; }))
     .catch(next);
 
+  const tipTimeBetweenOpeningAndClosureIssues = req.client.userClosedIssues()
+    .then((cIssues) => { response.tips = [req.client.tipsTimeBetweenOpeningAndClosureIssue(cIssues)]; })
+    .catch(next);
+
   /* ========================================================================
   /*  3nd graph : coded lines and commits
   /*====================================================================== */
@@ -99,16 +103,17 @@ app.get('/user', (req, res, next) => {
   /* ========================================================================
   /*  Results sending
   /*====================================================================== */
-  Promise.all([country, profilePicture, milestones, favLanguages, issues,
+  Promise.all([country, profilePicture, milestones, favLanguages, issues, tipTimeBetweenOpeningAndClosureIssues,
     trivia, repositories,
   ])
-    .then(() => {
+    .then(() => {      
+      console.log(`favLanguages: ${JSON.stringify(response.favLanguages)}`);
+
       // Get all user's information about the tips
-      response.tips = [
-        req.client.tipsNumberOfCharactersPerCommit(),
-        req.client.tipsNumberOfModificationsPerCommit(),
-        req.client.tipsNumberOfLanguagesToReach75PercentsOfCodedLines(),
-      ];
+      response.tips.push(req.client.tipsNumberOfLanguagesToReach75PercentsOfCodedLines());
+      response.tips.push(req.client.tipsNumberOfModificationsPerCommit());
+      response.tips.push(req.client.tipsNumberOfCharactersPerCommit());
+      response.tips.reverse();
 
       res.send(response);
     });

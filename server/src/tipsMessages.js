@@ -25,7 +25,6 @@ const tipMessageCommitLength0 = 'Come on, you can and have to do longer commit m
 + 'thankfull and they even might consider inviting you for a drink for being the "commit redactor of the year" :)';
 
 
-
 const tipModifiedLinesCommit40 = 'You love living dangerously... Making such big changes '
 + 'before committing can make you loose everything. Try making less changes per commit or '
 + 'making commits more often. Imagine a sunday afternoon, you, coding in front of your computer '
@@ -33,7 +32,7 @@ const tipModifiedLinesCommit40 = 'You love living dangerously... Making such big
 + 'a T-Rex enters your room breaking your door with a high kick and eats your computer... No commit, '
 + 'no work done. Next time, you should commit more often, after little changes! :D';
 
-const tipModifiedLinesCommit25 = 'C\'est un peu risqué';
+const tipModifiedLinesCommit25 = '';
 const tipModifiedLinesCommit15 = 'Parfait';
 const tipModifiedLinesCommit10 = 'La sûreté ça te connait';
 
@@ -41,7 +40,6 @@ const tipModifiedLinesCommit0 = 'What the fuuuuuuuuuck man? Even my Grandma make
 + 'commit... I don\'t even know what to say! I mean, making a commit per line is not that good... '
 + 'When your colleagues pull the changes, if they want to catch up and read the commits, they will be '
 + 'lost in miserable changes and a tsunami of commits... Not so productive :/';
-
 
 
 const tipLanguage8 = 'WOW, ok, you\'re curious, that\'s good, but you know it\'s a sin (not '
@@ -72,6 +70,24 @@ const tipLanguage0 = 'Most of your work is done with only one language, so there
 + 'in which you\'re curious/not comfortable yet. But try to spare some time to keep on practicing your favorite '
 + 'language :)';
 
+
+const tipIssue25 = 'Wow man, how was your trip to the East Siberian Taiga ecoregion? I hope '
++ 'it was fun because now, it\'s time to GET BACK TO WORK. No, really, getting issues done taking so much time... '
++ 'Your "working" with Candy Crush or what? Even Shakespare resolves issues more quickly...';
+
+const tipIssue10 = 'Imagine you are in a Safari and you meet with a lion. You run, right? Because you know it\'s '
++ 'your life or the lion dinner... Well, issues are quite similar. As long as you do nothing, they will follow '
++ 'you. And following issues are worse than being served as dinner for a lion, believe me. So just do it, work '
++ 'harder and close those issues!';
+
+const tipIssue3 = 'Hey, good rhythm. You resolve issues as well as Phil Collins play drums! Keep going on like '
++ 'that, your colleagues will love you for your efficiency and you won\'t be submerged by issues!';
+
+const tipIssue0 = 'Ow man, you are either an amazing genius or a careless dev. If you\'re part of the first '
++ 'type, go on and be super GitHuber! On the other hand, take time to really think for durable solutions instead '
++ 'of quickly solving the issues to get back to your Cookie Clicker game... An issue solved without thinking is '
++ 'another issue coming right up!';
+
 module.exports = {
   tipMessageCommitLength95,
   tipMessageCommitLength70,
@@ -88,4 +104,8 @@ module.exports = {
   tipLanguage3,
   tipLanguage2,
   tipLanguage0,
+  tipIssue25,
+  tipIssue10,
+  tipIssue3,
+  tipIssue0,
 };

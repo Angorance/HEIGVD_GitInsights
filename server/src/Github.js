@@ -229,6 +229,7 @@ class Github {
           .then((results) => {
             // Tip 2
             const copyResults = JSON.parse(JSON.stringify(results));
+            // eslint-disable-next-line
             tipsModifiedLinesCommitsArray = copyResults.reduce((acc, elem) => acc.concat(elem.total), []);
 
             return results.reduce((acc, elem) => acc + elem.additions, 0);
@@ -341,9 +342,9 @@ class Github {
 
   // Tip 4 : time between the opening and the closure of an issue
   // eslint-disable-next-line class-methods-use-this
-  /*tipsTimeBetweenOpeningAndClosureIssue() {
-    
-  }*/
+  tipsTimeBetweenOpeningAndClosureIssue(issues = []) {
+    return tips.getTipsTimeBetweenOpeningAndClosureIssue(issues);
+  }
 }
 
 module.exports = Github;

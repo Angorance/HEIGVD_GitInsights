@@ -182,8 +182,23 @@ describe('Github utils', () => {
       Julia: 130,
       Javascript: 250,
     };
+
     const expected = 3;
 
     expect(tips.getNumberOfLanguagesToReach75Percent(languages)).to.eql(expected);
+  });
+
+  // Get the time between the opening and closure of an issue
+  it('should retrieve the time between the opening and closure of an issue', () => {
+    const issues = [
+      { created_at: '2018-02-19T08:46:01Z', closed_at: '2018-02-24T08:46:01Z' },
+      { created_at: '2016-02-24T08:46:01Z', closed_at: '2016-02-24T09:46:01Z' },
+      { created_at: '2017-05-03T08:46:01Z', closed_at: '2017-05-23T08:46:01Z' },
+      { created_at: '2016-10-09T08:46:01Z', closed_at: '2016-10-18T08:46:01Z' },
+    ];
+
+    const expected = 7;
+
+    expect(tips.getTipsTimeBetweenOpeningAndClosureIssue(issues).score).to.eql(expected);
   });
 });

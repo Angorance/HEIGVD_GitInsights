@@ -13,7 +13,6 @@ const clientSecret = process.env.CLIENT_SECRET;
 function sendAccessToken(req, res, next) {
   // Get code from Github
   const codeReceived = req.query.code;
-  console.log(`Code received : ${codeReceived}`);
 
   // Create the POST request to Github with account information
   const url = 'https://github.com/login/oauth/access_token';
@@ -39,7 +38,6 @@ function sendAccessToken(req, res, next) {
       .then((result) => {
         // Get the access_token
         const accessToken = result.access_token;
-        console.log(`Access-token received : ${accessToken}`);
 
         // Send the access_token to the client
         const response = { access_token: accessToken };
