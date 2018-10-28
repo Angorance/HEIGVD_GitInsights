@@ -18,3 +18,25 @@ One more thing about the tips are the scores. Each section analysed is given a s
 
 ## How to use this locally
 
+Don't forget to do an `npm install` for both frontend and backend.
+
+### Register a new OAuth application
+Go on your Github account and register a new OAuth app for your local usage:
+```
+Homepage URL : http://localhost:4200/home
+Authorization callback URL : http://localhost:4200/stats
+```
+
+### Configure the backend
+In the file `.env` add these lines and replace `xyz` by the data of the OAuth app you just created:
+```
+CLIENT_ID=xyz
+CLIENT_SECRET=xyz
+```
+
+Open the backend folder in Visual Code and run it with the terminal:
+```
+npm run dev
+```
+
+### Configure the frontend
