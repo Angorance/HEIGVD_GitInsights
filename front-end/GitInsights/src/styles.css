@@ -1,7 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+/* global styles */
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
 html, body{
     width: 100%;
     height: 100%;
+    min-width: 1250px;
+    min-height: 825px;
     margin : 0px;
-    background-color: #abcfe5;
+    
+    font-family: Arial, Helvetica, sans-serif;
 }
