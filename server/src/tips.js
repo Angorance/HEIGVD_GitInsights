@@ -86,7 +86,7 @@ function getTipsNumberOfModificationsPerCommit(commits = []) {
     tip.tip = messages.tipMessageCommitLength25;
     tip.quality = 2;
   } else {
-    tip.tip = messages.tipMessageCommitLength0;
+    tip.tip = messages.tipMessageCommitLength0; 
     tip.quality = 3;
   } */
 

@@ -22,7 +22,7 @@ const tipMessageCommitLength25 = 'Hey not bad, you\'re doing pretty god ! But if
 const tipMessageCommitLength0 = 'Come on, you can and have to do longer commit messages. It\'s a '
 + 'description of your work, not a trivial text sent with your favorite messaging app. You don\'t have '
 + 'to write a book, but give as many informations as possible on what was done. Your team will be '
-+ 'thankfull and they event might consider inviting you for a drink for being the "commit redactor of the year" :)';
++ 'thankfull and they even might consider inviting you for a drink for being the "commit redactor of the year" :)';
 
 module.exports = {
   tipMessageCommitLength95, tipMessageCommitLength70, tipMessageCommitLength50, tipMessageCommitLength25, tipMessageCommitLength0,
