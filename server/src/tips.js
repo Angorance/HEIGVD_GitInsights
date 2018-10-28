@@ -62,7 +62,6 @@ function getTipsNumberOfCharactersPerCommit(commits = []) {
  */
 function getTipsNumberOfModificationsPerCommit(commits = []) {
   // Get the number of modifications (additions/deletions) of all commits
-  console.log(`commits receive: ${commits}`);
   const modificationsPerCommit = commits;
 
   // Get the length median

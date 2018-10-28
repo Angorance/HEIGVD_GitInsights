@@ -221,13 +221,11 @@ class Github {
 
         return Promise.all(urls.map(stats))
           .then((results) => {
-            console.log(`results: ${JSON.stringify(results)}`);
+            // Tip 2
             const copyResults = JSON.parse(JSON.stringify(results));
             tipsModifiedLinesCommitsArray = copyResults.reduce((acc, elem) => acc.concat(elem.total), []);
-            console.log(`tips: ${tipsModifiedLinesCommitsArray}`);
-            console.log(`results: ${JSON.stringify(results)}`);
 
-            return results.reduce((elem, acc) => elem.additions + acc, 0);
+            return results.reduce((acc, elem) => acc + elem.additions, 0);
           });
       });
   }
