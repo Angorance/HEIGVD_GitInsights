@@ -9,15 +9,16 @@ export class BtnLoginComponent implements OnInit {
 
   constructor() { }
 
+  // application client id
+  clientId = '2f294cfc663fdb3625c6';
+
   ngOnInit() { }
 
+  /**
+   * redirect the user to the gitHub OAuth page
+   */
   buttonClicked(): void {
-
-    console.log('Redirecting to GitHub');
-
-    // TODO - Put URL (or at least client_id) somewhere else
-    let redirect: string = 'https://github.com/login/oauth/authorize?client_id=2a9a479e2953860bbd89&scope=repo%20user';
-
+    let redirect: string = 'https://github.com/login/oauth/authorize?client_id=' + this.clientId + '&scope=repo%20user';
     window.location.href = redirect;
   }
 }
