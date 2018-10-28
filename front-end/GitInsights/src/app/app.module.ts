@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { MatButtonModule, MatGridListModule, MatTooltipModule,
   MatStepperModule, MatIconModule, MatProgressSpinnerModule } from '@angular/material';
+  import {MatDialogModule} from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 
 import { AppComponent } from './app.component';
@@ -15,6 +16,7 @@ import { StatPageComponent } from './stat-page/stat-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { TimelineComponent } from './timeline/timeline.component';
+import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 
 const appRoutes: Routes = [
   { path: "stats", component: StatPageComponent },
@@ -31,6 +33,7 @@ const appRoutes: Routes = [
     PageNotFoundComponent,
     LoginPageComponent,
     TimelineComponent,
+    ErrorDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,6 +45,7 @@ const appRoutes: Routes = [
     MatTooltipModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, { enableTracing: true }),
   ],
@@ -53,6 +57,7 @@ const appRoutes: Routes = [
     LoginPageComponent,
   ],
   providers: [],
+  entryComponents: [ErrorDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
