@@ -19,10 +19,10 @@ import { TimelineComponent } from './timeline/timeline.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 
 const appRoutes: Routes = [
-  { path: "stats", component: StatPageComponent },
-  { path: "home", component: LoginPageComponent },
-  { path: "", redirectTo: "/home", pathMatch: "full" },
-  { path: "**", component: PageNotFoundComponent }
+  { path: 'stats', component: StatPageComponent },
+  { path: 'home', component: LoginPageComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({

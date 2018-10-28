@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginPageComponent implements OnInit {
 
-  title="GitInsights";
+  title='GitInsights';
   
   constructor() { }
 

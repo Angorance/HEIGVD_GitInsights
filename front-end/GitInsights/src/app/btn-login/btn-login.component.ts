@@ -10,7 +10,7 @@ export class BtnLoginComponent implements OnInit {
   constructor() { }
 
   // application client id
-  clientId = '2f294cfc663fdb3625c6';
+  clientId = '2a9a479e2953860bbd89';
 
   ngOnInit() { }
 
