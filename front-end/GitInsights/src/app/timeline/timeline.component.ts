@@ -8,8 +8,10 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 
 export class TimelineComponent implements OnInit {
 
+  // User's milestones from the parent components
   @Input() milestones: Array<{date: string, label: String}>;
 
+  // in order to display the next big milestones (Happy New Years :D)
   today = new Date();
 
   years = [];
@@ -17,6 +19,10 @@ export class TimelineComponent implements OnInit {
   constructor() {
    }
 
+   /**
+    * get the position of a date bewteen two borns
+    * @param sDate 
+    */
    getPercentagePosition(sDate: string) {
 
      const date: Date =  new Date(sDate);
@@ -27,17 +33,29 @@ export class TimelineComponent implements OnInit {
      return position;
    }
 
-
+   /**
+    * Set the position style from a milstones date
+    * @param date 
+    */
    setMilestoneStyle(date: string) {
      return {
        'left' : this.getPercentagePosition(date).toString() + '%',
      };
    }
 
+   /**
+    * make the tooltip for a certain milestone
+    * @param elem Milestone use to make the tooltip
+    */
    getTooltip(elem: {date: string, label: string} ) {
      return new Date(elem.date).toLocaleDateString() + ' - ' + elem.label.charAt(0).toUpperCase() + elem.label.slice(1);
    }
 
+   /**
+    * fills the years array, in order to have the big dots in the timeline 
+    * (from the 01.01.XX - XX being the account creation years - to the 
+    * 01.01.YY - YY being the current next year )
+    */
    fillYears() {
     this.years = [];
 
@@ -49,6 +67,10 @@ export class TimelineComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * This function is called whenever a modification in the state of the component occures
+   * @param changes Object containing the changes between two states of the component (befor/after)
+   */
   ngOnChanges(changes: SimpleChanges): void {
     // first step : sort the dates in order to have the oldest date first
     if (this.milestones.length > 0) {
@@ -58,6 +80,6 @@ export class TimelineComponent implements OnInit {
   }
 }
 
-function compareDates(a, b) {
-  return -1; // new Date(b.date) - new Date(a.date);
+function compareDates(a: {date: string, label: string}, b: {date: string, label: string}) {
+  return new Date(b.date).getTime() - new Date(a.date).getTime();
 }
