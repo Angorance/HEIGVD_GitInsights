@@ -8,7 +8,6 @@ import * as Country from "country-list";
 import { trigger, state, style,
   animate, transition } from "@angular/animations";
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { log } from 'util';
 
 @Component({
   selector: "app-stat-page",
@@ -76,11 +75,11 @@ export class StatPageComponent implements OnInit {
     /*this.setData(JSON.parse(this.results));
     this.loaded = true;*/
     //this.getData();
-    
+    this.getToken();
+  }
 
+  getToken() : void {
     if (sessionStorage.getItem('token') === null) {
-
-      // console.log('no token found');
       // no token found, we have to get it
       const srvTokenService = '/authenticate';
 
@@ -94,24 +93,20 @@ export class StatPageComponent implements OnInit {
       this.http.get(getUrl).toPromise()
       .then(
         res => {
-          // console.log('Token received and saved');
           sessionStorage.setItem('token', res['access_token']);
           this.getData();
         }
       )
       .catch(err => {
-        // console.log(err);
-        window.location.href = '/home';
+        this.openDialogue();
       });
     } else {
-      // console.log('we already have a token');
       
       this.getData();
     }
   }
 
   setData(res: GitData) {
-    // console.log(JSON.stringify(res)); // récupérer les données suite au get et les utiliser :D
 
     // set the flag and the avatar
     this.avatarStyle = {
@@ -205,21 +200,16 @@ export class StatPageComponent implements OnInit {
     const getUrl = this._srvAddress +
     srvService + "?access_token=" + sessionStorage.getItem("token");
 
-    //console.log(getUrl);
-
     this.http
       .get(getUrl)
       .toPromise()
       .then((res: GitData) => {
-        //console.log('data retrieved');
 
         this.setData(res);
         this.loaded = true;
       })
       .catch(err => {
-        console.log(err);
-        // todo afficher une popup
-        // redirect to /home
+        this.openDialogue();
       });
   }
 
@@ -230,14 +220,14 @@ export class StatPageComponent implements OnInit {
     };
   }
 
-  openDialogue(ressource: string): void {
+  openDialogue(): void {
     this.errorDialogRef = this.dialog.open(ErrorDialogComponent, {
-      data : {
-        text : ressource
-      }
+      width: '60%',
+      autoFocus : false,
     });
 
     this.errorDialogRef.afterClosed().subscribe(() => {
+      sessionStorage.removeItem('token');
       window.location.href = '/home';
     });
   }
