@@ -60,5 +60,5 @@ typings/
 # next.js build output
 .next
 
-# Misc
-.DS_Store
+# MISC
+**.DS_Store

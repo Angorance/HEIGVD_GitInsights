@@ -1,0 +1,157 @@
+<div class="load-screen" [@endLoad]=" loaded ? 'closed' : 'opened'">
+  <mat-spinner id="spinner" color="primary" diameter="200" strokeWidth="10" ></mat-spinner>
+</div>
+<div class="topBar">
+  <img id="logo" src="../../assets/images/gitInsight.png" height="50 px"> <h1>GitInsights</h1>
+</div>
+<div class="mainContent">
+  <mat-horizontal-stepper linear="false" class="stepper-content">
+    <!--------------------------------------------------------- STATS PAGE ------------------------------------------------------------->
+    <mat-step label="Statistics" completed="false">
+      <mat-card class="timeline-card" >
+        <app-timeline *ngIf="milestones" [milestones]="milestones"></app-timeline>
+      </mat-card>
+
+      <mat-grid-list cols="3" rowHeight="1.8:1" class="grid-list">
+
+        <mat-grid-tile>
+          <mat-card class="stat-card">
+            <!-- Language -->
+            <table>
+              <thead>
+                <tr>
+                  <th>
+                    Favorites Languages <img alt="help" src="../../assets/images/help.png" height="20px" style="opacity: 0.3" matTooltip="The lines are from your private repositories as a whole" matTooltipPosition="above">
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td >
+                    <div id="canvas-container">
+                      <canvas  #canvas id="canvas"> {{ chart }} </canvas>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <th *ngIf="languages" style="font-weight: normal; text-align: left; font-size: 0.7em">{{languages.length}} languages in total</th>
+              </tfoot>
+            </table>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile rowspan="2">
+          <div id="avatar-container" [ngStyle]="avatarStyle"> <div [ngClass]="flagClasses"></div></div>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-card class="stat-card">
+            <!-- issues -->
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="2">
+                    Assigned issues <img alt="help" src="../../assets/images/help.png" height="20px" style="opacity: 0.3" matTooltip="Note: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request. For this reason, &quot;Issues&quot; endpoints may return both issues and pull requests in the response." matTooltipPosition="above">
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td *ngFor="let issue of issues">{{issue.value}}</td>
+                </tr>
+              </tbody>
+
+              <tfoot>
+                <tr>
+                    <th *ngFor="let issue of issues">{{issue.label}}</th>
+                </tr>
+              </tfoot>
+
+            </table>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-card class="stat-card">
+            <!-- General -->
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="2">
+                    Trivia <img alt="help" src="../../assets/images/help.png" height="20px" style="opacity: 0.3" matTooltip="For the coded lines, we only consider the 100 last commits" matTooltipPosition="above">
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td *ngFor="let trivia of trivias"> {{trivia.value.toLocaleString()}}</td>
+                </tr>
+              </tbody>
+
+              <tfoot>
+                <tr>
+                  <th *ngFor="let trivia of trivias"> {{trivia.label}}</th>
+                </tr>
+              </tfoot>
+            </table>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-card class="stat-card">
+            <!-- Repositories -->
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="4">
+                    Repositories
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td *ngFor="let repo of repositories"> {{repo.value}}</td>
+                </tr>
+              </tbody>
+
+              <tfoot>
+                <tr>
+                    <th *ngFor="let repo of repositories"> {{repo.label}}</th>
+                </tr>
+              </tfoot>
+            </table>
+          </mat-card>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+      <button mat-flat-button matStepperNext style="right : 50px; position:fixed; margin-top: 10px;"> Next </button>
+    </mat-step>
+
+    <!--------------------------------------------------------- TIPS PAGE ------------------------------------------------------------->
+    <mat-step label="Tips" completed="false">
+      <mat-card style="text-align: center">
+        <h2> 
+          How can you get better  ? 
+          <img alt="help" src="../../assets/images/help.png" height="15px" style="opacity: 0.3" matTooltip="The marking scheme were established by our standards, we are open to any feedback/suggestion to improve it" matTooltipPosition="above">
+        </h2>
+      </mat-card>
+      <div id="tip-container">
+          <mat-card *ngFor="let tip of tips" class="tip-card">
+            <mat-card-title>{{tip.title}}</mat-card-title>
+            <mat-card-subtitle class="card-subt" [ngStyle]="getTipStyle(tip.quality-1)">
+              Your score : {{tip.score}}
+              <img alt="help" src="../../assets/images/help.png" height="13px" style="opacity: 0.3" matTooltip="The criteria was : {{tip.criteria}}" matTooltipPosition="above">
+            </mat-card-subtitle>
+            <mat-card-content>
+              <p>{{tip.tip}}</p>
+            </mat-card-content>
+          </mat-card>
+      </div>
+      <button mat-flat-button matStepperPrevious style="left: 50px; position:fixed; margin-top:10px;"> Previous </button>
+    </mat-step>
+
+  </mat-horizontal-stepper>
+
+</div>
