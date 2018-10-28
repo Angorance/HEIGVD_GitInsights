@@ -47,7 +47,7 @@ function getNumberOfLanguagesToReach75Percent(languages = {}) {
   do {
     countLines += array[numberOfLanguages];
     // eslint-disable-next-line
-    ++numberOfLanguages;
+    numberOfLanguages += 1;
   } while (countLines < nbrLinesFor75Percent);
 
   return numberOfLanguages;
@@ -149,7 +149,7 @@ function getTipsNumberOfLanguagesToReach75PercentsOfCodedLines(languages = {}) {
   tip.criteria = 'To find that value, the array of languages is sorted descending. '
   + 'The languages used to calculate come from the array languages in the statistics.';
 
-  if (languages.length > 0) {
+  if (languages !== {}) {
     // Get the number of languages of the user to reach 75% of the coded lines
     const numberOfLanguages = getNumberOfLanguagesToReach75Percent(languages);
 

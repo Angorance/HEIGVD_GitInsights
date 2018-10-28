@@ -130,7 +130,8 @@ class Github {
         return Promise.all(repos.map(getLanguages))
           .then((languages) => {
             // Tip3
-            tipsLanguages = languages;
+            tipsLanguages = utils.getReposLanguagesStats(languages);
+
             return languages;
           });
       });

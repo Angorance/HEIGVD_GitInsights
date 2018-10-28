@@ -176,11 +176,20 @@ describe('Github utils', () => {
   // Get the number of languages to reach 75% of the coded lines
   it('should retrieve the number of languages to reach 75% of the coded lines (#3)', () => {
     const languages = {
-      Java: 250,
-      Go: 250,
-      Python: 120,
-      Julia: 130,
-      Javascript: 250,
+      Java: 1199284,
+      Dockerfile: 1050,
+      CSS: 267635,
+      'C++': 1098768,
+      C: 33995,
+      CMake: 1982,
+      JavaScript: 534006,
+      PHP: 83311,
+      Shell: 8185,
+      HTML: 3447,
+      TypeScript: 19272,
+      Makefile: 26979,
+      QMake: 10009,
+      PLpgSQL: 1946,
     };
 
     const expected = 3;

@@ -106,9 +106,7 @@ app.get('/user', (req, res, next) => {
   Promise.all([country, profilePicture, milestones, favLanguages, issues, tipTimeBetweenOpeningAndClosureIssues,
     trivia, repositories,
   ])
-    .then(() => {      
-      console.log(`favLanguages: ${JSON.stringify(response.favLanguages)}`);
-
+    .then(() => {
       // Get all user's information about the tips
       response.tips.push(req.client.tipsNumberOfLanguagesToReach75PercentsOfCodedLines());
       response.tips.push(req.client.tipsNumberOfModificationsPerCommit());
