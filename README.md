@@ -28,7 +28,7 @@ Authorization callback URL : http://localhost:4200/stats
 ```
 
 ### Configure the backend
-In the file `.env` add these lines and replace `xyz` by your data:
+In the file `.env` add these lines and replace `xyz` by the data of the OAuth app you just created:
 ```
 CLIENT_ID=xyz
 CLIENT_SECRET=xyz
