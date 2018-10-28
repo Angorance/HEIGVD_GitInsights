@@ -26,6 +26,7 @@
     "@types/jquery": "^3.3.22",
     "angular-webstorage-service": "^1.0.2",
     "chart.js": "^2.7.3",
+    "angular": "^1.7.5",
     "core-js": "^2.5.4",
     "country-list": "^1.1.0",
     "flag-icon-css": "^3.2.1",
