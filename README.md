@@ -43,12 +43,12 @@ npm run dev
 There is Two files to modify to use GitInsights in local : 
  - /front-end/GitInsights/src/app/btn-login/btn-login.component.ts : line 13 - you have to change the client ID
  ```
- clientId = '2a9a479e2953860bbd89';
+ clientId = 'yourClientID';
  ```
  - /front-end/GitInsights/src/app/stat-page/stat-page.component.ts : line 69 - change the target URL
  ```
  // server URL used
-  _srvAddress = 'http:localhost:3000';
+  _srvAddress = 'http://localhost:3000';
  ```
 #### Running the live server 
 In the folder `front-end\GitInsights` run the command
