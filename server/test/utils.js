@@ -72,10 +72,6 @@ describe('Github utils', () => {
   });
 
   /* ========================================================================
-  /*  2nd graph : issues
-  /*====================================================================== */
-
-  /* ========================================================================
   /*  3nd graph : coded lines and commits
   /*====================================================================== */
 
@@ -134,10 +130,6 @@ describe('Github utils', () => {
   });
 
   /* ========================================================================
-  /*  4nd graph : repositories
-  /*====================================================================== */
-
-  /* ========================================================================
   /*  Tips
   /*====================================================================== */
 
@@ -155,5 +147,43 @@ describe('Github utils', () => {
     const expected = 3;
 
     expect(tips.getMedian(numbers)).to.eql(expected);
+  });
+
+  // Get the number of languages to reach 75% of the coded lines
+  it('should retrieve the number of languages to reach 75% of the coded lines (#1)', () => {
+    const languages = {
+      Java: 260,
+      Go: 250,
+      Python: 249,
+      Julia: 140,
+      Javascript: 101,
+    };
+    const expected = 3;
+
+    expect(tips.getNumberOfLanguagesToReach75Percent(languages)).to.eql(expected);
+  });
+
+  // Get the number of languages to reach 75% of the coded lines
+  it('should retrieve the number of languages to reach 75% of the coded lines (#2)', () => {
+    const languages = {
+      Java: 260,
+    };
+    const expected = 1;
+
+    expect(tips.getNumberOfLanguagesToReach75Percent(languages)).to.eql(expected);
+  });
+
+  // Get the number of languages to reach 75% of the coded lines
+  it('should retrieve the number of languages to reach 75% of the coded lines (#3)', () => {
+    const languages = {
+      Java: 250,
+      Go: 250,
+      Python: 120,
+      Julia: 130,
+      Javascript: 250,
+    };
+    const expected = 3;
+
+    expect(tips.getNumberOfLanguagesToReach75Percent(languages)).to.eql(expected);
   });
 });

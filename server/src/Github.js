@@ -5,6 +5,7 @@ const tips = require('./tips');
 // Variables for tips
 let tipsCommitsMessagesArray = [];
 let tipsModifiedLinesCommitsArray = [];
+let tipsLanguages = {};
 
 class ResponseError extends Error {
   constructor(res, body) {
@@ -126,7 +127,12 @@ class Github {
     return this.privateRepos()
       .then((repos) => {
         const getLanguages = repo => this.repoLanguages(repo.full_name);
-        return Promise.all(repos.map(getLanguages));
+        return Promise.all(repos.map(getLanguages))
+          .then((languages) => {
+            // Tip3
+            tipsLanguages = languages;
+            return languages;
+          });
       });
   }
 
@@ -327,11 +333,11 @@ class Github {
     return tips.getTipsNumberOfModificationsPerCommit(tipsModifiedLinesCommitsArray);
   }
 
-  // Tip 3 : percentage of used languages
+  // Tip 3 : number of languages to reach 75% of the coded lines
   // eslint-disable-next-line class-methods-use-this
-  /*tipsPercentageOfUsedLanguages() {
-    
-  }*/
+  tipsNumberOfLanguagesToReach75PercentsOfCodedLines() {
+    return tips.getTipsNumberOfLanguagesToReach75PercentsOfCodedLines(tipsLanguages);
+  }
 
   // Tip 4 : time between the opening and the closure of an issue
   // eslint-disable-next-line class-methods-use-this

@@ -25,6 +25,7 @@ const tipMessageCommitLength0 = 'Come on, you can and have to do longer commit m
 + 'thankfull and they even might consider inviting you for a drink for being the "commit redactor of the year" :)';
 
 
+
 const tipModifiedLinesCommit40 = 'You love living dangerously... Making such big changes '
 + 'before committing can make you loose everything. Try making less changes per commit or '
 + 'making commits more often. Imagine a sunday afternoon, you, coding in front of your computer '
@@ -41,6 +42,36 @@ const tipModifiedLinesCommit0 = 'What the fuuuuuuuuuck man? Even my Grandma make
 + 'When your colleagues pull the changes, if they want to catch up and read the commits, they will be '
 + 'lost in miserable changes and a tsunami of commits... Not so productive :/';
 
+
+
+const tipLanguage8 = 'WOW, ok, you\'re curious, that\'s good, but you know it\'s a sin (not '
++ 'a big one though, but still) ? You\'re VERY versatile, but we doubt that you master every single '
++ 'language that you use. If that\'s the case, congratulation, you\'re the apex programmer. But otherwise '
++ 'you might consider reducing your arsenal in order to better use you weapons. Sure a Swiss Knife is useful, '
++ 'but you\'ll still use a kitchen knife to chop your vegetable.';
+
+const tipLanguage5 = 'You try to be verstile but man, maybe you should focus on a little less tools. It\'s good '
++ 'to know some languages, but it\'s way better to master a few languages. This way you\'ll have the knowledge '
++ 'to use a little bit of everything, mais you\'ll also be able to increase you productivity on the mastered '
++ 'tools. Your colleagues will even be impressed by how confident you\'ll look by smashing your keys frenetically, '
++ 'typing your bubble-sort method at the light of speed :)';
+
+const tipLanguage3 = 'Welp, what do you expect us to say ? You\'re pretty versatile as a programmer and you know what '
++ 'you\'re doing with your tools. That\'s a very appreciated set of skill that you have here. Try to keep using these '
++ 'languages as you need/want, but don\'t restrain yourself to use other languages.';
+
+const tipLanguage2 = 'Hey we see that you\'re the proud expert of two wonderful languages. That\'s '
++ 'quite good but you know, curiosity isn\'t that bad as a sin, you\'re not restricted to use these only two '
++ 'tools. Try to add one or two other languages to your arsenal to increase your versatility. This kind of skill '
++ 'is very appreciated on the job market. Think about a domain in which you have some interest, or something '
++ 'complementary to the two you already know :)';
+
+const tipLanguage0 = 'Most of your work is done with only one language, so there\'s two case possible : '
++ 'either you just created your account and did a very few project with it, or you are an apex programmer in '
++ 'this particular language. In both case, we encourage you to try out new languages, maybe check out a domain '
++ 'in which you\'re curious/not comfortable yet. But try to spare some time to keep on practicing your favorite '
++ 'language :)';
+
 module.exports = {
   tipMessageCommitLength95,
   tipMessageCommitLength70,
@@ -52,4 +83,9 @@ module.exports = {
   tipModifiedLinesCommit15,
   tipModifiedLinesCommit10,
   tipModifiedLinesCommit0,
+  tipLanguage8,
+  tipLanguage5,
+  tipLanguage3,
+  tipLanguage2,
+  tipLanguage0,
 };

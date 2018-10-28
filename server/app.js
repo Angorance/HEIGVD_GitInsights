@@ -107,6 +107,7 @@ app.get('/user', (req, res, next) => {
       response.tips = [
         req.client.tipsNumberOfCharactersPerCommit(),
         req.client.tipsNumberOfModificationsPerCommit(),
+        req.client.tipsNumberOfLanguagesToReach75PercentsOfCodedLines(),
       ];
 
       res.send(response);
