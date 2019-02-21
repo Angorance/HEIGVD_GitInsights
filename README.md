@@ -1,6 +1,6 @@
 # GitInsights
 
-@all-contributors
+Contributors: @Angorance, @BryCur, @LNAline
 
 ## What's for?
 
