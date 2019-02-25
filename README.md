@@ -1,5 +1,11 @@
 # GitInsights
 
+## Contributors
+
+* **Bryan Curchod** - *Frontend* - [BryCur](https://github.com/BryCur)
+* **Daniel Gonzalez Lopez** - *Backend* - [Angorance](https://github.com/Angorance)
+* **Héléna Reymond** - *Backend* - [LNAline](https://github.com/LNAline)
+
 ## What's for?
 
 Our application is for giving an **insight** about GitHub accounts and their usage. Hence our application shows some statistics of the authenticated user and analyse his past commits / issues to give some tips on how to be a better GitHuber (or dev).
