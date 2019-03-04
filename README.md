@@ -6,6 +6,9 @@
 * **Daniel Gonzalez Lopez** - *Backend* - [Angorance](https://github.com/Angorance)
 * **Héléna Reymond** - *Backend* - [LNAline](https://github.com/LNAline)
 
+For the frontend, we decided to use Angular 6 (JavaScript framework using TypeScript) to have a structured web app with Material Design.
+For the backend, we used Express (Javascript framework using NodeJS) to build a REST Api.
+
 ## What's for?
 
 Our application is for giving an **insight** about GitHub accounts and their usage. Hence our application shows some statistics of the authenticated user and analyse his past commits / issues to give some tips on how to be a better GitHuber (or dev).
